@@ -12,3 +12,7 @@ repos:
       - id: check-case-conflict
       - id: check-merge-conflict
       - id: check-yaml
+  - repo: https://github.com/fsfe/reuse-tool
+    rev: v6.2.0
+    hooks:
+      - id: reuse-lint-file
