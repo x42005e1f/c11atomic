@@ -64,3 +64,22 @@ typedef __typeof__(__ATOMIC_RELAXED) c11atomic_mo;
 typedef _C11ATOMIC_FLAG c11atomic_flag_vt;
 typedef struct { c11atomic_flag_vt _c11atomic_flag_v; } c11atomic_flag;
 #define C11ATOMIC_FLAG_INIT { _C11ATOMIC_FLAG_CLEAR }
+
+/*------------------------- c11atomic_is_lock_free --------------------------*/
+#define _c11atomic_is_lock_free_impl(volatile, S, T)                          \
+static inline C11ATOMIC_BOOL                                                  \
+_c11atomic_is_lock_free##S(const volatile c11atomic_vt(T) *obj)               \
+_C11ATOMIC_NOEXCEPT                                                           \
+{                                                                             \
+    return __atomic_is_lock_free(sizeof(__typeof__(*obj)), obj);              \
+}
+_C11ATOMIC_FUNDAMENTAL_DEF1(_c11atomic_is_lock_free)
+#define _c11atomic_is_lock_free(...)                                          \
+_C11ATOMIC_VA(                                                                \
+    _C11ATOMIC_FUNDAMENTAL_CALL_CONST(                                        \
+        _c11atomic_is_lock_free,                                              \
+        __VA_ARGS__                                                           \
+    )                                                                         \
+)
+#define c11atomic_is_lock_free(obj)                                           \
+    _c11atomic_is_lock_free(&(obj)->_c11atomic_v)
