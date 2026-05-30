@@ -109,3 +109,56 @@ _C11ATOMIC_VA(                                                                \
 )
 #define c11atomic_is_lock_free(obj)                                           \
     _c11atomic_is_lock_free(&(obj)->_c11atomic_v)
+
+/*------------------------- c11atomic_signal_fence --------------------------*/
+static inline void
+_c11atomic_signal_fence_explicit(c11atomic_ms scope, c11atomic_mo order)
+_C11ATOMIC_NOEXCEPT
+{
+#if defined(C11ATOMIC_GCC)
+    __atomic_signal_fence(order);
+#elif defined(C11ATOMIC_STD)
+    _C11ATOMIC_STD_CALL(atomic_signal_fence, order);
+#elif defined(C11ATOMIC_MSC)
+    if (order != c11atomic_mo_relaxed) {
+#  if defined(__clang__)
+#    pragma clang diagnostic push
+#    pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#  elif defined(__GNUC__)
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#  elif defined(_MSC_VER)
+#    pragma warning(push)
+#    pragma warning(disable: 4996) // "deprecated"
+#  endif
+        _ReadWriteBarrier();
+#  if defined(__clang__)
+#    pragma clang diagnostic pop
+#  elif defined(__GNUC__)
+#    pragma GCC diagnostic pop
+#  elif defined(_MSC_VER)
+#    pragma warning(pop)
+#  endif
+    }
+#endif
+}
+#define c11atomic_signal_fence_explicit(scope, order)                         \
+    _c11atomic_signal_fence_explicit(                                         \
+        scope,                                                                \
+        order                                                                 \
+    )
+#define c11atomic_signal_fence_ordered(order)                                 \
+    _c11atomic_signal_fence_explicit(                                         \
+        C11ATOMIC_DEFAULT_MEMORY_SCOPE,                                       \
+        order                                                                 \
+    )
+#define c11atomic_signal_fence_scoped(scope)                                  \
+    _c11atomic_signal_fence_explicit(                                         \
+        scope,                                                                \
+        C11ATOMIC_DEFAULT_MEMORY_ORDER                                        \
+    )
+#define c11atomic_signal_fence()                                              \
+    _c11atomic_signal_fence_explicit(                                         \
+        C11ATOMIC_DEFAULT_MEMORY_SCOPE,                                       \
+        C11ATOMIC_DEFAULT_MEMORY_ORDER                                        \
+    )

@@ -74,3 +74,31 @@ _C11ATOMIC_VA(                                                                \
 )
 #define c11atomic_is_lock_free(obj)                                           \
     _c11atomic_is_lock_free(&(obj)->_c11atomic_v)
+
+/*------------------------- c11atomic_signal_fence --------------------------*/
+static inline void
+_c11atomic_signal_fence_explicit(c11atomic_ms scope, c11atomic_mo order)
+_C11ATOMIC_NOEXCEPT
+{
+    _C11ATOMIC_STD_CALL(atomic_signal_fence, order);
+}
+#define c11atomic_signal_fence_explicit(scope, order)                         \
+    _c11atomic_signal_fence_explicit(                                         \
+        scope,                                                                \
+        order                                                                 \
+    )
+#define c11atomic_signal_fence_ordered(order)                                 \
+    _c11atomic_signal_fence_explicit(                                         \
+        C11ATOMIC_DEFAULT_MEMORY_SCOPE,                                       \
+        order                                                                 \
+    )
+#define c11atomic_signal_fence_scoped(scope)                                  \
+    _c11atomic_signal_fence_explicit(                                         \
+        scope,                                                                \
+        C11ATOMIC_DEFAULT_MEMORY_ORDER                                        \
+    )
+#define c11atomic_signal_fence()                                              \
+    _c11atomic_signal_fence_explicit(                                         \
+        C11ATOMIC_DEFAULT_MEMORY_SCOPE,                                       \
+        C11ATOMIC_DEFAULT_MEMORY_ORDER                                        \
+    )
