@@ -31,13 +31,13 @@
 #    endif
 #  endif
 #  if C11ATOMIC_C >= 202311L // C23: predefined `bool`, `true`, and `false`
-#    define _C11ATOMIC_BOOL_TRUE_FALSE_ARE_DEFINED 1
+#    define _C11ATOMIC_BOOL_TRUE_FALSE_ARE_DEFINED
 #  elif _C11ATOMIC_HAS_INCLUDE_OPTIMISTIC(<stdbool.h>) // C99
-#    define _C11ATOMIC_BOOL_TRUE_FALSE_ARE_DEFINED 1
+#    define _C11ATOMIC_BOOL_TRUE_FALSE_ARE_DEFINED
 #    define _C11ATOMIC_STDBOOL_H
 #  endif
 #else // C++: `bool`, `true`, and `false` are keywords
-#  define _C11ATOMIC_BOOL_TRUE_FALSE_ARE_DEFINED 1
+#  define _C11ATOMIC_BOOL_TRUE_FALSE_ARE_DEFINED
 #endif
 #if _C11ATOMIC_HAS_INCLUDE_OPTIMISTIC(<stddef.h>)
 #  define _C11ATOMIC_STDDEF_H
