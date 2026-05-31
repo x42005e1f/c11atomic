@@ -118,3 +118,47 @@ _C11ATOMIC_NOEXCEPT
         C11ATOMIC_DEFAULT_MEMORY_SCOPE,                                       \
         C11ATOMIC_DEFAULT_MEMORY_ORDER                                        \
     )
+
+/*------------------------- c11atomic_thread_fence --------------------------*/
+static inline void
+_c11atomic_thread_fence_explicit(c11atomic_ms scope, c11atomic_mo order)
+_C11ATOMIC_NOEXCEPT
+{
+    if (order != c11atomic_mo_relaxed) {
+        _c11atomic_signal_fence_explicit(scope, order);
+#if defined(_M_ARM64) || defined(_M_ARM64EC) // ARM64
+        __dmb(_ARM64_BARRIER_ISH);
+        _c11atomic_signal_fence_explicit(scope, order);
+#elif defined(_M_ARM) // ARM32
+        __dmb(_ARM_BARRIER_ISH);
+        _c11atomic_signal_fence_explicit(scope, order);
+#elif defined(_M_IX86) || defined(_M_X64) // x86(-64)
+        if (order == c11atomic_mo_seq_cst) {
+            _mm_mfence();
+            _c11atomic_signal_fence_explicit(scope, order);
+        }
+#else
+#  error "unknown architecture"
+#endif
+    }
+}
+#define c11atomic_thread_fence_explicit(scope, order)                         \
+    _c11atomic_thread_fence_explicit(                                         \
+        scope,                                                                \
+        order                                                                 \
+    )
+#define c11atomic_thread_fence_ordered(order)                                 \
+    _c11atomic_thread_fence_explicit(                                         \
+        C11ATOMIC_DEFAULT_MEMORY_SCOPE,                                       \
+        order                                                                 \
+    )
+#define c11atomic_thread_fence_scoped(scope)                                  \
+    _c11atomic_thread_fence_explicit(                                         \
+        scope,                                                                \
+        C11ATOMIC_DEFAULT_MEMORY_ORDER                                        \
+    )
+#define c11atomic_thread_fence()                                              \
+    _c11atomic_thread_fence_explicit(                                         \
+        C11ATOMIC_DEFAULT_MEMORY_SCOPE,                                       \
+        C11ATOMIC_DEFAULT_MEMORY_ORDER                                        \
+    )
