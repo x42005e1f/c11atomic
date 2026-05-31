@@ -277,7 +277,13 @@ _C11ATOMIC_NOEXCEPT
         case c11atomic_mo_acquire:
         case c11atomic_mo_acq_rel:
         case c11atomic_mo_seq_cst:
+#if defined(__x86_64__) || defined(_M_X64) // x86-64
+            _c11atomic_signal_fence_explicit(scope, order);
+#elif defined(__i386__) || defined(_M_IX86) // x86
+            _c11atomic_signal_fence_explicit(scope, order);
+#else
             _c11atomic_thread_fence_explicit(scope, order);
+#endif
     }
 }
 #define c11atomic_load_thread_fence_explicit(scope, order)                    \
@@ -310,7 +316,13 @@ _C11ATOMIC_NOEXCEPT
         case c11atomic_mo_release:
         case c11atomic_mo_acq_rel:
         case c11atomic_mo_seq_cst:
+#if defined(__x86_64__) || defined(_M_X64) // x86-64
+            _c11atomic_signal_fence_explicit(scope, order);
+#elif defined(__i386__) || defined(_M_IX86) // x86
+            _c11atomic_signal_fence_explicit(scope, order);
+#else
             _c11atomic_thread_fence_explicit(scope, order);
+#endif
     }
 }
 #define c11atomic_store_thread_fence_explicit(scope, order)                   \
