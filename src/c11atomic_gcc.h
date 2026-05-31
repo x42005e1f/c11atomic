@@ -84,6 +84,40 @@ _C11ATOMIC_VA(                                                                \
 #define c11atomic_is_lock_free(obj)                                           \
     _c11atomic_is_lock_free(&(obj)->_c11atomic_v)
 
+/*-------------------------- c11atomic_load_order ---------------------------*/
+static inline c11atomic_mo
+_c11atomic_load_order(c11atomic_mo order) // <- read-modify-write
+_C11ATOMIC_NOEXCEPT
+{
+    switch (order) {
+        case c11atomic_mo_release:
+            return c11atomic_mo_relaxed;
+        case c11atomic_mo_acq_rel:
+            return c11atomic_mo_acquire;
+        default:
+            return order;
+    }
+}
+#define c11atomic_load_order(order)                                           \
+    _c11atomic_load_order(order)
+
+/*-------------------------- c11atomic_store_order --------------------------*/
+static inline c11atomic_mo
+_c11atomic_store_order(c11atomic_mo order) // <- read-modify-write
+_C11ATOMIC_NOEXCEPT
+{
+    switch (order) {
+        case c11atomic_mo_acquire:
+            return c11atomic_mo_relaxed;
+        case c11atomic_mo_acq_rel:
+            return c11atomic_mo_release;
+        default:
+            return order;
+    }
+}
+#define c11atomic_store_order(order)                                          \
+    _c11atomic_store_order(order)
+
 /*------------------------- c11atomic_signal_fence --------------------------*/
 static inline void
 _c11atomic_signal_fence_explicit(c11atomic_ms scope, c11atomic_mo order)
@@ -108,6 +142,72 @@ _C11ATOMIC_NOEXCEPT
     )
 #define c11atomic_signal_fence()                                              \
     _c11atomic_signal_fence_explicit(                                         \
+        C11ATOMIC_DEFAULT_MEMORY_SCOPE,                                       \
+        C11ATOMIC_DEFAULT_MEMORY_ORDER                                        \
+    )
+
+/*----------------------- c11atomic_load_signal_fence -----------------------*/
+static inline void
+_c11atomic_load_signal_fence_explicit(c11atomic_ms scope, c11atomic_mo order)
+_C11ATOMIC_NOEXCEPT
+{
+    switch (order) {
+        case c11atomic_mo_acquire:
+        case c11atomic_mo_acq_rel:
+        case c11atomic_mo_seq_cst:
+            _c11atomic_signal_fence_explicit(scope, order);
+    }
+}
+#define c11atomic_load_signal_fence_explicit(scope, order)                    \
+    _c11atomic_load_signal_fence_explicit(                                    \
+        scope,                                                                \
+        order                                                                 \
+    )
+#define c11atomic_load_signal_fence_ordered(order)                            \
+    _c11atomic_load_signal_fence_explicit(                                    \
+        C11ATOMIC_DEFAULT_MEMORY_SCOPE,                                       \
+        order                                                                 \
+    )
+#define c11atomic_load_signal_fence_scoped(scope)                             \
+    _c11atomic_load_signal_fence_explicit(                                    \
+        scope,                                                                \
+        C11ATOMIC_DEFAULT_MEMORY_ORDER                                        \
+    )
+#define c11atomic_load_signal_fence()                                         \
+    _c11atomic_load_signal_fence_explicit(                                    \
+        C11ATOMIC_DEFAULT_MEMORY_SCOPE,                                       \
+        C11ATOMIC_DEFAULT_MEMORY_ORDER                                        \
+    )
+
+/*---------------------- c11atomic_store_signal_fence -----------------------*/
+static inline void
+_c11atomic_store_signal_fence_explicit(c11atomic_ms scope, c11atomic_mo order)
+_C11ATOMIC_NOEXCEPT
+{
+    switch (order) {
+        case c11atomic_mo_release:
+        case c11atomic_mo_acq_rel:
+        case c11atomic_mo_seq_cst:
+            _c11atomic_signal_fence_explicit(scope, order);
+    }
+}
+#define c11atomic_store_signal_fence_explicit(scope, order)                   \
+    _c11atomic_store_signal_fence_explicit(                                   \
+        scope,                                                                \
+        order                                                                 \
+    )
+#define c11atomic_store_signal_fence_ordered(order)                           \
+    _c11atomic_store_signal_fence_explicit(                                   \
+        C11ATOMIC_DEFAULT_MEMORY_SCOPE,                                       \
+        order                                                                 \
+    )
+#define c11atomic_store_signal_fence_scoped(scope)                            \
+    _c11atomic_store_signal_fence_explicit(                                   \
+        scope,                                                                \
+        C11ATOMIC_DEFAULT_MEMORY_ORDER                                        \
+    )
+#define c11atomic_store_signal_fence()                                        \
+    _c11atomic_store_signal_fence_explicit(                                   \
         C11ATOMIC_DEFAULT_MEMORY_SCOPE,                                       \
         C11ATOMIC_DEFAULT_MEMORY_ORDER                                        \
     )
@@ -140,6 +240,72 @@ _C11ATOMIC_NOEXCEPT
     )
 #define c11atomic_thread_fence()                                              \
     _c11atomic_thread_fence_explicit(                                         \
+        C11ATOMIC_DEFAULT_MEMORY_SCOPE,                                       \
+        C11ATOMIC_DEFAULT_MEMORY_ORDER                                        \
+    )
+
+/*----------------------- c11atomic_load_thread_fence -----------------------*/
+static inline void
+_c11atomic_load_thread_fence_explicit(c11atomic_ms scope, c11atomic_mo order)
+_C11ATOMIC_NOEXCEPT
+{
+    switch (order) {
+        case c11atomic_mo_acquire:
+        case c11atomic_mo_acq_rel:
+        case c11atomic_mo_seq_cst:
+            _c11atomic_thread_fence_explicit(scope, order);
+    }
+}
+#define c11atomic_load_thread_fence_explicit(scope, order)                    \
+    _c11atomic_load_thread_fence_explicit(                                    \
+        scope,                                                                \
+        order                                                                 \
+    )
+#define c11atomic_load_thread_fence_ordered(order)                            \
+    _c11atomic_load_thread_fence_explicit(                                    \
+        C11ATOMIC_DEFAULT_MEMORY_SCOPE,                                       \
+        order                                                                 \
+    )
+#define c11atomic_load_thread_fence_scoped(scope)                             \
+    _c11atomic_load_thread_fence_explicit(                                    \
+        scope,                                                                \
+        C11ATOMIC_DEFAULT_MEMORY_ORDER                                        \
+    )
+#define c11atomic_load_thread_fence()                                         \
+    _c11atomic_load_thread_fence_explicit(                                    \
+        C11ATOMIC_DEFAULT_MEMORY_SCOPE,                                       \
+        C11ATOMIC_DEFAULT_MEMORY_ORDER                                        \
+    )
+
+/*---------------------- c11atomic_store_thread_fence -----------------------*/
+static inline void
+_c11atomic_store_thread_fence_explicit(c11atomic_ms scope, c11atomic_mo order)
+_C11ATOMIC_NOEXCEPT
+{
+    switch (order) {
+        case c11atomic_mo_release:
+        case c11atomic_mo_acq_rel:
+        case c11atomic_mo_seq_cst:
+            _c11atomic_thread_fence_explicit(scope, order);
+    }
+}
+#define c11atomic_store_thread_fence_explicit(scope, order)                   \
+    _c11atomic_store_thread_fence_explicit(                                   \
+        scope,                                                                \
+        order                                                                 \
+    )
+#define c11atomic_store_thread_fence_ordered(order)                           \
+    _c11atomic_store_thread_fence_explicit(                                   \
+        C11ATOMIC_DEFAULT_MEMORY_SCOPE,                                       \
+        order                                                                 \
+    )
+#define c11atomic_store_thread_fence_scoped(scope)                            \
+    _c11atomic_store_thread_fence_explicit(                                   \
+        scope,                                                                \
+        C11ATOMIC_DEFAULT_MEMORY_ORDER                                        \
+    )
+#define c11atomic_store_thread_fence()                                        \
+    _c11atomic_store_thread_fence_explicit(                                   \
         C11ATOMIC_DEFAULT_MEMORY_SCOPE,                                       \
         C11ATOMIC_DEFAULT_MEMORY_ORDER                                        \
     )
