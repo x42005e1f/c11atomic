@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: ISC
  */
 
-#if defined(C11ATOMIC_CPP) || defined(C11ATOMIC_C)
+#if defined(C11ATOMIC_CPP) || defined(C11ATOMIC_C) /* include guard */
 #elif defined(__cplusplus) /* see `/Zc:__cplusplus` */
 #  if defined(_MSC_VER) && defined(_MSVC_LANG) && __cplusplus == 199711L
 #    if _MSC_VER >= 1929 && _MSVC_LANG >= 202002L /* VS 2019 16.10; C++20 */

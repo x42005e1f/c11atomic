@@ -6,6 +6,7 @@
 #ifndef C11ATOMIC_H
 #  error "this header file must not be included directly"
 #endif
+
 #ifndef C11ATOMIC_DEFAULT_MEMORY_SCOPE
 #  define C11ATOMIC_DEFAULT_MEMORY_SCOPE                                      \
     c11atomic_ms_device
@@ -34,626 +35,8 @@
 #  define C11ATOMIC_DEFAULT_FAILURE_MEMORY_ORDER                              \
     C11ATOMIC_DEFAULT_LOAD_MEMORY_ORDER
 #endif
-#define C11ATOMIC_POINTER void *
-#if defined(C11ATOMIC_NOP)
-#  define C11ATOMIC_POINTER_LOCK_FREE 2
-#elif defined(C11ATOMIC_STD)
-#  define C11ATOMIC_POINTER_LOCK_FREE ATOMIC_POINTER_LOCK_FREE
-#elif defined(C11ATOMIC_MSC)
-#  define C11ATOMIC_POINTER_LOCK_FREE 2
-#else
-#  define C11ATOMIC_POINTER_LOCK_FREE 1
-#endif
-#ifdef _C11ATOMIC_BOOL_TRUE_FALSE_ARE_DEFINED
-#  define C11ATOMIC_BOOL bool
-#  define C11ATOMIC_TRUE true
-#  define C11ATOMIC_FALSE false
-#else
-#  define C11ATOMIC_BOOL _Bool // C99
-#  define C11ATOMIC_TRUE 1
-#  define C11ATOMIC_FALSE 0
-#endif
-#if defined(C11ATOMIC_NOP)
-#  define C11ATOMIC_BOOL_LOCK_FREE 2
-#elif defined(C11ATOMIC_STD)
-#  define C11ATOMIC_BOOL_LOCK_FREE ATOMIC_BOOL_LOCK_FREE
-#elif defined(C11ATOMIC_MSC)
-#  define C11ATOMIC_BOOL_LOCK_FREE 2
-#else
-#  define C11ATOMIC_BOOL_LOCK_FREE 1
-#endif
-#define C11ATOMIC_CHAR char
-#if defined(C11ATOMIC_NOP)
-#  define C11ATOMIC_CHAR_LOCK_FREE 2
-#elif defined(C11ATOMIC_STD)
-#  define C11ATOMIC_CHAR_LOCK_FREE ATOMIC_CHAR_LOCK_FREE
-#elif defined(C11ATOMIC_MSC)
-#  define C11ATOMIC_CHAR_LOCK_FREE 2
-#else
-#  define C11ATOMIC_CHAR_LOCK_FREE 1
-#endif
-#define C11ATOMIC_SCHAR signed char
-#define C11ATOMIC_SCHAR_LOCK_FREE C11ATOMIC_CHAR_LOCK_FREE
-#define C11ATOMIC_UCHAR unsigned char
-#define C11ATOMIC_UCHAR_LOCK_FREE C11ATOMIC_CHAR_LOCK_FREE
-#define C11ATOMIC_SHORT short
-#if defined(C11ATOMIC_NOP)
-#  define C11ATOMIC_SHORT_LOCK_FREE 2
-#elif defined(C11ATOMIC_STD)
-#  define C11ATOMIC_SHORT_LOCK_FREE ATOMIC_SHORT_LOCK_FREE
-#elif defined(C11ATOMIC_MSC)
-#  define C11ATOMIC_SHORT_LOCK_FREE 2
-#else
-#  define C11ATOMIC_SHORT_LOCK_FREE 1
-#endif
-#define C11ATOMIC_USHORT unsigned short
-#define C11ATOMIC_USHORT_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
-#define C11ATOMIC_INT int
-#if defined(C11ATOMIC_NOP)
-#  define C11ATOMIC_INT_LOCK_FREE 2
-#elif defined(C11ATOMIC_STD)
-#  define C11ATOMIC_INT_LOCK_FREE ATOMIC_INT_LOCK_FREE
-#elif defined(C11ATOMIC_MSC)
-#  define C11ATOMIC_INT_LOCK_FREE 2
-#else
-#  define C11ATOMIC_INT_LOCK_FREE 1
-#endif
-#define C11ATOMIC_UINT unsigned int
-#define C11ATOMIC_UINT_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
-#define C11ATOMIC_LONG long
-#if defined(C11ATOMIC_NOP)
-#  define C11ATOMIC_LONG_LOCK_FREE 2
-#elif defined(C11ATOMIC_STD)
-#  define C11ATOMIC_LONG_LOCK_FREE ATOMIC_LONG_LOCK_FREE
-#elif defined(C11ATOMIC_MSC)
-#  define C11ATOMIC_LONG_LOCK_FREE 2
-#else
-#  define C11ATOMIC_LONG_LOCK_FREE 1
-#endif
-#define C11ATOMIC_ULONG unsigned long
-#define C11ATOMIC_ULONG_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
-#define C11ATOMIC_LLONG long long
-#if defined(C11ATOMIC_NOP)
-#  define C11ATOMIC_LLONG_LOCK_FREE 2
-#elif defined(C11ATOMIC_STD)
-#  define C11ATOMIC_LLONG_LOCK_FREE ATOMIC_LLONG_LOCK_FREE
-#elif defined(C11ATOMIC_MSC)
-#  define C11ATOMIC_LLONG_LOCK_FREE 2
-#else
-#  define C11ATOMIC_LLONG_LOCK_FREE 1
-#endif
-#define C11ATOMIC_ULLONG unsigned long long
-#define C11ATOMIC_ULLONG_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
-#ifdef _C11ATOMIC_STDINT_H
-#  ifdef INT8_MAX // <stdint.h> (optional)
-#    define C11ATOMIC_INT8_T int8_t
-#    ifdef _C11ATOMIC_LIMITS_H
-#      if INT8_MAX == SCHAR_MAX
-#        define C11ATOMIC_INT8_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
-#      endif
-#    endif
-#    ifndef C11ATOMIC_INT8_T_LOCK_FREE
-#      define C11ATOMIC_INT8_T_LOCK_FREE 1
-#    endif
-#  endif
-#  ifdef UINT8_MAX // <stdint.h> (optional)
-#    define C11ATOMIC_UINT8_T uint8_t
-#    ifdef _C11ATOMIC_LIMITS_H
-#      if UINT8_MAX == UCHAR_MAX
-#        define C11ATOMIC_UINT8_T_LOCK_FREE C11ATOMIC_UCHAR_LOCK_FREE
-#      endif
-#    endif
-#    ifndef C11ATOMIC_UINT8_T_LOCK_FREE
-#      define C11ATOMIC_UINT8_T_LOCK_FREE 1
-#    endif
-#  endif
-#  ifdef INT16_MAX // <stdint.h> (optional)
-#    define C11ATOMIC_INT16_T int16_t
-#    ifdef _C11ATOMIC_LIMITS_H
-#      if INT16_MAX == INT_MAX
-#        define C11ATOMIC_INT16_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
-#      elif INT16_MAX == SHRT_MAX
-#        define C11ATOMIC_INT16_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
-#      elif INT16_MAX == SCHAR_MAX
-#        define C11ATOMIC_INT16_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
-#      endif
-#    endif
-#    ifndef C11ATOMIC_INT16_T_LOCK_FREE
-#      define C11ATOMIC_INT16_T_LOCK_FREE 1
-#    endif
-#  endif
-#  ifdef UINT16_MAX // <stdint.h> (optional)
-#    define C11ATOMIC_UINT16_T uint16_t
-#    ifdef _C11ATOMIC_LIMITS_H
-#      if UINT16_MAX == UINT_MAX
-#        define C11ATOMIC_UINT16_T_LOCK_FREE C11ATOMIC_UINT_LOCK_FREE
-#      elif UINT16_MAX == USHRT_MAX
-#        define C11ATOMIC_UINT16_T_LOCK_FREE C11ATOMIC_USHORT_LOCK_FREE
-#      elif UINT16_MAX == UCHAR_MAX
-#        define C11ATOMIC_UINT16_T_LOCK_FREE C11ATOMIC_UCHAR_LOCK_FREE
-#      endif
-#    endif
-#    ifndef C11ATOMIC_UINT16_T_LOCK_FREE
-#      define C11ATOMIC_UINT16_T_LOCK_FREE 1
-#    endif
-#  endif
-#  ifdef INT32_MAX // <stdint.h> (optional)
-#    define C11ATOMIC_INT32_T int32_t
-#    ifdef _C11ATOMIC_LIMITS_H
-#      if INT32_MAX == LONG_MAX
-#        define C11ATOMIC_INT32_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
-#      elif INT32_MAX == INT_MAX
-#        define C11ATOMIC_INT32_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
-#      elif INT32_MAX == SHRT_MAX
-#        define C11ATOMIC_INT32_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
-#      elif INT32_MAX == SCHAR_MAX
-#        define C11ATOMIC_INT32_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
-#      endif
-#    endif
-#    ifndef C11ATOMIC_INT32_T_LOCK_FREE
-#      define C11ATOMIC_INT32_T_LOCK_FREE 1
-#    endif
-#  endif
-#  ifdef UINT32_MAX // <stdint.h> (optional)
-#    define C11ATOMIC_UINT32_T uint32_t
-#    ifdef _C11ATOMIC_LIMITS_H
-#      if UINT32_MAX == ULONG_MAX
-#        define C11ATOMIC_UINT32_T_LOCK_FREE C11ATOMIC_ULONG_LOCK_FREE
-#      elif UINT32_MAX == UINT_MAX
-#        define C11ATOMIC_UINT32_T_LOCK_FREE C11ATOMIC_UINT_LOCK_FREE
-#      elif UINT32_MAX == USHRT_MAX
-#        define C11ATOMIC_UINT32_T_LOCK_FREE C11ATOMIC_USHORT_LOCK_FREE
-#      elif UINT32_MAX == UCHAR_MAX
-#        define C11ATOMIC_UINT32_T_LOCK_FREE C11ATOMIC_UCHAR_LOCK_FREE
-#      endif
-#    endif
-#    ifndef C11ATOMIC_UINT32_T_LOCK_FREE
-#      define C11ATOMIC_UINT32_T_LOCK_FREE 1
-#    endif
-#  endif
-#  ifdef INT64_MAX // <stdint.h> (optional)
-#    define C11ATOMIC_INT64_T int64_t
-#    ifdef _C11ATOMIC_LIMITS_H
-#      if INT64_MAX == LLONG_MAX
-#        define C11ATOMIC_INT64_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
-#      elif INT64_MAX == LONG_MAX
-#        define C11ATOMIC_INT64_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
-#      elif INT64_MAX == INT_MAX
-#        define C11ATOMIC_INT64_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
-#      elif INT64_MAX == SHRT_MAX
-#        define C11ATOMIC_INT64_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
-#      elif INT64_MAX == SCHAR_MAX
-#        define C11ATOMIC_INT64_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
-#      endif
-#    endif
-#    ifndef C11ATOMIC_INT64_T_LOCK_FREE
-#      define C11ATOMIC_INT64_T_LOCK_FREE 1
-#    endif
-#  endif
-#  ifdef UINT64_MAX // <stdint.h> (optional)
-#    define C11ATOMIC_UINT64_T uint64_t
-#    ifdef _C11ATOMIC_LIMITS_H
-#      if UINT64_MAX == ULLONG_MAX
-#        define C11ATOMIC_UINT64_T_LOCK_FREE C11ATOMIC_ULLONG_LOCK_FREE
-#      elif UINT64_MAX == ULONG_MAX
-#        define C11ATOMIC_UINT64_T_LOCK_FREE C11ATOMIC_ULONG_LOCK_FREE
-#      elif UINT64_MAX == UINT_MAX
-#        define C11ATOMIC_UINT64_T_LOCK_FREE C11ATOMIC_UINT_LOCK_FREE
-#      elif UINT64_MAX == USHRT_MAX
-#        define C11ATOMIC_UINT64_T_LOCK_FREE C11ATOMIC_USHORT_LOCK_FREE
-#      elif UINT64_MAX == UCHAR_MAX
-#        define C11ATOMIC_UINT64_T_LOCK_FREE C11ATOMIC_UCHAR_LOCK_FREE
-#      endif
-#    endif
-#    ifndef C11ATOMIC_UINT64_T_LOCK_FREE
-#      define C11ATOMIC_UINT64_T_LOCK_FREE 1
-#    endif
-#  endif
-#  define C11ATOMIC_INT_LEAST8_T int_least8_t
-#  ifdef _C11ATOMIC_LIMITS_H
-#    ifdef INT_LEAST8_MAX // <stdint.h>
-#      if INT_LEAST8_MAX == LLONG_MAX
-#        define C11ATOMIC_INT_LEAST8_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
-#      elif INT_LEAST8_MAX == LONG_MAX
-#        define C11ATOMIC_INT_LEAST8_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
-#      elif INT_LEAST8_MAX == INT_MAX
-#        define C11ATOMIC_INT_LEAST8_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
-#      elif INT_LEAST8_MAX == SHRT_MAX
-#        define C11ATOMIC_INT_LEAST8_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
-#      elif INT_LEAST8_MAX == SCHAR_MAX
-#        define C11ATOMIC_INT_LEAST8_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
-#      endif
-#    endif
-#  endif
-#  ifndef C11ATOMIC_INT_LEAST8_T_LOCK_FREE
-#    define C11ATOMIC_INT_LEAST8_T_LOCK_FREE 1
-#  endif
-#  define C11ATOMIC_UINT_LEAST8_T uint_least8_t
-#  ifdef _C11ATOMIC_LIMITS_H
-#    ifdef UINT_LEAST8_MAX // <stdint.h>
-#      if UINT_LEAST8_MAX == ULLONG_MAX
-#        define C11ATOMIC_UINT_LEAST8_T_LOCK_FREE C11ATOMIC_ULLONG_LOCK_FREE
-#      elif UINT_LEAST8_MAX == ULONG_MAX
-#        define C11ATOMIC_UINT_LEAST8_T_LOCK_FREE C11ATOMIC_ULONG_LOCK_FREE
-#      elif UINT_LEAST8_MAX == UINT_MAX
-#        define C11ATOMIC_UINT_LEAST8_T_LOCK_FREE C11ATOMIC_UINT_LOCK_FREE
-#      elif UINT_LEAST8_MAX == USHRT_MAX
-#        define C11ATOMIC_UINT_LEAST8_T_LOCK_FREE C11ATOMIC_USHORT_LOCK_FREE
-#      elif UINT_LEAST8_MAX == UCHAR_MAX
-#        define C11ATOMIC_UINT_LEAST8_T_LOCK_FREE C11ATOMIC_UCHAR_LOCK_FREE
-#      endif
-#    endif
-#  endif
-#  ifndef C11ATOMIC_UINT_LEAST8_T_LOCK_FREE
-#    define C11ATOMIC_UINT_LEAST8_T_LOCK_FREE 1
-#  endif
-#  define C11ATOMIC_INT_LEAST16_T int_least16_t
-#  ifdef _C11ATOMIC_LIMITS_H
-#    ifdef INT_LEAST16_MAX // <stdint.h>
-#      if INT_LEAST16_MAX == LLONG_MAX
-#        define C11ATOMIC_INT_LEAST16_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
-#      elif INT_LEAST16_MAX == LONG_MAX
-#        define C11ATOMIC_INT_LEAST16_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
-#      elif INT_LEAST16_MAX == INT_MAX
-#        define C11ATOMIC_INT_LEAST16_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
-#      elif INT_LEAST16_MAX == SHRT_MAX
-#        define C11ATOMIC_INT_LEAST16_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
-#      elif INT_LEAST16_MAX == SCHAR_MAX
-#        define C11ATOMIC_INT_LEAST16_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
-#      endif
-#    endif
-#  endif
-#  ifndef C11ATOMIC_INT_LEAST16_T_LOCK_FREE
-#    define C11ATOMIC_INT_LEAST16_T_LOCK_FREE 1
-#  endif
-#  define C11ATOMIC_UINT_LEAST16_T uint_least16_t
-#  ifdef _C11ATOMIC_LIMITS_H
-#    ifdef UINT_LEAST16_MAX // <stdint.h>
-#      if UINT_LEAST16_MAX == ULLONG_MAX
-#        define C11ATOMIC_UINT_LEAST16_T_LOCK_FREE C11ATOMIC_ULLONG_LOCK_FREE
-#      elif UINT_LEAST16_MAX == ULONG_MAX
-#        define C11ATOMIC_UINT_LEAST16_T_LOCK_FREE C11ATOMIC_ULONG_LOCK_FREE
-#      elif UINT_LEAST16_MAX == UINT_MAX
-#        define C11ATOMIC_UINT_LEAST16_T_LOCK_FREE C11ATOMIC_UINT_LOCK_FREE
-#      elif UINT_LEAST16_MAX == USHRT_MAX
-#        define C11ATOMIC_UINT_LEAST16_T_LOCK_FREE C11ATOMIC_USHORT_LOCK_FREE
-#      elif UINT_LEAST16_MAX == UCHAR_MAX
-#        define C11ATOMIC_UINT_LEAST16_T_LOCK_FREE C11ATOMIC_UCHAR_LOCK_FREE
-#      endif
-#    endif
-#  endif
-#  ifndef C11ATOMIC_UINT_LEAST16_T_LOCK_FREE
-#    define C11ATOMIC_UINT_LEAST16_T_LOCK_FREE 1
-#  endif
-#  define C11ATOMIC_INT_LEAST32_T int_least32_t
-#  ifdef _C11ATOMIC_LIMITS_H
-#    ifdef INT_LEAST32_MAX // <stdint.h>
-#      if INT_LEAST32_MAX == LLONG_MAX
-#        define C11ATOMIC_INT_LEAST32_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
-#      elif INT_LEAST32_MAX == LONG_MAX
-#        define C11ATOMIC_INT_LEAST32_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
-#      elif INT_LEAST32_MAX == INT_MAX
-#        define C11ATOMIC_INT_LEAST32_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
-#      elif INT_LEAST32_MAX == SHRT_MAX
-#        define C11ATOMIC_INT_LEAST32_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
-#      elif INT_LEAST32_MAX == SCHAR_MAX
-#        define C11ATOMIC_INT_LEAST32_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
-#      endif
-#    endif
-#  endif
-#  ifndef C11ATOMIC_INT_LEAST32_T_LOCK_FREE
-#    define C11ATOMIC_INT_LEAST32_T_LOCK_FREE 1
-#  endif
-#  define C11ATOMIC_UINT_LEAST32_T uint_least32_t
-#  ifdef _C11ATOMIC_LIMITS_H
-#    ifdef UINT_LEAST32_MAX // <stdint.h>
-#      if UINT_LEAST32_MAX == ULLONG_MAX
-#        define C11ATOMIC_UINT_LEAST32_T_LOCK_FREE C11ATOMIC_ULLONG_LOCK_FREE
-#      elif UINT_LEAST32_MAX == ULONG_MAX
-#        define C11ATOMIC_UINT_LEAST32_T_LOCK_FREE C11ATOMIC_ULONG_LOCK_FREE
-#      elif UINT_LEAST32_MAX == UINT_MAX
-#        define C11ATOMIC_UINT_LEAST32_T_LOCK_FREE C11ATOMIC_UINT_LOCK_FREE
-#      elif UINT_LEAST32_MAX == USHRT_MAX
-#        define C11ATOMIC_UINT_LEAST32_T_LOCK_FREE C11ATOMIC_USHORT_LOCK_FREE
-#      elif UINT_LEAST32_MAX == UCHAR_MAX
-#        define C11ATOMIC_UINT_LEAST32_T_LOCK_FREE C11ATOMIC_UCHAR_LOCK_FREE
-#      endif
-#    endif
-#  endif
-#  ifndef C11ATOMIC_UINT_LEAST32_T_LOCK_FREE
-#    define C11ATOMIC_UINT_LEAST32_T_LOCK_FREE 1
-#  endif
-#  define C11ATOMIC_INT_LEAST64_T int_least64_t
-#  ifdef _C11ATOMIC_LIMITS_H
-#    ifdef INT_LEAST64_MAX // <stdint.h>
-#      if INT_LEAST64_MAX == LLONG_MAX
-#        define C11ATOMIC_INT_LEAST64_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
-#      elif INT_LEAST64_MAX == LONG_MAX
-#        define C11ATOMIC_INT_LEAST64_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
-#      elif INT_LEAST64_MAX == INT_MAX
-#        define C11ATOMIC_INT_LEAST64_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
-#      elif INT_LEAST64_MAX == SHRT_MAX
-#        define C11ATOMIC_INT_LEAST64_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
-#      elif INT_LEAST64_MAX == SCHAR_MAX
-#        define C11ATOMIC_INT_LEAST64_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
-#      endif
-#    endif
-#  endif
-#  ifndef C11ATOMIC_INT_LEAST64_T_LOCK_FREE
-#    define C11ATOMIC_INT_LEAST64_T_LOCK_FREE 1
-#  endif
-#  define C11ATOMIC_UINT_LEAST64_T uint_least64_t
-#  ifdef _C11ATOMIC_LIMITS_H
-#    ifdef UINT_LEAST64_MAX // <stdint.h>
-#      if UINT_LEAST64_MAX == ULLONG_MAX
-#        define C11ATOMIC_UINT_LEAST64_T_LOCK_FREE C11ATOMIC_ULLONG_LOCK_FREE
-#      elif UINT_LEAST64_MAX == ULONG_MAX
-#        define C11ATOMIC_UINT_LEAST64_T_LOCK_FREE C11ATOMIC_ULONG_LOCK_FREE
-#      elif UINT_LEAST64_MAX == UINT_MAX
-#        define C11ATOMIC_UINT_LEAST64_T_LOCK_FREE C11ATOMIC_UINT_LOCK_FREE
-#      elif UINT_LEAST64_MAX == USHRT_MAX
-#        define C11ATOMIC_UINT_LEAST64_T_LOCK_FREE C11ATOMIC_USHORT_LOCK_FREE
-#      elif UINT_LEAST64_MAX == UCHAR_MAX
-#        define C11ATOMIC_UINT_LEAST64_T_LOCK_FREE C11ATOMIC_UCHAR_LOCK_FREE
-#      endif
-#    endif
-#  endif
-#  ifndef C11ATOMIC_UINT_LEAST64_T_LOCK_FREE
-#    define C11ATOMIC_UINT_LEAST64_T_LOCK_FREE 1
-#  endif
-#  define C11ATOMIC_INT_FAST8_T int_fast8_t
-#  ifdef _C11ATOMIC_LIMITS_H
-#    ifdef INT_FAST8_MAX // <stdint.h>
-#      if INT_FAST8_MAX == LLONG_MAX
-#        define C11ATOMIC_INT_FAST8_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
-#      elif INT_FAST8_MAX == LONG_MAX
-#        define C11ATOMIC_INT_FAST8_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
-#      elif INT_FAST8_MAX == INT_MAX
-#        define C11ATOMIC_INT_FAST8_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
-#      elif INT_FAST8_MAX == SHRT_MAX
-#        define C11ATOMIC_INT_FAST8_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
-#      elif INT_FAST8_MAX == SCHAR_MAX
-#        define C11ATOMIC_INT_FAST8_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
-#      endif
-#    endif
-#  endif
-#  ifndef C11ATOMIC_INT_FAST8_T_LOCK_FREE
-#    define C11ATOMIC_INT_FAST8_T_LOCK_FREE 1
-#  endif
-#  define C11ATOMIC_UINT_FAST8_T uint_fast8_t
-#  ifdef _C11ATOMIC_LIMITS_H
-#    ifdef UINT_FAST8_MAX // <stdint.h>
-#      if UINT_FAST8_MAX == ULLONG_MAX
-#        define C11ATOMIC_UINT_FAST8_T_LOCK_FREE C11ATOMIC_ULLONG_LOCK_FREE
-#      elif UINT_FAST8_MAX == ULONG_MAX
-#        define C11ATOMIC_UINT_FAST8_T_LOCK_FREE C11ATOMIC_ULONG_LOCK_FREE
-#      elif UINT_FAST8_MAX == UINT_MAX
-#        define C11ATOMIC_UINT_FAST8_T_LOCK_FREE C11ATOMIC_UINT_LOCK_FREE
-#      elif UINT_FAST8_MAX == USHRT_MAX
-#        define C11ATOMIC_UINT_FAST8_T_LOCK_FREE C11ATOMIC_USHORT_LOCK_FREE
-#      elif UINT_FAST8_MAX == UCHAR_MAX
-#        define C11ATOMIC_UINT_FAST8_T_LOCK_FREE C11ATOMIC_UCHAR_LOCK_FREE
-#      endif
-#    endif
-#  endif
-#  ifndef C11ATOMIC_UINT_FAST8_T_LOCK_FREE
-#    define C11ATOMIC_UINT_FAST8_T_LOCK_FREE 1
-#  endif
-#  define C11ATOMIC_INT_FAST16_T int_fast16_t
-#  ifdef _C11ATOMIC_LIMITS_H
-#    ifdef INT_FAST16_MAX // <stdint.h>
-#      if INT_FAST16_MAX == LLONG_MAX
-#        define C11ATOMIC_INT_FAST16_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
-#      elif INT_FAST16_MAX == LONG_MAX
-#        define C11ATOMIC_INT_FAST16_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
-#      elif INT_FAST16_MAX == INT_MAX
-#        define C11ATOMIC_INT_FAST16_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
-#      elif INT_FAST16_MAX == SHRT_MAX
-#        define C11ATOMIC_INT_FAST16_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
-#      elif INT_FAST16_MAX == SCHAR_MAX
-#        define C11ATOMIC_INT_FAST16_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
-#      endif
-#    endif
-#  endif
-#  ifndef C11ATOMIC_INT_FAST16_T_LOCK_FREE
-#    define C11ATOMIC_INT_FAST16_T_LOCK_FREE 1
-#  endif
-#  define C11ATOMIC_UINT_FAST16_T uint_fast16_t
-#  ifdef _C11ATOMIC_LIMITS_H
-#    ifdef UINT_FAST16_MAX // <stdint.h>
-#      if UINT_FAST16_MAX == ULLONG_MAX
-#        define C11ATOMIC_UINT_FAST16_T_LOCK_FREE C11ATOMIC_ULLONG_LOCK_FREE
-#      elif UINT_FAST16_MAX == ULONG_MAX
-#        define C11ATOMIC_UINT_FAST16_T_LOCK_FREE C11ATOMIC_ULONG_LOCK_FREE
-#      elif UINT_FAST16_MAX == UINT_MAX
-#        define C11ATOMIC_UINT_FAST16_T_LOCK_FREE C11ATOMIC_UINT_LOCK_FREE
-#      elif UINT_FAST16_MAX == USHRT_MAX
-#        define C11ATOMIC_UINT_FAST16_T_LOCK_FREE C11ATOMIC_USHORT_LOCK_FREE
-#      elif UINT_FAST16_MAX == UCHAR_MAX
-#        define C11ATOMIC_UINT_FAST16_T_LOCK_FREE C11ATOMIC_UCHAR_LOCK_FREE
-#      endif
-#    endif
-#  endif
-#  ifndef C11ATOMIC_UINT_FAST16_T_LOCK_FREE
-#    define C11ATOMIC_UINT_FAST16_T_LOCK_FREE 1
-#  endif
-#  define C11ATOMIC_INT_FAST32_T int_fast32_t
-#  ifdef _C11ATOMIC_LIMITS_H
-#    ifdef INT_FAST32_MAX // <stdint.h>
-#      if INT_FAST32_MAX == LLONG_MAX
-#        define C11ATOMIC_INT_FAST32_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
-#      elif INT_FAST32_MAX == LONG_MAX
-#        define C11ATOMIC_INT_FAST32_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
-#      elif INT_FAST32_MAX == INT_MAX
-#        define C11ATOMIC_INT_FAST32_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
-#      elif INT_FAST32_MAX == SHRT_MAX
-#        define C11ATOMIC_INT_FAST32_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
-#      elif INT_FAST32_MAX == SCHAR_MAX
-#        define C11ATOMIC_INT_FAST32_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
-#      endif
-#    endif
-#  endif
-#  ifndef C11ATOMIC_INT_FAST32_T_LOCK_FREE
-#    define C11ATOMIC_INT_FAST32_T_LOCK_FREE 1
-#  endif
-#  define C11ATOMIC_UINT_FAST32_T uint_fast32_t
-#  ifdef _C11ATOMIC_LIMITS_H
-#    ifdef UINT_FAST32_MAX // <stdint.h>
-#      if UINT_FAST32_MAX == ULLONG_MAX
-#        define C11ATOMIC_UINT_FAST32_T_LOCK_FREE C11ATOMIC_ULLONG_LOCK_FREE
-#      elif UINT_FAST32_MAX == ULONG_MAX
-#        define C11ATOMIC_UINT_FAST32_T_LOCK_FREE C11ATOMIC_ULONG_LOCK_FREE
-#      elif UINT_FAST32_MAX == UINT_MAX
-#        define C11ATOMIC_UINT_FAST32_T_LOCK_FREE C11ATOMIC_UINT_LOCK_FREE
-#      elif UINT_FAST32_MAX == USHRT_MAX
-#        define C11ATOMIC_UINT_FAST32_T_LOCK_FREE C11ATOMIC_USHORT_LOCK_FREE
-#      elif UINT_FAST32_MAX == UCHAR_MAX
-#        define C11ATOMIC_UINT_FAST32_T_LOCK_FREE C11ATOMIC_UCHAR_LOCK_FREE
-#      endif
-#    endif
-#  endif
-#  ifndef C11ATOMIC_UINT_FAST32_T_LOCK_FREE
-#    define C11ATOMIC_UINT_FAST32_T_LOCK_FREE 1
-#  endif
-#  define C11ATOMIC_INT_FAST64_T int_fast64_t
-#  ifdef _C11ATOMIC_LIMITS_H
-#    ifdef INT_FAST64_MAX // <stdint.h>
-#      if INT_FAST64_MAX == LLONG_MAX
-#        define C11ATOMIC_INT_FAST64_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
-#      elif INT_FAST64_MAX == LONG_MAX
-#        define C11ATOMIC_INT_FAST64_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
-#      elif INT_FAST64_MAX == INT_MAX
-#        define C11ATOMIC_INT_FAST64_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
-#      elif INT_FAST64_MAX == SHRT_MAX
-#        define C11ATOMIC_INT_FAST64_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
-#      elif INT_FAST64_MAX == SCHAR_MAX
-#        define C11ATOMIC_INT_FAST64_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
-#      endif
-#    endif
-#  endif
-#  ifndef C11ATOMIC_INT_FAST64_T_LOCK_FREE
-#    define C11ATOMIC_INT_FAST64_T_LOCK_FREE 1
-#  endif
-#  define C11ATOMIC_UINT_FAST64_T uint_fast64_t
-#  ifdef _C11ATOMIC_LIMITS_H
-#    ifdef UINT_FAST64_MAX // <stdint.h>
-#      if UINT_FAST64_MAX == ULLONG_MAX
-#        define C11ATOMIC_UINT_FAST64_T_LOCK_FREE C11ATOMIC_ULLONG_LOCK_FREE
-#      elif UINT_FAST64_MAX == ULONG_MAX
-#        define C11ATOMIC_UINT_FAST64_T_LOCK_FREE C11ATOMIC_ULONG_LOCK_FREE
-#      elif UINT_FAST64_MAX == UINT_MAX
-#        define C11ATOMIC_UINT_FAST64_T_LOCK_FREE C11ATOMIC_UINT_LOCK_FREE
-#      elif UINT_FAST64_MAX == USHRT_MAX
-#        define C11ATOMIC_UINT_FAST64_T_LOCK_FREE C11ATOMIC_USHORT_LOCK_FREE
-#      elif UINT_FAST64_MAX == UCHAR_MAX
-#        define C11ATOMIC_UINT_FAST64_T_LOCK_FREE C11ATOMIC_UCHAR_LOCK_FREE
-#      endif
-#    endif
-#  endif
-#  ifndef C11ATOMIC_UINT_FAST64_T_LOCK_FREE
-#    define C11ATOMIC_UINT_FAST64_T_LOCK_FREE 1
-#  endif
-#  define C11ATOMIC_INTMAX_T intmax_t
-#  ifdef _C11ATOMIC_LIMITS_H
-#    ifdef INTMAX_MAX // <stdint.h>
-#      if INTMAX_MAX == LLONG_MAX
-#        define C11ATOMIC_INTMAX_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
-#      endif
-#    endif
-#  endif
-#  ifndef C11ATOMIC_INTMAX_T_LOCK_FREE
-#    define C11ATOMIC_INTMAX_T_LOCK_FREE 1
-#  endif
-#  define C11ATOMIC_UINTMAX_T uintmax_t
-#  ifdef _C11ATOMIC_LIMITS_H
-#    ifdef UINTMAX_MAX // <stdint.h>
-#      if UINTMAX_MAX == ULLONG_MAX
-#        define C11ATOMIC_UINTMAX_T_LOCK_FREE C11ATOMIC_ULLONG_LOCK_FREE
-#      endif
-#    endif
-#  endif
-#  ifndef C11ATOMIC_UINTMAX_T_LOCK_FREE
-#    define C11ATOMIC_UINTMAX_T_LOCK_FREE 1
-#  endif
-#  ifdef INTPTR_MAX // <stdint.h> (optional)
-#    define C11ATOMIC_INTPTR_T intptr_t
-#    ifdef _C11ATOMIC_LIMITS_H
-#      if INTPTR_MAX == LLONG_MAX
-#        define C11ATOMIC_INTPTR_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
-#      elif INTPTR_MAX == LONG_MAX
-#        define C11ATOMIC_INTPTR_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
-#      elif INTPTR_MAX == INT_MAX
-#        define C11ATOMIC_INTPTR_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
-#      elif INTPTR_MAX == SHRT_MAX
-#        define C11ATOMIC_INTPTR_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
-#      elif INTPTR_MAX == SCHAR_MAX
-#        define C11ATOMIC_INTPTR_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
-#      endif
-#    endif
-#    ifndef C11ATOMIC_INTPTR_T_LOCK_FREE
-#      define C11ATOMIC_INTPTR_T_LOCK_FREE 1
-#    endif
-#  endif
-#  ifdef UINTPTR_MAX // <stdint.h> (optional)
-#    define C11ATOMIC_UINTPTR_T uintptr_t
-#    ifdef _C11ATOMIC_LIMITS_H
-#      if UINTPTR_MAX == ULLONG_MAX
-#        define C11ATOMIC_UINTPTR_T_LOCK_FREE C11ATOMIC_ULLONG_LOCK_FREE
-#      elif UINTPTR_MAX == ULONG_MAX
-#        define C11ATOMIC_UINTPTR_T_LOCK_FREE C11ATOMIC_ULONG_LOCK_FREE
-#      elif UINTPTR_MAX == UINT_MAX
-#        define C11ATOMIC_UINTPTR_T_LOCK_FREE C11ATOMIC_UINT_LOCK_FREE
-#      elif UINTPTR_MAX == USHRT_MAX
-#        define C11ATOMIC_UINTPTR_T_LOCK_FREE C11ATOMIC_USHORT_LOCK_FREE
-#      elif UINTPTR_MAX == UCHAR_MAX
-#        define C11ATOMIC_UINTPTR_T_LOCK_FREE C11ATOMIC_UCHAR_LOCK_FREE
-#      endif
-#    endif
-#    ifndef C11ATOMIC_UINTPTR_T_LOCK_FREE
-#      define C11ATOMIC_UINTPTR_T_LOCK_FREE 1
-#    endif
-#  endif
-#endif
-#ifdef _C11ATOMIC_STDDEF_H
-#  define C11ATOMIC_SIZE_T size_t
-#  ifdef _C11ATOMIC_LIMITS_H
-#    ifdef SIZE_MAX // <stdint.h>
-#      if SIZE_MAX == ULLONG_MAX
-#        define C11ATOMIC_SIZE_T_LOCK_FREE C11ATOMIC_ULLONG_LOCK_FREE
-#      elif SIZE_MAX == ULONG_MAX
-#        define C11ATOMIC_SIZE_T_LOCK_FREE C11ATOMIC_ULONG_LOCK_FREE
-#      elif SIZE_MAX == UINT_MAX
-#        define C11ATOMIC_SIZE_T_LOCK_FREE C11ATOMIC_UINT_LOCK_FREE
-#      elif SIZE_MAX == USHRT_MAX
-#        define C11ATOMIC_SIZE_T_LOCK_FREE C11ATOMIC_USHORT_LOCK_FREE
-#      elif SIZE_MAX == UCHAR_MAX
-#        define C11ATOMIC_SIZE_T_LOCK_FREE C11ATOMIC_UCHAR_LOCK_FREE
-#      endif
-#    endif
-#  endif
-#  ifndef C11ATOMIC_SIZE_T_LOCK_FREE
-#    define C11ATOMIC_SIZE_T_LOCK_FREE 1
-#  endif
-#  define C11ATOMIC_PTRDIFF_T ptrdiff_t
-#  ifdef _C11ATOMIC_LIMITS_H
-#    ifdef PTRDIFF_MAX // <stdint.h>
-#      if PTRDIFF_MAX == LLONG_MAX
-#        define C11ATOMIC_PTRDIFF_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
-#      elif PTRDIFF_MAX == LONG_MAX
-#        define C11ATOMIC_PTRDIFF_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
-#      elif PTRDIFF_MAX == INT_MAX
-#        define C11ATOMIC_PTRDIFF_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
-#      elif PTRDIFF_MAX == SHRT_MAX
-#        define C11ATOMIC_PTRDIFF_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
-#      elif PTRDIFF_MAX == SCHAR_MAX
-#        define C11ATOMIC_PTRDIFF_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
-#      endif
-#    endif
-#  endif
-#  ifndef C11ATOMIC_PTRDIFF_T_LOCK_FREE
-#    define C11ATOMIC_PTRDIFF_T_LOCK_FREE 1
-#  endif
-#endif
+
+/*---------------------------------------------------------------------------*/
 #define _C11ATOMIC_NA // to avoid C4003 (MSVC)
 #define _C11ATOMIC_VA(expr) expr // https://stackoverflow.com/a/5134656 (MSVC)
 #define _C11ATOMIC_FIRST_HELPER(first, ...) first // `...`: at least one (C99)
@@ -661,6 +44,3278 @@
 _C11ATOMIC_VA(                                                                \
     _C11ATOMIC_FIRST_HELPER(__VA_ARGS__, _C11ATOMIC_NA)                       \
 )
+
+/*---------------------------------------------------------------------------*/
+#ifdef C11ATOMIC_CPP
+#  define _C11ATOMIC_NOEXCEPT noexcept
+#else
+#  define _C11ATOMIC_NOEXCEPT
+#endif
+#ifdef C11ATOMIC_CPP
+#  define _C11ATOMIC_STD_CALL(name, ...)                                      \
+_C11ATOMIC_VA((                                                               \
+    std::name(__VA_ARGS__)                                                    \
+))
+#else
+#  define _C11ATOMIC_STD_CALL(name, ...)                                      \
+_C11ATOMIC_VA((                                                               \
+    name(__VA_ARGS__)                                                         \
+))
+#endif
+
+/*---------------------------- C11ATOMIC_POINTER ----------------------------*/
+#define C11ATOMIC_NULLPTR ((C11ATOMIC_POINTER)0)
+#define C11ATOMIC_POINTER void *
+#if defined(__SIZEOF_POINTER__) // GCC/Clang
+#  define C11ATOMIC_POINTER_SIZE (__SIZEOF_POINTER__)
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_POINTER_SIZE (8) // 64 bit
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_POINTER_SIZE (4) // 32 bit
+#elif defined(_WIN64) // MSVC LLP64
+#  define C11ATOMIC_POINTER_SIZE (8) // 64 bit
+#elif defined(_WIN32) // MSVC ILP32
+#  define C11ATOMIC_POINTER_SIZE (4) // 32 bit
+#endif
+#ifdef C11ATOMIC_POINTER_SIZE
+#  define C11ATOMIC_POINTER_BIT  (C11ATOMIC_POINTER_SIZE * C11ATOMIC_CHAR_BIT)
+#  define C11ATOMIC_POINTER_WIDTH C11ATOMIC_POINTER_BIT
+#endif
+#if defined(C11ATOMIC_STD)
+#  define C11ATOMIC_POINTER_LOCK_FREE ATOMIC_POINTER_LOCK_FREE
+#elif defined(C11ATOMIC_MSC)
+#  define C11ATOMIC_POINTER_LOCK_FREE 2 // always
+#else
+#  define C11ATOMIC_POINTER_LOCK_FREE 1 // unknown
+#endif
+
+/*------------------------------ C11ATOMIC_BOOL -----------------------------*/
+#ifdef _C11ATOMIC_BOOL_TRUE_FALSE_ARE_DEFINED
+#  define C11ATOMIC_BOOL   bool
+#  define C11ATOMIC_TRUE  (true)
+#  define C11ATOMIC_FALSE (false)
+#else
+#  define C11ATOMIC_BOOL   _Bool // C99
+#  define C11ATOMIC_TRUE  (1)    // C99
+#  define C11ATOMIC_FALSE (0)    // C99
+#endif
+#if defined(C11ATOMIC_STD)
+#  define C11ATOMIC_BOOL_LOCK_FREE ATOMIC_BOOL_LOCK_FREE
+#elif defined(C11ATOMIC_MSC)
+#  define C11ATOMIC_BOOL_LOCK_FREE 2 // always
+#else
+#  define C11ATOMIC_BOOL_LOCK_FREE 1 // unknown
+#endif
+
+/*------------------------------ C11ATOMIC_CHAR -----------------------------*/
+#define C11ATOMIC_CHAR char
+#if defined(CHAR_BIT) // <limits.h>
+#  define C11ATOMIC_CHAR_BIT (CHAR_BIT)
+#elif defined(__CHAR_BIT__) // GCC/Clang
+#  define C11ATOMIC_CHAR_BIT (__CHAR_BIT__)
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_CHAR_BIT (8)
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_CHAR_BIT (8)
+#elif defined(_WIN64) // MSVC LLP64
+#  define C11ATOMIC_CHAR_BIT (8)
+#elif defined(_WIN32) // MSVC ILP32
+#  define C11ATOMIC_CHAR_BIT (8)
+#endif
+#ifdef C11ATOMIC_CHAR_BIT
+#  define C11ATOMIC_CHAR_SIZE  (1) // C/C++
+#  define C11ATOMIC_CHAR_WIDTH  C11ATOMIC_CHAR_BIT // C23
+#  define C11ATOMIC_BOOL_WIDTH (1) // C23
+#  define C11ATOMIC_BOOL_SIZE   C11ATOMIC_CHAR_SIZE // typical (unreliable!)
+#  define C11ATOMIC_BOOL_BIT   (C11ATOMIC_BOOL_SIZE * C11ATOMIC_CHAR_BIT)
+#endif
+#if defined(C11ATOMIC_STD)
+#  define C11ATOMIC_CHAR_LOCK_FREE ATOMIC_CHAR_LOCK_FREE
+#elif defined(C11ATOMIC_MSC)
+#  define C11ATOMIC_CHAR_LOCK_FREE 2 // always
+#else
+#  define C11ATOMIC_CHAR_LOCK_FREE 1 // unknown
+#endif
+#define C11ATOMIC_SCHAR signed char
+#ifdef C11ATOMIC_CHAR_BIT
+#  define C11ATOMIC_SCHAR_WIDTH   C11ATOMIC_CHAR_WIDTH
+#  define C11ATOMIC_SCHAR_SIZE    C11ATOMIC_CHAR_SIZE
+#  define C11ATOMIC_SCHAR_BIT     C11ATOMIC_CHAR_BIT
+#endif
+#define C11ATOMIC_SCHAR_LOCK_FREE C11ATOMIC_CHAR_LOCK_FREE
+#define C11ATOMIC_UCHAR unsigned char
+#ifdef C11ATOMIC_CHAR_BIT
+#  define C11ATOMIC_UCHAR_WIDTH   C11ATOMIC_CHAR_WIDTH
+#  define C11ATOMIC_UCHAR_SIZE    C11ATOMIC_CHAR_SIZE
+#  define C11ATOMIC_UCHAR_BIT     C11ATOMIC_CHAR_BIT
+#endif
+#define C11ATOMIC_UCHAR_LOCK_FREE C11ATOMIC_CHAR_LOCK_FREE
+
+/*----------------------------- C11ATOMIC_SHORT -----------------------------*/
+#define C11ATOMIC_SHORT signed short int
+#if defined(SHRT_WIDTH) // <limits.h> (C23)
+#  define C11ATOMIC_SHORT_WIDTH (SHRT_WIDTH)
+#elif defined(__SHRT_WIDTH__) // GCC/Clang
+#  define C11ATOMIC_SHORT_WIDTH (__SHRT_WIDTH__)
+#elif defined(SHRT_MAX) // <limits.h>
+#  define C11ATOMIC_SHORT_WIDTH (SHRT_MAX/0x7F80%0xFF*8+8)
+#elif defined(__SHRT_MAX__) // GCC/Clang
+#  define C11ATOMIC_SHORT_WIDTH (__SHRT_MAX__/0x7F80%0xFF*8+8)
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_SHORT_WIDTH (16)
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_SHORT_WIDTH (16)
+#elif defined(_WIN64) // MSVC LLP64
+#  define C11ATOMIC_SHORT_WIDTH (16)
+#elif defined(_WIN32) // MSVC ILP32
+#  define C11ATOMIC_SHORT_WIDTH (16)
+#endif
+#ifdef C11ATOMIC_SHORT_WIDTH
+#  if defined(__SIZEOF_SHORT__) // GCC/Clang
+#    define C11ATOMIC_SHORT_SIZE (__SIZEOF_SHORT__)
+#    define C11ATOMIC_SHORT_BIT  (C11ATOMIC_SHORT_SIZE * C11ATOMIC_CHAR_BIT)
+#  elif defined(__LP64__) || defined(__ILP32__) // GCC/Clang LP64/ILP32
+#    define C11ATOMIC_SHORT_SIZE (C11ATOMIC_SHORT_BIT / C11ATOMIC_CHAR_BIT)
+#    define C11ATOMIC_SHORT_BIT   C11ATOMIC_SHORT_WIDTH // no padding bits
+#  elif defined(_WIN64) || defined(_WIN32) // MSVC LLP64/ILP32
+#    define C11ATOMIC_SHORT_SIZE (C11ATOMIC_SHORT_BIT / C11ATOMIC_CHAR_BIT)
+#    define C11ATOMIC_SHORT_BIT   C11ATOMIC_SHORT_WIDTH // no padding bits
+#  endif
+#endif
+#if defined(C11ATOMIC_STD)
+#  define C11ATOMIC_SHORT_LOCK_FREE ATOMIC_SHORT_LOCK_FREE
+#elif defined(C11ATOMIC_MSC)
+#  define C11ATOMIC_SHORT_LOCK_FREE 2 // always
+#else
+#  define C11ATOMIC_SHORT_LOCK_FREE 1 // unknown
+#endif
+#define C11ATOMIC_USHORT unsigned short int
+#ifdef C11ATOMIC_SHORT_WIDTH
+#  define C11ATOMIC_USHORT_WIDTH   C11ATOMIC_SHORT_WIDTH
+#endif
+#ifdef C11ATOMIC_SHORT_BIT
+#  define C11ATOMIC_USHORT_SIZE    C11ATOMIC_SHORT_SIZE
+#  define C11ATOMIC_USHORT_BIT     C11ATOMIC_SHORT_BIT
+#endif
+#define C11ATOMIC_USHORT_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
+
+/*------------------------------ C11ATOMIC_INT ------------------------------*/
+#define C11ATOMIC_INT signed int
+#if defined(INT_WIDTH) // <limits.h> (C23)
+#  define C11ATOMIC_INT_WIDTH (INT_WIDTH)
+#elif defined(__INT_WIDTH__) // GCC/Clang
+#  define C11ATOMIC_INT_WIDTH (__INT_WIDTH__)
+#elif defined(INT_MAX) // <limits.h>
+#  define C11ATOMIC_INT_WIDTH (INT_MAX/0x7F80%0xFF*8+8)
+#elif defined(__INT_MAX__) // GCC/Clang
+#  define C11ATOMIC_INT_WIDTH (__INT_MAX__/0x7F80%0xFF*8+8)
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_INT_WIDTH (32)
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_INT_WIDTH (32)
+#elif defined(_WIN64) // MSVC LLP64
+#  define C11ATOMIC_INT_WIDTH (32)
+#elif defined(_WIN32) // MSVC ILP32
+#  define C11ATOMIC_INT_WIDTH (32)
+#endif
+#ifdef C11ATOMIC_INT_WIDTH
+#  if defined(__SIZEOF_INT__) // GCC/Clang
+#    define C11ATOMIC_INT_SIZE (__SIZEOF_INT__)
+#    define C11ATOMIC_INT_BIT  (C11ATOMIC_INT_SIZE * C11ATOMIC_CHAR_BIT)
+#  elif defined(__LP64__) || defined(__ILP32__) // GCC/Clang LP64/ILP32
+#    define C11ATOMIC_INT_SIZE (C11ATOMIC_INT_BIT / C11ATOMIC_CHAR_BIT)
+#    define C11ATOMIC_INT_BIT   C11ATOMIC_INT_WIDTH // no padding bits
+#  elif defined(_WIN64) || defined(_WIN32) // MSVC LLP64/ILP32
+#    define C11ATOMIC_INT_SIZE (C11ATOMIC_INT_BIT / C11ATOMIC_CHAR_BIT)
+#    define C11ATOMIC_INT_BIT   C11ATOMIC_INT_WIDTH // no padding bits
+#  endif
+#endif
+#if defined(C11ATOMIC_STD)
+#  define C11ATOMIC_INT_LOCK_FREE ATOMIC_INT_LOCK_FREE
+#elif defined(C11ATOMIC_MSC)
+#  define C11ATOMIC_INT_LOCK_FREE 2 // always
+#else
+#  define C11ATOMIC_INT_LOCK_FREE 1 // unknown
+#endif
+#define C11ATOMIC_UINT unsigned int
+#ifdef C11ATOMIC_INT_WIDTH
+#  define C11ATOMIC_UINT_WIDTH   C11ATOMIC_INT_WIDTH
+#endif
+#ifdef C11ATOMIC_INT_BIT
+#  define C11ATOMIC_UINT_SIZE    C11ATOMIC_INT_SIZE
+#  define C11ATOMIC_UINT_BIT     C11ATOMIC_INT_BIT
+#endif
+#define C11ATOMIC_UINT_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
+
+/*------------------------------ C11ATOMIC_LONG -----------------------------*/
+#define C11ATOMIC_LONG signed long int
+#if defined(LONG_WIDTH) // <limits.h> (C23)
+#  define C11ATOMIC_LONG_WIDTH (LONG_WIDTH)
+#elif defined(__LONG_WIDTH__) // GCC/Clang
+#  define C11ATOMIC_LONG_WIDTH (__LONG_WIDTH__)
+#elif defined(LONG_MAX) // <limits.h>
+#  define C11ATOMIC_LONG_WIDTH (LONG_MAX/0x7F80%0xFF*8+8)
+#elif defined(__LONG_MAX__) // GCC/Clang
+#  define C11ATOMIC_LONG_WIDTH (__LONG_MAX__/0x7F80%0xFF*8+8)
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_LONG_WIDTH (64)
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_LONG_WIDTH (32)
+#elif defined(_WIN64) // MSVC LLP64
+#  define C11ATOMIC_LONG_WIDTH (32)
+#elif defined(_WIN32) // MSVC ILP32
+#  define C11ATOMIC_LONG_WIDTH (32)
+#endif
+#ifdef C11ATOMIC_LONG_WIDTH
+#  if defined(__SIZEOF_LONG__) // GCC/Clang
+#    define C11ATOMIC_LONG_SIZE (__SIZEOF_LONG__)
+#    define C11ATOMIC_LONG_BIT  (C11ATOMIC_LONG_SIZE * C11ATOMIC_CHAR_BIT)
+#  elif defined(__LP64__) || defined(__ILP32__) // GCC/Clang LP64/ILP32
+#    define C11ATOMIC_LONG_SIZE (C11ATOMIC_LONG_BIT / C11ATOMIC_CHAR_BIT)
+#    define C11ATOMIC_LONG_BIT   C11ATOMIC_LONG_WIDTH // no padding bits
+#  elif defined(_WIN64) || defined(_WIN32) // MSVC LLP64/ILP32
+#    define C11ATOMIC_LONG_SIZE (C11ATOMIC_LONG_BIT / C11ATOMIC_CHAR_BIT)
+#    define C11ATOMIC_LONG_BIT   C11ATOMIC_LONG_WIDTH // no padding bits
+#  endif
+#endif
+#if defined(C11ATOMIC_STD)
+#  define C11ATOMIC_LONG_LOCK_FREE ATOMIC_LONG_LOCK_FREE
+#elif defined(C11ATOMIC_MSC)
+#  define C11ATOMIC_LONG_LOCK_FREE 2 // always
+#else
+#  define C11ATOMIC_LONG_LOCK_FREE 1 // unknown
+#endif
+#define C11ATOMIC_ULONG unsigned long int
+#ifdef C11ATOMIC_LONG_WIDTH
+#  define C11ATOMIC_ULONG_WIDTH   C11ATOMIC_LONG_WIDTH
+#endif
+#ifdef C11ATOMIC_LONG_BIT
+#  define C11ATOMIC_ULONG_SIZE    C11ATOMIC_LONG_SIZE
+#  define C11ATOMIC_ULONG_BIT     C11ATOMIC_LONG_BIT
+#endif
+#define C11ATOMIC_ULONG_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
+
+/*----------------------------- C11ATOMIC_LLONG -----------------------------*/
+#define C11ATOMIC_LLONG signed long long int
+#if defined(LLONG_WIDTH) // <limits.h> (C23)
+#  define C11ATOMIC_LLONG_WIDTH (LLONG_WIDTH)
+#elif defined(__LONG_LONG_WIDTH__) // GCC/Clang
+#  define C11ATOMIC_LLONG_WIDTH (__LONG_LONG_WIDTH__)
+#elif defined(LLONG_MAX) // <limits.h> (C99)
+#  define C11ATOMIC_LLONG_WIDTH (LLONG_MAX/0x7F80%0xFF*8+8)
+#elif defined(__LONG_LONG_MAX__) // GCC/Clang
+#  define C11ATOMIC_LLONG_WIDTH (__LONG_LONG_MAX__/0x7F80%0xFF*8+8)
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_LLONG_WIDTH (64)
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_LLONG_WIDTH (64)
+#elif defined(_WIN64) // MSVC LLP64
+#  define C11ATOMIC_LLONG_WIDTH (64)
+#elif defined(_WIN32) // MSVC ILP32
+#  define C11ATOMIC_LLONG_WIDTH (64)
+#endif
+#ifdef C11ATOMIC_LLONG_WIDTH
+#  if defined(__SIZEOF_LONG_LONG__) // GCC/Clang
+#    define C11ATOMIC_LLONG_SIZE (__SIZEOF_LONG_LONG__)
+#    define C11ATOMIC_LLONG_BIT  (C11ATOMIC_LLONG_SIZE * C11ATOMIC_CHAR_BIT)
+#  elif defined(__LP64__) || defined(__ILP32__) // GCC/Clang LP64/ILP32
+#    define C11ATOMIC_LLONG_SIZE (C11ATOMIC_LLONG_BIT / C11ATOMIC_CHAR_BIT)
+#    define C11ATOMIC_LLONG_BIT   C11ATOMIC_LLONG_WIDTH // no padding bits
+#  elif defined(_WIN64) || defined(_WIN32) // MSVC LLP64/ILP32
+#    define C11ATOMIC_LLONG_SIZE (C11ATOMIC_LLONG_BIT / C11ATOMIC_CHAR_BIT)
+#    define C11ATOMIC_LLONG_BIT   C11ATOMIC_LLONG_WIDTH // no padding bits
+#  endif
+#endif
+#if defined(C11ATOMIC_STD)
+#  define C11ATOMIC_LLONG_LOCK_FREE ATOMIC_LLONG_LOCK_FREE
+#elif defined(C11ATOMIC_MSC)
+#  define C11ATOMIC_LLONG_LOCK_FREE 2 // always
+#else
+#  define C11ATOMIC_LLONG_LOCK_FREE 1 // unknown
+#endif
+#define C11ATOMIC_ULLONG unsigned long long int
+#ifdef C11ATOMIC_LLONG_WIDTH
+#  define C11ATOMIC_ULLONG_WIDTH   C11ATOMIC_LLONG_WIDTH
+#endif
+#ifdef C11ATOMIC_LLONG_BIT
+#  define C11ATOMIC_ULLONG_SIZE    C11ATOMIC_LLONG_SIZE
+#  define C11ATOMIC_ULLONG_BIT     C11ATOMIC_LLONG_BIT
+#endif
+#define C11ATOMIC_ULLONG_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
+
+/*----------------------------- C11ATOMIC_INT8_T ----------------------------*/
+#if defined(_C11ATOMIC_STDINT_H) && defined(INT8_MAX) // C99 (optional)
+#  define C11ATOMIC_INT8_T int8_t
+#elif defined(__INT8_TYPE__) // GCC/Clang (optional)
+#  define C11ATOMIC_INT8_T __INT8_TYPE__
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_INT8_T C11ATOMIC_SCHAR
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_INT8_T C11ATOMIC_SCHAR
+#elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#  define C11ATOMIC_INT8_T signed __int8
+#elif !defined(C11ATOMIC_SCHAR_BIT) // -> break
+#elif 8 == C11ATOMIC_SCHAR_WIDTH && C11ATOMIC_SCHAR_BIT == 8
+#  define C11ATOMIC_INT8_T C11ATOMIC_SCHAR
+#endif
+#ifdef C11ATOMIC_INT8_T
+#  ifdef C11ATOMIC_CHAR_BIT
+#    define C11ATOMIC_INT8_T_WIDTH (8) // C99
+#    define C11ATOMIC_INT8_T_SIZE ((8) / C11ATOMIC_CHAR_BIT)
+#    define C11ATOMIC_INT8_T_BIT   (8) // C99
+#  endif
+#  if !defined(C11ATOMIC_SCHAR_WIDTH)
+#    define C11ATOMIC_INT8_T_LOCK_FREE 1 // unknown
+#  elif C11ATOMIC_INT8_T_WIDTH == C11ATOMIC_SCHAR_WIDTH
+#    define C11ATOMIC_INT8_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
+#  else
+#    define C11ATOMIC_INT8_T_LOCK_FREE 1 // unknown
+#  endif
+#endif
+#if defined(_C11ATOMIC_STDINT_H) && defined(UINT8_MAX) // C99 (optional)
+#  define C11ATOMIC_UINT8_T uint8_t
+#elif defined(__UINT8_TYPE__) // GCC/Clang (optional)
+#  define C11ATOMIC_UINT8_T __UINT8_TYPE__
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_UINT8_T C11ATOMIC_UCHAR
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_UINT8_T C11ATOMIC_UCHAR
+#elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#  define C11ATOMIC_UINT8_T unsigned __int8
+#elif !defined(C11ATOMIC_UCHAR_BIT) // -> break
+#elif 8 == C11ATOMIC_UCHAR_WIDTH && C11ATOMIC_UCHAR_BIT == 8
+#  define C11ATOMIC_UINT8_T C11ATOMIC_UCHAR
+#endif
+#ifdef C11ATOMIC_UINT8_T
+#  ifdef C11ATOMIC_INT8_T_BIT
+#    define C11ATOMIC_UINT8_T_WIDTH   C11ATOMIC_INT8_T_WIDTH
+#    define C11ATOMIC_UINT8_T_SIZE    C11ATOMIC_INT8_T_SIZE
+#    define C11ATOMIC_UINT8_T_BIT     C11ATOMIC_INT8_T_BIT
+#  endif
+#  define C11ATOMIC_UINT8_T_LOCK_FREE C11ATOMIC_INT8_T_LOCK_FREE
+#endif
+
+/*---------------------------- C11ATOMIC_INT16_T ----------------------------*/
+#if defined(_C11ATOMIC_STDINT_H) && defined(INT16_MAX) // C99 (optional)
+#  define C11ATOMIC_INT16_T int16_t
+#elif defined(__INT16_TYPE__) // GCC/Clang (optional)
+#  define C11ATOMIC_INT16_T __INT16_TYPE__
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_INT16_T C11ATOMIC_SHORT
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_INT16_T C11ATOMIC_SHORT
+#elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#  define C11ATOMIC_INT16_T signed __int16
+#elif !defined(C11ATOMIC_SHORT_BIT) // -> break
+#elif 16 == C11ATOMIC_SCHAR_WIDTH && C11ATOMIC_SCHAR_BIT == 16
+#  define C11ATOMIC_INT16_T C11ATOMIC_SCHAR
+#elif 16 == C11ATOMIC_SHORT_WIDTH && C11ATOMIC_SHORT_BIT == 16
+#  define C11ATOMIC_INT16_T C11ATOMIC_SHORT
+#endif
+#ifdef C11ATOMIC_INT16_T
+#  ifdef C11ATOMIC_CHAR_BIT
+#    define C11ATOMIC_INT16_T_WIDTH (16) // C99
+#    define C11ATOMIC_INT16_T_SIZE ((16) / C11ATOMIC_CHAR_BIT)
+#    define C11ATOMIC_INT16_T_BIT   (16) // C99
+#  endif
+#  if !defined(C11ATOMIC_SHORT_WIDTH)
+#    define C11ATOMIC_INT16_T_LOCK_FREE 1 // unknown
+#  elif C11ATOMIC_INT16_T_WIDTH == C11ATOMIC_SCHAR_WIDTH
+#    define C11ATOMIC_INT16_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
+#  elif C11ATOMIC_INT16_T_WIDTH == C11ATOMIC_SHORT_WIDTH
+#    define C11ATOMIC_INT16_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
+#  else
+#    define C11ATOMIC_INT16_T_LOCK_FREE 1 // unknown
+#  endif
+#endif
+#if defined(_C11ATOMIC_STDINT_H) && defined(UINT16_MAX) // C99 (optional)
+#  define C11ATOMIC_UINT16_T uint16_t
+#elif defined(__UINT16_TYPE__) // GCC/Clang (optional)
+#  define C11ATOMIC_UINT16_T __UINT16_TYPE__
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_UINT16_T C11ATOMIC_USHORT
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_UINT16_T C11ATOMIC_USHORT
+#elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#  define C11ATOMIC_UINT16_T unsigned __int16
+#elif !defined(C11ATOMIC_USHORT_BIT) // -> break
+#elif 16 == C11ATOMIC_UCHAR_WIDTH && C11ATOMIC_UCHAR_BIT == 16
+#  define C11ATOMIC_UINT16_T C11ATOMIC_UCHAR
+#elif 16 == C11ATOMIC_USHORT_WIDTH && C11ATOMIC_USHORT_BIT == 16
+#  define C11ATOMIC_UINT16_T C11ATOMIC_USHORT
+#endif
+#ifdef C11ATOMIC_UINT16_T
+#  ifdef C11ATOMIC_INT16_T_BIT
+#    define C11ATOMIC_UINT16_T_WIDTH   C11ATOMIC_INT16_T_WIDTH
+#    define C11ATOMIC_UINT16_T_SIZE    C11ATOMIC_INT16_T_SIZE
+#    define C11ATOMIC_UINT16_T_BIT     C11ATOMIC_INT16_T_BIT
+#  endif
+#  define C11ATOMIC_UINT16_T_LOCK_FREE C11ATOMIC_INT16_T_LOCK_FREE
+#endif
+
+/*---------------------------- C11ATOMIC_INT32_T ----------------------------*/
+#if defined(_C11ATOMIC_STDINT_H) && defined(INT32_MAX) // C99 (optional)
+#  define C11ATOMIC_INT32_T int32_t
+#elif defined(__INT32_TYPE__) // GCC/Clang (optional)
+#  define C11ATOMIC_INT32_T __INT32_TYPE__
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_INT32_T C11ATOMIC_INT
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_INT32_T C11ATOMIC_INT
+#elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#  define C11ATOMIC_INT32_T signed __int32
+#elif !defined(C11ATOMIC_LONG_BIT) // -> break
+#elif 32 == C11ATOMIC_SCHAR_WIDTH && C11ATOMIC_SCHAR_BIT == 32
+#  define C11ATOMIC_INT32_T C11ATOMIC_SCHAR
+#elif 32 == C11ATOMIC_SHORT_WIDTH && C11ATOMIC_SHORT_BIT == 32
+#  define C11ATOMIC_INT32_T C11ATOMIC_SHORT
+#elif 32 == C11ATOMIC_INT_WIDTH && C11ATOMIC_INT_BIT == 32
+#  define C11ATOMIC_INT32_T C11ATOMIC_INT
+#elif 32 == C11ATOMIC_LONG_WIDTH && C11ATOMIC_LONG_BIT == 32
+#  define C11ATOMIC_INT32_T C11ATOMIC_LONG
+#endif
+#ifdef C11ATOMIC_INT32_T
+#  ifdef C11ATOMIC_CHAR_BIT
+#    define C11ATOMIC_INT32_T_WIDTH (32) // C99
+#    define C11ATOMIC_INT32_T_SIZE ((32) / C11ATOMIC_CHAR_BIT)
+#    define C11ATOMIC_INT32_T_BIT   (32) // C99
+#  endif
+#  if !defined(C11ATOMIC_LONG_WIDTH)
+#    define C11ATOMIC_INT32_T_LOCK_FREE 1 // unknown
+#  elif C11ATOMIC_INT32_T_WIDTH == C11ATOMIC_SCHAR_WIDTH
+#    define C11ATOMIC_INT32_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
+#  elif C11ATOMIC_INT32_T_WIDTH == C11ATOMIC_SHORT_WIDTH
+#    define C11ATOMIC_INT32_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
+#  elif C11ATOMIC_INT32_T_WIDTH == C11ATOMIC_INT_WIDTH
+#    define C11ATOMIC_INT32_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
+#  elif C11ATOMIC_INT32_T_WIDTH == C11ATOMIC_LONG_WIDTH
+#    define C11ATOMIC_INT32_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
+#  else
+#    define C11ATOMIC_INT32_T_LOCK_FREE 1 // unknown
+#  endif
+#endif
+#if defined(_C11ATOMIC_STDINT_H) && defined(UINT32_MAX) // C99 (optional)
+#  define C11ATOMIC_UINT32_T uint32_t
+#elif defined(__UINT32_TYPE__) // GCC/Clang (optional)
+#  define C11ATOMIC_UINT32_T __UINT32_TYPE__
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_UINT32_T C11ATOMIC_UINT
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_UINT32_T C11ATOMIC_UINT
+#elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#  define C11ATOMIC_UINT32_T unsigned __int32
+#elif !defined(C11ATOMIC_ULONG_BIT) // -> break
+#elif 32 == C11ATOMIC_UCHAR_WIDTH && C11ATOMIC_UCHAR_BIT == 32
+#  define C11ATOMIC_UINT32_T C11ATOMIC_UCHAR
+#elif 32 == C11ATOMIC_USHORT_WIDTH && C11ATOMIC_USHORT_BIT == 32
+#  define C11ATOMIC_UINT32_T C11ATOMIC_USHORT
+#elif 32 == C11ATOMIC_UINT_WIDTH && C11ATOMIC_UINT_BIT == 32
+#  define C11ATOMIC_UINT32_T C11ATOMIC_UINT
+#elif 32 == C11ATOMIC_ULONG_WIDTH && C11ATOMIC_ULONG_BIT == 32
+#  define C11ATOMIC_UINT32_T C11ATOMIC_ULONG
+#endif
+#ifdef C11ATOMIC_UINT32_T
+#  ifdef C11ATOMIC_INT32_T_BIT
+#    define C11ATOMIC_UINT32_T_WIDTH   C11ATOMIC_INT32_T_WIDTH
+#    define C11ATOMIC_UINT32_T_SIZE    C11ATOMIC_INT32_T_SIZE
+#    define C11ATOMIC_UINT32_T_BIT     C11ATOMIC_INT32_T_BIT
+#  endif
+#  define C11ATOMIC_UINT32_T_LOCK_FREE C11ATOMIC_INT32_T_LOCK_FREE
+#endif
+
+/*---------------------------- C11ATOMIC_INT64_T ----------------------------*/
+#if defined(_C11ATOMIC_STDINT_H) && defined(INT64_MAX) // C99 (optional)
+#  define C11ATOMIC_INT64_T int64_t
+#elif defined(__INT64_TYPE__) // GCC/Clang (optional)
+#  define C11ATOMIC_INT64_T __INT64_TYPE__
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_INT64_T C11ATOMIC_LONG
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_INT64_T C11ATOMIC_LLONG
+#elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#  define C11ATOMIC_INT64_T signed __int64
+#elif !defined(C11ATOMIC_LLONG_BIT) // -> break
+#elif 64 == C11ATOMIC_SCHAR_WIDTH && C11ATOMIC_SCHAR_BIT == 64
+#  define C11ATOMIC_INT64_T C11ATOMIC_SCHAR
+#elif 64 == C11ATOMIC_SHORT_WIDTH && C11ATOMIC_SHORT_BIT == 64
+#  define C11ATOMIC_INT64_T C11ATOMIC_SHORT
+#elif 64 == C11ATOMIC_INT_WIDTH && C11ATOMIC_INT_BIT == 64
+#  define C11ATOMIC_INT64_T C11ATOMIC_INT
+#elif 64 == C11ATOMIC_LONG_WIDTH && C11ATOMIC_LONG_BIT == 64
+#  define C11ATOMIC_INT64_T C11ATOMIC_LONG
+#elif 64 == C11ATOMIC_LLONG_WIDTH && C11ATOMIC_LLONG_BIT == 64
+#  define C11ATOMIC_INT64_T C11ATOMIC_LLONG
+#endif
+#ifdef C11ATOMIC_INT64_T
+#  ifdef C11ATOMIC_CHAR_BIT
+#    define C11ATOMIC_INT64_T_WIDTH (64) // C99
+#    define C11ATOMIC_INT64_T_SIZE ((64) / C11ATOMIC_CHAR_BIT)
+#    define C11ATOMIC_INT64_T_BIT   (64) // C99
+#  endif
+#  if !defined(C11ATOMIC_LLONG_WIDTH)
+#    define C11ATOMIC_INT64_T_LOCK_FREE 1 // unknown
+#  elif C11ATOMIC_INT64_T_WIDTH == C11ATOMIC_SCHAR_WIDTH
+#    define C11ATOMIC_INT64_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
+#  elif C11ATOMIC_INT64_T_WIDTH == C11ATOMIC_SHORT_WIDTH
+#    define C11ATOMIC_INT64_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
+#  elif C11ATOMIC_INT64_T_WIDTH == C11ATOMIC_INT_WIDTH
+#    define C11ATOMIC_INT64_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
+#  elif C11ATOMIC_INT64_T_WIDTH == C11ATOMIC_LONG_WIDTH
+#    define C11ATOMIC_INT64_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
+#  elif C11ATOMIC_INT64_T_WIDTH == C11ATOMIC_LLONG_WIDTH
+#    define C11ATOMIC_INT64_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
+#  else
+#    define C11ATOMIC_INT64_T_LOCK_FREE 1 // unknown
+#  endif
+#endif
+#if defined(_C11ATOMIC_STDINT_H) && defined(UINT64_MAX) // C99 (optional)
+#  define C11ATOMIC_UINT64_T uint64_t
+#elif defined(__UINT64_TYPE__) // GCC/Clang (optional)
+#  define C11ATOMIC_UINT64_T __UINT64_TYPE__
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_UINT64_T C11ATOMIC_ULONG
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_UINT64_T C11ATOMIC_ULLONG
+#elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#  define C11ATOMIC_UINT64_T unsigned __int64
+#elif !defined(C11ATOMIC_ULLONG_BIT) // -> break
+#elif 64 == C11ATOMIC_UCHAR_WIDTH && C11ATOMIC_UCHAR_BIT == 64
+#  define C11ATOMIC_UINT64_T C11ATOMIC_UCHAR
+#elif 64 == C11ATOMIC_USHORT_WIDTH && C11ATOMIC_USHORT_BIT == 64
+#  define C11ATOMIC_UINT64_T C11ATOMIC_USHORT
+#elif 64 == C11ATOMIC_UINT_WIDTH && C11ATOMIC_UINT_BIT == 64
+#  define C11ATOMIC_UINT64_T C11ATOMIC_UINT
+#elif 64 == C11ATOMIC_ULONG_WIDTH && C11ATOMIC_ULONG_BIT == 64
+#  define C11ATOMIC_UINT64_T C11ATOMIC_ULONG
+#elif 64 == C11ATOMIC_ULLONG_WIDTH && C11ATOMIC_ULLONG_BIT == 64
+#  define C11ATOMIC_UINT64_T C11ATOMIC_ULLONG
+#endif
+#ifdef C11ATOMIC_UINT64_T
+#  ifdef C11ATOMIC_INT64_T_BIT
+#    define C11ATOMIC_UINT64_T_WIDTH   C11ATOMIC_INT64_T_WIDTH
+#    define C11ATOMIC_UINT64_T_SIZE    C11ATOMIC_INT64_T_SIZE
+#    define C11ATOMIC_UINT64_T_BIT     C11ATOMIC_INT64_T_BIT
+#  endif
+#  define C11ATOMIC_UINT64_T_LOCK_FREE C11ATOMIC_INT64_T_LOCK_FREE
+#endif
+
+/*---------------------------- C11ATOMIC_LEAST8_T ---------------------------*/
+#if defined(_C11ATOMIC_STDINT_H) && defined(INT_LEAST8_MAX) // C99
+#  define C11ATOMIC_INT_LEAST8_T int_least8_t
+#elif defined(__INT_LEAST8_TYPE__) // GCC/Clang
+#  define C11ATOMIC_INT_LEAST8_T __INT_LEAST8_TYPE__
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_INT_LEAST8_T C11ATOMIC_SCHAR
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_INT_LEAST8_T C11ATOMIC_SCHAR
+#elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#  define C11ATOMIC_INT_LEAST8_T signed __int8
+#elif !defined(C11ATOMIC_SCHAR_WIDTH)
+#  define C11ATOMIC_INT_LEAST8_T C11ATOMIC_SCHAR
+#  define C11ATOMIC_INT_LEAST8_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
+#else
+#  define C11ATOMIC_INT_LEAST8_T C11ATOMIC_SCHAR
+#  define C11ATOMIC_INT_LEAST8_T_WIDTH     C11ATOMIC_SCHAR_WIDTH
+#endif
+#ifndef C11ATOMIC_INT_LEAST8_T_LOCK_FREE
+#  if defined(INT_LEAST8_WIDTH) // <stdint.h> (C23)
+#    define C11ATOMIC_INT_LEAST8_T_WIDTH (INT_LEAST8_WIDTH)
+#  elif defined(__INT_LEAST8_WIDTH__) // GCC/Clang
+#    define C11ATOMIC_INT_LEAST8_T_WIDTH (__INT_LEAST8_WIDTH__)
+#  elif defined(INT_LEAST8_MAX) // <stdint.h> (C99)
+#    define C11ATOMIC_INT_LEAST8_T_WIDTH (INT_LEAST8_MAX/0x7F80%0xFF*8+8)
+#  elif defined(__INT_LEAST8_MAX__) // GCC/Clang
+#    define C11ATOMIC_INT_LEAST8_T_WIDTH (__INT_LEAST8_MAX__/0x7F80%0xFF*8+8)
+#  elif defined(__LP64__) // GCC/Clang LP64
+#    define C11ATOMIC_INT_LEAST8_T_WIDTH (8)
+#  elif defined(__ILP32__) // GCC/Clang ILP32
+#    define C11ATOMIC_INT_LEAST8_T_WIDTH (8)
+#  elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#    define C11ATOMIC_INT_LEAST8_T_WIDTH (8)
+#  endif
+#  if !defined(C11ATOMIC_SCHAR_WIDTH)
+#    define C11ATOMIC_INT_LEAST8_T_LOCK_FREE 1 // unknown
+#  elif C11ATOMIC_INT_LEAST8_T_WIDTH == C11ATOMIC_SCHAR_WIDTH
+#    ifdef C11ATOMIC_SCHAR_BIT
+#      define C11ATOMIC_INT_LEAST8_T_SIZE    C11ATOMIC_SCHAR_SIZE
+#      define C11ATOMIC_INT_LEAST8_T_BIT     C11ATOMIC_SCHAR_BIT
+#    endif
+#    define C11ATOMIC_INT_LEAST8_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
+#  else
+#    define C11ATOMIC_INT_LEAST8_T_LOCK_FREE 1 // unknown
+#  endif
+#endif
+#if defined(_C11ATOMIC_STDINT_H) && defined(UINT_LEAST8_MAX) // C99
+#  define C11ATOMIC_UINT_LEAST8_T uint_least8_t
+#elif defined(__UINT_LEAST8_TYPE__) // GCC/Clang
+#  define C11ATOMIC_UINT_LEAST8_T __UINT_LEAST8_TYPE__
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_UINT_LEAST8_T C11ATOMIC_UCHAR
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_UINT_LEAST8_T C11ATOMIC_UCHAR
+#elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#  define C11ATOMIC_UINT_LEAST8_T unsigned __int8
+#elif !defined(C11ATOMIC_UCHAR_WIDTH)
+#  define C11ATOMIC_UINT_LEAST8_T C11ATOMIC_UCHAR
+#else
+#  define C11ATOMIC_UINT_LEAST8_T C11ATOMIC_UCHAR
+#endif
+#ifdef C11ATOMIC_INT_LEAST8_T_WIDTH
+#  define C11ATOMIC_UINT_LEAST8_T_WIDTH   C11ATOMIC_INT_LEAST8_T_WIDTH
+#endif
+#ifdef C11ATOMIC_INT_LEAST8_T_BIT
+#  define C11ATOMIC_UINT_LEAST8_T_SIZE    C11ATOMIC_INT_LEAST8_T_SIZE
+#  define C11ATOMIC_UINT_LEAST8_T_BIT     C11ATOMIC_INT_LEAST8_T_BIT
+#endif
+#define C11ATOMIC_UINT_LEAST8_T_LOCK_FREE C11ATOMIC_INT_LEAST8_T_LOCK_FREE
+
+/*--------------------------- C11ATOMIC_LEAST16_T ---------------------------*/
+#if defined(_C11ATOMIC_STDINT_H) && defined(INT_LEAST16_MAX) // C99
+#  define C11ATOMIC_INT_LEAST16_T int_least16_t
+#elif defined(__INT_LEAST16_TYPE__) // GCC/Clang
+#  define C11ATOMIC_INT_LEAST16_T __INT_LEAST16_TYPE__
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_INT_LEAST16_T C11ATOMIC_SHORT
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_INT_LEAST16_T C11ATOMIC_SHORT
+#elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#  define C11ATOMIC_INT_LEAST16_T signed __int16
+#elif !defined(C11ATOMIC_SHORT_WIDTH)
+#  define C11ATOMIC_INT_LEAST16_T C11ATOMIC_SHORT
+#  define C11ATOMIC_INT_LEAST16_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
+#elif 16 <= C11ATOMIC_SCHAR_WIDTH
+#  define C11ATOMIC_INT_LEAST16_T C11ATOMIC_SCHAR
+#  define C11ATOMIC_INT_LEAST16_T_WIDTH     C11ATOMIC_SCHAR_WIDTH
+#else
+#  define C11ATOMIC_INT_LEAST16_T C11ATOMIC_SHORT
+#  define C11ATOMIC_INT_LEAST16_T_WIDTH     C11ATOMIC_SHORT_WIDTH
+#endif
+#ifndef C11ATOMIC_INT_LEAST16_T_LOCK_FREE
+#  if defined(INT_LEAST16_WIDTH) // <stdint.h> (C23)
+#    define C11ATOMIC_INT_LEAST16_T_WIDTH (INT_LEAST16_WIDTH)
+#  elif defined(__INT_LEAST16_WIDTH__) // GCC/Clang
+#    define C11ATOMIC_INT_LEAST16_T_WIDTH (__INT_LEAST16_WIDTH__)
+#  elif defined(INT_LEAST16_MAX) // <stdint.h> (C99)
+#    define C11ATOMIC_INT_LEAST16_T_WIDTH (INT_LEAST16_MAX/0x7F80%0xFF*8+8)
+#  elif defined(__INT_LEAST16_MAX__) // GCC/Clang
+#    define C11ATOMIC_INT_LEAST16_T_WIDTH (__INT_LEAST16_MAX__/0x7F80%0xFF*8+8)
+#  elif defined(__LP64__) // GCC/Clang LP64
+#    define C11ATOMIC_INT_LEAST16_T_WIDTH (16)
+#  elif defined(__ILP32__) // GCC/Clang ILP32
+#    define C11ATOMIC_INT_LEAST16_T_WIDTH (16)
+#  elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#    define C11ATOMIC_INT_LEAST16_T_WIDTH (16)
+#  endif
+#  if !defined(C11ATOMIC_SHORT_WIDTH)
+#    define C11ATOMIC_INT_LEAST16_T_LOCK_FREE 1 // unknown
+#  elif C11ATOMIC_INT_LEAST16_T_WIDTH == C11ATOMIC_SCHAR_WIDTH
+#    ifdef C11ATOMIC_SCHAR_BIT
+#      define C11ATOMIC_INT_LEAST16_T_SIZE    C11ATOMIC_SCHAR_SIZE
+#      define C11ATOMIC_INT_LEAST16_T_BIT     C11ATOMIC_SCHAR_BIT
+#    endif
+#    define C11ATOMIC_INT_LEAST16_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
+#  elif C11ATOMIC_INT_LEAST16_T_WIDTH == C11ATOMIC_SHORT_WIDTH
+#    ifdef C11ATOMIC_SHORT_BIT
+#      define C11ATOMIC_INT_LEAST16_T_SIZE    C11ATOMIC_SHORT_SIZE
+#      define C11ATOMIC_INT_LEAST16_T_BIT     C11ATOMIC_SHORT_BIT
+#    endif
+#    define C11ATOMIC_INT_LEAST16_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
+#  else
+#    define C11ATOMIC_INT_LEAST16_T_LOCK_FREE 1 // unknown
+#  endif
+#endif
+#if defined(_C11ATOMIC_STDINT_H) && defined(UINT_LEAST16_MAX) // C99
+#  define C11ATOMIC_UINT_LEAST16_T uint_least16_t
+#elif defined(__UINT_LEAST16_TYPE__) // GCC/Clang
+#  define C11ATOMIC_UINT_LEAST16_T __UINT_LEAST16_TYPE__
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_UINT_LEAST16_T C11ATOMIC_USHORT
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_UINT_LEAST16_T C11ATOMIC_USHORT
+#elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#  define C11ATOMIC_UINT_LEAST16_T unsigned __int16
+#elif !defined(C11ATOMIC_USHORT_WIDTH)
+#  define C11ATOMIC_UINT_LEAST16_T C11ATOMIC_USHORT
+#elif 16 <= C11ATOMIC_UCHAR_WIDTH
+#  define C11ATOMIC_UINT_LEAST16_T C11ATOMIC_UCHAR
+#else
+#  define C11ATOMIC_UINT_LEAST16_T C11ATOMIC_USHORT
+#endif
+#ifdef C11ATOMIC_INT_LEAST16_T_WIDTH
+#  define C11ATOMIC_UINT_LEAST16_T_WIDTH   C11ATOMIC_INT_LEAST16_T_WIDTH
+#endif
+#ifdef C11ATOMIC_INT_LEAST16_T_BIT
+#  define C11ATOMIC_UINT_LEAST16_T_SIZE    C11ATOMIC_INT_LEAST16_T_SIZE
+#  define C11ATOMIC_UINT_LEAST16_T_BIT     C11ATOMIC_INT_LEAST16_T_BIT
+#endif
+#define C11ATOMIC_UINT_LEAST16_T_LOCK_FREE C11ATOMIC_INT_LEAST16_T_LOCK_FREE
+
+/*--------------------------- C11ATOMIC_LEAST32_T ---------------------------*/
+#if defined(_C11ATOMIC_STDINT_H) && defined(INT_LEAST32_MAX) // C99
+#  define C11ATOMIC_INT_LEAST32_T int_least32_t
+#elif defined(__INT_LEAST32_TYPE__) // GCC/Clang
+#  define C11ATOMIC_INT_LEAST32_T __INT_LEAST32_TYPE__
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_INT_LEAST32_T C11ATOMIC_INT
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_INT_LEAST32_T C11ATOMIC_INT
+#elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#  define C11ATOMIC_INT_LEAST32_T signed __int32
+#elif !defined(C11ATOMIC_LONG_WIDTH)
+#  define C11ATOMIC_INT_LEAST32_T C11ATOMIC_LONG
+#  define C11ATOMIC_INT_LEAST32_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
+#elif 32 <= C11ATOMIC_SCHAR_WIDTH
+#  define C11ATOMIC_INT_LEAST32_T C11ATOMIC_SCHAR
+#  define C11ATOMIC_INT_LEAST32_T_WIDTH     C11ATOMIC_SCHAR_WIDTH
+#elif 32 <= C11ATOMIC_SHORT_WIDTH
+#  define C11ATOMIC_INT_LEAST32_T C11ATOMIC_SHORT
+#  define C11ATOMIC_INT_LEAST32_T_WIDTH     C11ATOMIC_SHORT_WIDTH
+#elif 32 <= C11ATOMIC_INT_WIDTH
+#  define C11ATOMIC_INT_LEAST32_T C11ATOMIC_INT
+#  define C11ATOMIC_INT_LEAST32_T_WIDTH     C11ATOMIC_INT_WIDTH
+#else
+#  define C11ATOMIC_INT_LEAST32_T C11ATOMIC_LONG
+#  define C11ATOMIC_INT_LEAST32_T_WIDTH     C11ATOMIC_LONG_WIDTH
+#endif
+#ifndef C11ATOMIC_INT_LEAST32_T_LOCK_FREE
+#  if defined(INT_LEAST32_WIDTH) // <stdint.h> (C23)
+#    define C11ATOMIC_INT_LEAST32_T_WIDTH (INT_LEAST32_WIDTH)
+#  elif defined(__INT_LEAST32_WIDTH__) // GCC/Clang
+#    define C11ATOMIC_INT_LEAST32_T_WIDTH (__INT_LEAST32_WIDTH__)
+#  elif defined(INT_LEAST32_MAX) // <stdint.h> (C99)
+#    define C11ATOMIC_INT_LEAST32_T_WIDTH (INT_LEAST32_MAX/0x7F80%0xFF*8+8)
+#  elif defined(__INT_LEAST32_MAX__) // GCC/Clang
+#    define C11ATOMIC_INT_LEAST32_T_WIDTH (__INT_LEAST32_MAX__/0x7F80%0xFF*8+8)
+#  elif defined(__LP64__) // GCC/Clang LP64
+#    define C11ATOMIC_INT_LEAST32_T_WIDTH (32)
+#  elif defined(__ILP32__) // GCC/Clang ILP32
+#    define C11ATOMIC_INT_LEAST32_T_WIDTH (32)
+#  elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#    define C11ATOMIC_INT_LEAST32_T_WIDTH (32)
+#  endif
+#  if !defined(C11ATOMIC_LONG_WIDTH)
+#    define C11ATOMIC_INT_LEAST32_T_LOCK_FREE 1 // unknown
+#  elif C11ATOMIC_INT_LEAST32_T_WIDTH == C11ATOMIC_SCHAR_WIDTH
+#    ifdef C11ATOMIC_SCHAR_BIT
+#      define C11ATOMIC_INT_LEAST32_T_SIZE    C11ATOMIC_SCHAR_SIZE
+#      define C11ATOMIC_INT_LEAST32_T_BIT     C11ATOMIC_SCHAR_BIT
+#    endif
+#    define C11ATOMIC_INT_LEAST32_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
+#  elif C11ATOMIC_INT_LEAST32_T_WIDTH == C11ATOMIC_SHORT_WIDTH
+#    ifdef C11ATOMIC_SHORT_BIT
+#      define C11ATOMIC_INT_LEAST32_T_SIZE    C11ATOMIC_SHORT_SIZE
+#      define C11ATOMIC_INT_LEAST32_T_BIT     C11ATOMIC_SHORT_BIT
+#    endif
+#    define C11ATOMIC_INT_LEAST32_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
+#  elif C11ATOMIC_INT_LEAST32_T_WIDTH == C11ATOMIC_INT_WIDTH
+#    ifdef C11ATOMIC_INT_BIT
+#      define C11ATOMIC_INT_LEAST32_T_SIZE    C11ATOMIC_INT_SIZE
+#      define C11ATOMIC_INT_LEAST32_T_BIT     C11ATOMIC_INT_BIT
+#    endif
+#    define C11ATOMIC_INT_LEAST32_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
+#  elif C11ATOMIC_INT_LEAST32_T_WIDTH == C11ATOMIC_LONG_WIDTH
+#    ifdef C11ATOMIC_LONG_BIT
+#      define C11ATOMIC_INT_LEAST32_T_SIZE    C11ATOMIC_LONG_SIZE
+#      define C11ATOMIC_INT_LEAST32_T_BIT     C11ATOMIC_LONG_BIT
+#    endif
+#    define C11ATOMIC_INT_LEAST32_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
+#  else
+#    define C11ATOMIC_INT_LEAST32_T_LOCK_FREE 1 // unknown
+#  endif
+#endif
+#if defined(_C11ATOMIC_STDINT_H) && defined(UINT_LEAST32_MAX) // C99
+#  define C11ATOMIC_UINT_LEAST32_T uint_least32_t
+#elif defined(__UINT_LEAST32_TYPE__) // GCC/Clang
+#  define C11ATOMIC_UINT_LEAST32_T __UINT_LEAST32_TYPE__
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_UINT_LEAST32_T C11ATOMIC_UINT
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_UINT_LEAST32_T C11ATOMIC_UINT
+#elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#  define C11ATOMIC_UINT_LEAST32_T unsigned __int32
+#elif !defined(C11ATOMIC_ULONG_WIDTH)
+#  define C11ATOMIC_UINT_LEAST32_T C11ATOMIC_ULONG
+#elif 32 <= C11ATOMIC_UCHAR_WIDTH
+#  define C11ATOMIC_UINT_LEAST32_T C11ATOMIC_UCHAR
+#elif 32 <= C11ATOMIC_USHORT_WIDTH
+#  define C11ATOMIC_UINT_LEAST32_T C11ATOMIC_USHORT
+#elif 32 <= C11ATOMIC_UINT_WIDTH
+#  define C11ATOMIC_UINT_LEAST32_T C11ATOMIC_UINT
+#else
+#  define C11ATOMIC_UINT_LEAST32_T C11ATOMIC_ULONG
+#endif
+#ifdef C11ATOMIC_INT_LEAST32_T_WIDTH
+#  define C11ATOMIC_UINT_LEAST32_T_WIDTH   C11ATOMIC_INT_LEAST32_T_WIDTH
+#endif
+#ifdef C11ATOMIC_INT_LEAST32_T_BIT
+#  define C11ATOMIC_UINT_LEAST32_T_SIZE    C11ATOMIC_INT_LEAST32_T_SIZE
+#  define C11ATOMIC_UINT_LEAST32_T_BIT     C11ATOMIC_INT_LEAST32_T_BIT
+#endif
+#define C11ATOMIC_UINT_LEAST32_T_LOCK_FREE C11ATOMIC_INT_LEAST32_T_LOCK_FREE
+
+/*--------------------------- C11ATOMIC_LEAST64_T ---------------------------*/
+#if defined(_C11ATOMIC_STDINT_H) && defined(INT_LEAST64_MAX) // C99
+#  define C11ATOMIC_INT_LEAST64_T int_least64_t
+#elif defined(__INT_LEAST64_TYPE__) // GCC/Clang
+#  define C11ATOMIC_INT_LEAST64_T __INT_LEAST64_TYPE__
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_INT_LEAST64_T C11ATOMIC_LONG
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_INT_LEAST64_T C11ATOMIC_LLONG
+#elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#  define C11ATOMIC_INT_LEAST64_T signed __int64
+#elif !defined(C11ATOMIC_LLONG_WIDTH)
+#  define C11ATOMIC_INT_LEAST64_T C11ATOMIC_LLONG
+#  define C11ATOMIC_INT_LEAST64_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
+#elif 64 <= C11ATOMIC_SCHAR_WIDTH
+#  define C11ATOMIC_INT_LEAST64_T C11ATOMIC_SCHAR
+#  define C11ATOMIC_INT_LEAST64_T_WIDTH     C11ATOMIC_SCHAR_WIDTH
+#elif 64 <= C11ATOMIC_SHORT_WIDTH
+#  define C11ATOMIC_INT_LEAST64_T C11ATOMIC_SHORT
+#  define C11ATOMIC_INT_LEAST64_T_WIDTH     C11ATOMIC_SHORT_WIDTH
+#elif 64 <= C11ATOMIC_INT_WIDTH
+#  define C11ATOMIC_INT_LEAST64_T C11ATOMIC_INT
+#  define C11ATOMIC_INT_LEAST64_T_WIDTH     C11ATOMIC_INT_WIDTH
+#elif 64 <= C11ATOMIC_LONG_WIDTH
+#  define C11ATOMIC_INT_LEAST64_T C11ATOMIC_LONG
+#  define C11ATOMIC_INT_LEAST64_T_WIDTH     C11ATOMIC_LONG_WIDTH
+#else
+#  define C11ATOMIC_INT_LEAST64_T C11ATOMIC_LLONG
+#  define C11ATOMIC_INT_LEAST64_T_WIDTH     C11ATOMIC_LLONG_WIDTH
+#endif
+#ifndef C11ATOMIC_INT_LEAST64_T_LOCK_FREE
+#  if defined(INT_LEAST64_WIDTH) // <stdint.h> (C23)
+#    define C11ATOMIC_INT_LEAST64_T_WIDTH (INT_LEAST64_WIDTH)
+#  elif defined(__INT_LEAST64_WIDTH__) // GCC/Clang
+#    define C11ATOMIC_INT_LEAST64_T_WIDTH (__INT_LEAST64_WIDTH__)
+#  elif defined(INT_LEAST64_MAX) // <stdint.h> (C99)
+#    define C11ATOMIC_INT_LEAST64_T_WIDTH (INT_LEAST64_MAX/0x7F80%0xFF*8+8)
+#  elif defined(__INT_LEAST64_MAX__) // GCC/Clang
+#    define C11ATOMIC_INT_LEAST64_T_WIDTH (__INT_LEAST64_MAX__/0x7F80%0xFF*8+8)
+#  elif defined(__LP64__) // GCC/Clang LP64
+#    define C11ATOMIC_INT_LEAST64_T_WIDTH (64)
+#  elif defined(__ILP32__) // GCC/Clang ILP32
+#    define C11ATOMIC_INT_LEAST64_T_WIDTH (64)
+#  elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#    define C11ATOMIC_INT_LEAST64_T_WIDTH (64)
+#  endif
+#  if !defined(C11ATOMIC_LLONG_WIDTH)
+#    define C11ATOMIC_INT_LEAST64_T_LOCK_FREE 1 // unknown
+#  elif C11ATOMIC_INT_LEAST64_T_WIDTH == C11ATOMIC_SCHAR_WIDTH
+#    ifdef C11ATOMIC_SCHAR_BIT
+#      define C11ATOMIC_INT_LEAST64_T_SIZE    C11ATOMIC_SCHAR_SIZE
+#      define C11ATOMIC_INT_LEAST64_T_BIT     C11ATOMIC_SCHAR_BIT
+#    endif
+#    define C11ATOMIC_INT_LEAST64_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
+#  elif C11ATOMIC_INT_LEAST64_T_WIDTH == C11ATOMIC_SHORT_WIDTH
+#    ifdef C11ATOMIC_SHORT_BIT
+#      define C11ATOMIC_INT_LEAST64_T_SIZE    C11ATOMIC_SHORT_SIZE
+#      define C11ATOMIC_INT_LEAST64_T_BIT     C11ATOMIC_SHORT_BIT
+#    endif
+#    define C11ATOMIC_INT_LEAST64_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
+#  elif C11ATOMIC_INT_LEAST64_T_WIDTH == C11ATOMIC_INT_WIDTH
+#    ifdef C11ATOMIC_INT_BIT
+#      define C11ATOMIC_INT_LEAST64_T_SIZE    C11ATOMIC_INT_SIZE
+#      define C11ATOMIC_INT_LEAST64_T_BIT     C11ATOMIC_INT_BIT
+#    endif
+#    define C11ATOMIC_INT_LEAST64_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
+#  elif C11ATOMIC_INT_LEAST64_T_WIDTH == C11ATOMIC_LONG_WIDTH
+#    ifdef C11ATOMIC_LONG_BIT
+#      define C11ATOMIC_INT_LEAST64_T_SIZE    C11ATOMIC_LONG_SIZE
+#      define C11ATOMIC_INT_LEAST64_T_BIT     C11ATOMIC_LONG_BIT
+#    endif
+#    define C11ATOMIC_INT_LEAST64_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
+#  elif C11ATOMIC_INT_LEAST64_T_WIDTH == C11ATOMIC_LLONG_WIDTH
+#    ifdef C11ATOMIC_LLONG_BIT
+#      define C11ATOMIC_INT_LEAST64_T_SIZE    C11ATOMIC_LLONG_SIZE
+#      define C11ATOMIC_INT_LEAST64_T_BIT     C11ATOMIC_LLONG_BIT
+#    endif
+#    define C11ATOMIC_INT_LEAST64_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
+#  else
+#    define C11ATOMIC_INT_LEAST64_T_LOCK_FREE 1 // unknown
+#  endif
+#endif
+#if defined(_C11ATOMIC_STDINT_H) && defined(UINT_LEAST64_MAX) // C99
+#  define C11ATOMIC_UINT_LEAST64_T uint_least64_t
+#elif defined(__UINT_LEAST64_TYPE__) // GCC/Clang
+#  define C11ATOMIC_UINT_LEAST64_T __UINT_LEAST64_TYPE__
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_UINT_LEAST64_T C11ATOMIC_ULONG
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_UINT_LEAST64_T C11ATOMIC_ULLONG
+#elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#  define C11ATOMIC_UINT_LEAST64_T unsigned __int64
+#elif !defined(C11ATOMIC_ULLONG_WIDTH)
+#  define C11ATOMIC_UINT_LEAST64_T C11ATOMIC_ULLONG
+#elif 64 <= C11ATOMIC_UCHAR_WIDTH
+#  define C11ATOMIC_UINT_LEAST64_T C11ATOMIC_UCHAR
+#elif 64 <= C11ATOMIC_USHORT_WIDTH
+#  define C11ATOMIC_UINT_LEAST64_T C11ATOMIC_USHORT
+#elif 64 <= C11ATOMIC_UINT_WIDTH
+#  define C11ATOMIC_UINT_LEAST64_T C11ATOMIC_UINT
+#elif 64 <= C11ATOMIC_ULONG_WIDTH
+#  define C11ATOMIC_UINT_LEAST64_T C11ATOMIC_ULONG
+#else
+#  define C11ATOMIC_UINT_LEAST64_T C11ATOMIC_ULLONG
+#endif
+#ifdef C11ATOMIC_INT_LEAST64_T_WIDTH
+#  define C11ATOMIC_UINT_LEAST64_T_WIDTH   C11ATOMIC_INT_LEAST64_T_WIDTH
+#endif
+#ifdef C11ATOMIC_INT_LEAST64_T_BIT
+#  define C11ATOMIC_UINT_LEAST64_T_SIZE    C11ATOMIC_INT_LEAST64_T_SIZE
+#  define C11ATOMIC_UINT_LEAST64_T_BIT     C11ATOMIC_INT_LEAST64_T_BIT
+#endif
+#define C11ATOMIC_UINT_LEAST64_T_LOCK_FREE C11ATOMIC_INT_LEAST64_T_LOCK_FREE
+
+/*---------------------------- C11ATOMIC_FAST8_T ----------------------------*/
+#if defined(_C11ATOMIC_STDINT_H) && defined(INT_FAST8_MAX) // C99
+#  define C11ATOMIC_INT_FAST8_T int_fast8_t
+#elif defined(__INT_FAST8_TYPE__) // GCC/Clang
+#  define C11ATOMIC_INT_FAST8_T __INT_FAST8_TYPE__
+#elif defined(_MSC_VER) // MSVC
+#  define C11ATOMIC_INT_FAST8_T signed __int8
+#elif !defined(C11ATOMIC_LLONG_WIDTH)
+#  define C11ATOMIC_INT_FAST8_T C11ATOMIC_INT_LEAST8_T
+#  define C11ATOMIC_INT_FAST8_T_LOCK_FREE C11ATOMIC_INT_LEAST8_T_LOCK_FREE
+#elif 8 <= C11ATOMIC_SCHAR_WIDTH && C11ATOMIC_SCHAR_LOCK_FREE >= 2
+#  define C11ATOMIC_INT_FAST8_T C11ATOMIC_SCHAR
+#  define C11ATOMIC_INT_FAST8_T_WIDTH     C11ATOMIC_SCHAR_WIDTH
+#elif 8 <= C11ATOMIC_SHORT_WIDTH && C11ATOMIC_SHORT_LOCK_FREE >= 2
+#  define C11ATOMIC_INT_FAST8_T C11ATOMIC_SHORT
+#  define C11ATOMIC_INT_FAST8_T_WIDTH     C11ATOMIC_SHORT_WIDTH
+#elif 8 <= C11ATOMIC_INT_WIDTH && C11ATOMIC_INT_LOCK_FREE >= 2
+#  define C11ATOMIC_INT_FAST8_T C11ATOMIC_INT
+#  define C11ATOMIC_INT_FAST8_T_WIDTH     C11ATOMIC_INT_WIDTH
+#elif 8 <= C11ATOMIC_LONG_WIDTH && C11ATOMIC_LONG_LOCK_FREE >= 2
+#  define C11ATOMIC_INT_FAST8_T C11ATOMIC_LONG
+#  define C11ATOMIC_INT_FAST8_T_WIDTH     C11ATOMIC_LONG_WIDTH
+#elif 8 <= C11ATOMIC_LLONG_WIDTH && C11ATOMIC_LLONG_LOCK_FREE >= 2
+#  define C11ATOMIC_INT_FAST8_T C11ATOMIC_LLONG
+#  define C11ATOMIC_INT_FAST8_T_WIDTH     C11ATOMIC_LLONG_WIDTH
+#elif 8 <= C11ATOMIC_SCHAR_WIDTH && C11ATOMIC_SCHAR_LOCK_FREE >= 1
+#  define C11ATOMIC_INT_FAST8_T C11ATOMIC_SCHAR
+#  define C11ATOMIC_INT_FAST8_T_WIDTH     C11ATOMIC_SCHAR_WIDTH
+#elif 8 <= C11ATOMIC_SHORT_WIDTH && C11ATOMIC_SHORT_LOCK_FREE >= 1
+#  define C11ATOMIC_INT_FAST8_T C11ATOMIC_SHORT
+#  define C11ATOMIC_INT_FAST8_T_WIDTH     C11ATOMIC_SHORT_WIDTH
+#elif 8 <= C11ATOMIC_INT_WIDTH && C11ATOMIC_INT_LOCK_FREE >= 1
+#  define C11ATOMIC_INT_FAST8_T C11ATOMIC_INT
+#  define C11ATOMIC_INT_FAST8_T_WIDTH     C11ATOMIC_INT_WIDTH
+#elif 8 <= C11ATOMIC_LONG_WIDTH && C11ATOMIC_LONG_LOCK_FREE >= 1
+#  define C11ATOMIC_INT_FAST8_T C11ATOMIC_LONG
+#  define C11ATOMIC_INT_FAST8_T_WIDTH     C11ATOMIC_LONG_WIDTH
+#elif 8 <= C11ATOMIC_LLONG_WIDTH && C11ATOMIC_LLONG_LOCK_FREE >= 1
+#  define C11ATOMIC_INT_FAST8_T C11ATOMIC_LLONG
+#  define C11ATOMIC_INT_FAST8_T_WIDTH     C11ATOMIC_LLONG_WIDTH
+#else
+#  define C11ATOMIC_INT_FAST8_T C11ATOMIC_INT_LEAST8_T
+#  define C11ATOMIC_INT_FAST8_T_WIDTH     C11ATOMIC_INT_LEAST8_T_WIDTH
+#endif
+#ifndef C11ATOMIC_INT_FAST8_T_LOCK_FREE
+#  if defined(INT_FAST8_WIDTH) // <stdint.h> (C23)
+#    define C11ATOMIC_INT_FAST8_T_WIDTH (INT_FAST8_WIDTH)
+#  elif defined(__INT_FAST8_WIDTH__) // GCC/Clang
+#    define C11ATOMIC_INT_FAST8_T_WIDTH (__INT_FAST8_WIDTH__)
+#  elif defined(INT_FAST8_MAX) // <stdint.h> (C99)
+#    define C11ATOMIC_INT_FAST8_T_WIDTH (INT_FAST8_MAX/0x7F80%0xFF*8+8)
+#  elif defined(__INT_FAST8_MAX__) // GCC/Clang
+#    define C11ATOMIC_INT_FAST8_T_WIDTH (__INT_FAST8_MAX__/0x7F80%0xFF*8+8)
+#  elif defined(_MSC_VER) // MSVC
+#    define C11ATOMIC_INT_FAST8_T_WIDTH (8)
+#  endif
+#  if !defined(C11ATOMIC_LLONG_WIDTH)
+#    define C11ATOMIC_INT_FAST8_T_LOCK_FREE 1 // unknown
+#  elif C11ATOMIC_INT_FAST8_T_WIDTH == C11ATOMIC_SCHAR_WIDTH
+#    ifdef C11ATOMIC_SCHAR_BIT
+#      define C11ATOMIC_INT_FAST8_T_SIZE    C11ATOMIC_SCHAR_SIZE
+#      define C11ATOMIC_INT_FAST8_T_BIT     C11ATOMIC_SCHAR_BIT
+#    endif
+#    define C11ATOMIC_INT_FAST8_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
+#  elif C11ATOMIC_INT_FAST8_T_WIDTH == C11ATOMIC_SHORT_WIDTH
+#    ifdef C11ATOMIC_SHORT_BIT
+#      define C11ATOMIC_INT_FAST8_T_SIZE    C11ATOMIC_SHORT_SIZE
+#      define C11ATOMIC_INT_FAST8_T_BIT     C11ATOMIC_SHORT_BIT
+#    endif
+#    define C11ATOMIC_INT_FAST8_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
+#  elif C11ATOMIC_INT_FAST8_T_WIDTH == C11ATOMIC_INT_WIDTH
+#    ifdef C11ATOMIC_INT_BIT
+#      define C11ATOMIC_INT_FAST8_T_SIZE    C11ATOMIC_INT_SIZE
+#      define C11ATOMIC_INT_FAST8_T_BIT     C11ATOMIC_INT_BIT
+#    endif
+#    define C11ATOMIC_INT_FAST8_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
+#  elif C11ATOMIC_INT_FAST8_T_WIDTH == C11ATOMIC_LONG_WIDTH
+#    ifdef C11ATOMIC_LONG_BIT
+#      define C11ATOMIC_INT_FAST8_T_SIZE    C11ATOMIC_LONG_SIZE
+#      define C11ATOMIC_INT_FAST8_T_BIT     C11ATOMIC_LONG_BIT
+#    endif
+#    define C11ATOMIC_INT_FAST8_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
+#  elif C11ATOMIC_INT_FAST8_T_WIDTH == C11ATOMIC_LLONG_WIDTH
+#    ifdef C11ATOMIC_LLONG_BIT
+#      define C11ATOMIC_INT_FAST8_T_SIZE    C11ATOMIC_LLONG_SIZE
+#      define C11ATOMIC_INT_FAST8_T_BIT     C11ATOMIC_LLONG_BIT
+#    endif
+#    define C11ATOMIC_INT_FAST8_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
+#  else
+#    define C11ATOMIC_INT_FAST8_T_LOCK_FREE 1 // unknown
+#  endif
+#endif
+#if defined(_C11ATOMIC_STDINT_H) && defined(UINT_FAST8_MAX) // C99
+#  define C11ATOMIC_UINT_FAST8_T uint_fast8_t
+#elif defined(__UINT_FAST8_TYPE__) // GCC/Clang
+#  define C11ATOMIC_UINT_FAST8_T __UINT_FAST8_TYPE__
+#elif defined(_MSC_VER) // MSVC
+#  define C11ATOMIC_UINT_FAST8_T unsigned __int8
+#elif !defined(C11ATOMIC_ULLONG_WIDTH)
+#  define C11ATOMIC_UINT_FAST8_T C11ATOMIC_UINT_LEAST8_T
+#elif 8 <= C11ATOMIC_UCHAR_WIDTH && C11ATOMIC_UCHAR_LOCK_FREE >= 2
+#  define C11ATOMIC_UINT_FAST8_T C11ATOMIC_UCHAR
+#elif 8 <= C11ATOMIC_USHORT_WIDTH && C11ATOMIC_USHORT_LOCK_FREE >= 2
+#  define C11ATOMIC_UINT_FAST8_T C11ATOMIC_USHORT
+#elif 8 <= C11ATOMIC_UINT_WIDTH && C11ATOMIC_UINT_LOCK_FREE >= 2
+#  define C11ATOMIC_UINT_FAST8_T C11ATOMIC_UINT
+#elif 8 <= C11ATOMIC_ULONG_WIDTH && C11ATOMIC_ULONG_LOCK_FREE >= 2
+#  define C11ATOMIC_UINT_FAST8_T C11ATOMIC_ULONG
+#elif 8 <= C11ATOMIC_ULLONG_WIDTH && C11ATOMIC_ULLONG_LOCK_FREE >= 2
+#  define C11ATOMIC_UINT_FAST8_T C11ATOMIC_ULLONG
+#elif 8 <= C11ATOMIC_UCHAR_WIDTH && C11ATOMIC_UCHAR_LOCK_FREE >= 1
+#  define C11ATOMIC_UINT_FAST8_T C11ATOMIC_UCHAR
+#elif 8 <= C11ATOMIC_USHORT_WIDTH && C11ATOMIC_USHORT_LOCK_FREE >= 1
+#  define C11ATOMIC_UINT_FAST8_T C11ATOMIC_USHORT
+#elif 8 <= C11ATOMIC_UINT_WIDTH && C11ATOMIC_UINT_LOCK_FREE >= 1
+#  define C11ATOMIC_UINT_FAST8_T C11ATOMIC_UINT
+#elif 8 <= C11ATOMIC_ULONG_WIDTH && C11ATOMIC_ULONG_LOCK_FREE >= 1
+#  define C11ATOMIC_UINT_FAST8_T C11ATOMIC_ULONG
+#elif 8 <= C11ATOMIC_ULLONG_WIDTH && C11ATOMIC_ULLONG_LOCK_FREE >= 1
+#  define C11ATOMIC_UINT_FAST8_T C11ATOMIC_ULLONG
+#else
+#  define C11ATOMIC_UINT_FAST8_T C11ATOMIC_UINT_LEAST8_T
+#endif
+#ifdef C11ATOMIC_INT_FAST8_T_WIDTH
+#  define C11ATOMIC_UINT_FAST8_T_WIDTH   C11ATOMIC_INT_FAST8_T_WIDTH
+#endif
+#ifdef C11ATOMIC_INT_FAST8_T_SIZE
+#  define C11ATOMIC_UINT_FAST8_T_SIZE    C11ATOMIC_INT_FAST8_T_SIZE
+#  define C11ATOMIC_UINT_FAST8_T_BIT     C11ATOMIC_INT_FAST8_T_BIT
+#endif
+#define C11ATOMIC_UINT_FAST8_T_LOCK_FREE C11ATOMIC_INT_FAST8_T_LOCK_FREE
+
+/*---------------------------- C11ATOMIC_FAST16_T ---------------------------*/
+#if defined(_C11ATOMIC_STDINT_H) && defined(INT_FAST16_MAX) // C99
+#  define C11ATOMIC_INT_FAST16_T int_fast16_t
+#elif defined(__INT_FAST16_TYPE__) // GCC/Clang
+#  define C11ATOMIC_INT_FAST16_T __INT_FAST16_TYPE__
+#elif defined(_MSC_VER) // MSVC
+#  define C11ATOMIC_INT_FAST16_T signed __int32
+#elif !defined(C11ATOMIC_LLONG_WIDTH)
+#  define C11ATOMIC_INT_FAST16_T C11ATOMIC_INT_LEAST16_T
+#  define C11ATOMIC_INT_FAST16_T_LOCK_FREE C11ATOMIC_INT_LEAST16_T_LOCK_FREE
+#elif 16 <= C11ATOMIC_SCHAR_WIDTH && C11ATOMIC_SCHAR_LOCK_FREE >= 2
+#  define C11ATOMIC_INT_FAST16_T C11ATOMIC_SCHAR
+#  define C11ATOMIC_INT_FAST16_T_WIDTH     C11ATOMIC_SCHAR_WIDTH
+#elif 16 <= C11ATOMIC_SHORT_WIDTH && C11ATOMIC_SHORT_LOCK_FREE >= 2
+#  define C11ATOMIC_INT_FAST16_T C11ATOMIC_SHORT
+#  define C11ATOMIC_INT_FAST16_T_WIDTH     C11ATOMIC_SHORT_WIDTH
+#elif 16 <= C11ATOMIC_INT_WIDTH && C11ATOMIC_INT_LOCK_FREE >= 2
+#  define C11ATOMIC_INT_FAST16_T C11ATOMIC_INT
+#  define C11ATOMIC_INT_FAST16_T_WIDTH     C11ATOMIC_INT_WIDTH
+#elif 16 <= C11ATOMIC_LONG_WIDTH && C11ATOMIC_LONG_LOCK_FREE >= 2
+#  define C11ATOMIC_INT_FAST16_T C11ATOMIC_LONG
+#  define C11ATOMIC_INT_FAST16_T_WIDTH     C11ATOMIC_LONG_WIDTH
+#elif 16 <= C11ATOMIC_LLONG_WIDTH && C11ATOMIC_LLONG_LOCK_FREE >= 2
+#  define C11ATOMIC_INT_FAST16_T C11ATOMIC_LLONG
+#  define C11ATOMIC_INT_FAST16_T_WIDTH     C11ATOMIC_LLONG_WIDTH
+#elif 16 <= C11ATOMIC_SCHAR_WIDTH && C11ATOMIC_SCHAR_LOCK_FREE >= 1
+#  define C11ATOMIC_INT_FAST16_T C11ATOMIC_SCHAR
+#  define C11ATOMIC_INT_FAST16_T_WIDTH     C11ATOMIC_SCHAR_WIDTH
+#elif 16 <= C11ATOMIC_SHORT_WIDTH && C11ATOMIC_SHORT_LOCK_FREE >= 1
+#  define C11ATOMIC_INT_FAST16_T C11ATOMIC_SHORT
+#  define C11ATOMIC_INT_FAST16_T_WIDTH     C11ATOMIC_SHORT_WIDTH
+#elif 16 <= C11ATOMIC_INT_WIDTH && C11ATOMIC_INT_LOCK_FREE >= 1
+#  define C11ATOMIC_INT_FAST16_T C11ATOMIC_INT
+#  define C11ATOMIC_INT_FAST16_T_WIDTH     C11ATOMIC_INT_WIDTH
+#elif 16 <= C11ATOMIC_LONG_WIDTH && C11ATOMIC_LONG_LOCK_FREE >= 1
+#  define C11ATOMIC_INT_FAST16_T C11ATOMIC_LONG
+#  define C11ATOMIC_INT_FAST16_T_WIDTH     C11ATOMIC_LONG_WIDTH
+#elif 16 <= C11ATOMIC_LLONG_WIDTH && C11ATOMIC_LLONG_LOCK_FREE >= 1
+#  define C11ATOMIC_INT_FAST16_T C11ATOMIC_LLONG
+#  define C11ATOMIC_INT_FAST16_T_WIDTH     C11ATOMIC_LLONG_WIDTH
+#else
+#  define C11ATOMIC_INT_FAST16_T C11ATOMIC_INT_LEAST16_T
+#  define C11ATOMIC_INT_FAST16_T_WIDTH     C11ATOMIC_INT_LEAST16_T_WIDTH
+#endif
+#ifndef C11ATOMIC_INT_FAST16_T_LOCK_FREE
+#  if defined(INT_FAST16_WIDTH) // <stdint.h> (C23)
+#    define C11ATOMIC_INT_FAST16_T_WIDTH (INT_FAST16_WIDTH)
+#  elif defined(__INT_FAST16_WIDTH__) // GCC/Clang
+#    define C11ATOMIC_INT_FAST16_T_WIDTH (__INT_FAST16_WIDTH__)
+#  elif defined(INT_FAST16_MAX) // <stdint.h> (C99)
+#    define C11ATOMIC_INT_FAST16_T_WIDTH (INT_FAST16_MAX/0x7F80%0xFF*8+8)
+#  elif defined(__INT_FAST16_MAX__) // GCC/Clang
+#    define C11ATOMIC_INT_FAST16_T_WIDTH (__INT_FAST16_MAX__/0x7F80%0xFF*8+8)
+#  elif defined(_MSC_VER) // MSVC
+#    define C11ATOMIC_INT_FAST16_T_WIDTH (32)
+#  endif
+#  if !defined(C11ATOMIC_LLONG_WIDTH)
+#    define C11ATOMIC_INT_FAST16_T_LOCK_FREE 1 // unknown
+#  elif C11ATOMIC_INT_FAST16_T_WIDTH == C11ATOMIC_SCHAR_WIDTH
+#    ifdef C11ATOMIC_SCHAR_BIT
+#      define C11ATOMIC_INT_FAST16_T_SIZE    C11ATOMIC_SCHAR_SIZE
+#      define C11ATOMIC_INT_FAST16_T_BIT     C11ATOMIC_SCHAR_BIT
+#    endif
+#    define C11ATOMIC_INT_FAST16_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
+#  elif C11ATOMIC_INT_FAST16_T_WIDTH == C11ATOMIC_SHORT_WIDTH
+#    ifdef C11ATOMIC_SHORT_BIT
+#      define C11ATOMIC_INT_FAST16_T_SIZE    C11ATOMIC_SHORT_SIZE
+#      define C11ATOMIC_INT_FAST16_T_BIT     C11ATOMIC_SHORT_BIT
+#    endif
+#    define C11ATOMIC_INT_FAST16_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
+#  elif C11ATOMIC_INT_FAST16_T_WIDTH == C11ATOMIC_INT_WIDTH
+#    ifdef C11ATOMIC_INT_BIT
+#      define C11ATOMIC_INT_FAST16_T_SIZE    C11ATOMIC_INT_SIZE
+#      define C11ATOMIC_INT_FAST16_T_BIT     C11ATOMIC_INT_BIT
+#    endif
+#    define C11ATOMIC_INT_FAST16_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
+#  elif C11ATOMIC_INT_FAST16_T_WIDTH == C11ATOMIC_LONG_WIDTH
+#    ifdef C11ATOMIC_LONG_BIT
+#      define C11ATOMIC_INT_FAST16_T_SIZE    C11ATOMIC_LONG_SIZE
+#      define C11ATOMIC_INT_FAST16_T_BIT     C11ATOMIC_LONG_BIT
+#    endif
+#    define C11ATOMIC_INT_FAST16_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
+#  elif C11ATOMIC_INT_FAST16_T_WIDTH == C11ATOMIC_LLONG_WIDTH
+#    ifdef C11ATOMIC_LLONG_BIT
+#      define C11ATOMIC_INT_FAST16_T_SIZE    C11ATOMIC_LLONG_SIZE
+#      define C11ATOMIC_INT_FAST16_T_BIT     C11ATOMIC_LLONG_BIT
+#    endif
+#    define C11ATOMIC_INT_FAST16_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
+#  else
+#    define C11ATOMIC_INT_FAST16_T_LOCK_FREE 1 // unknown
+#  endif
+#endif
+#if defined(_C11ATOMIC_STDINT_H) && defined(UINT_FAST16_MAX) // C99
+#  define C11ATOMIC_UINT_FAST16_T uint_fast16_t
+#elif defined(__UINT_FAST16_TYPE__) // GCC/Clang
+#  define C11ATOMIC_UINT_FAST16_T __UINT_FAST16_TYPE__
+#elif defined(_MSC_VER) // MSVC
+#  define C11ATOMIC_UINT_FAST16_T unsigned __int32
+#elif !defined(C11ATOMIC_ULLONG_WIDTH)
+#  define C11ATOMIC_UINT_FAST16_T C11ATOMIC_UINT_LEAST16_T
+#elif 16 <= C11ATOMIC_UCHAR_WIDTH && C11ATOMIC_UCHAR_LOCK_FREE >= 2
+#  define C11ATOMIC_UINT_FAST16_T C11ATOMIC_UCHAR
+#elif 16 <= C11ATOMIC_USHORT_WIDTH && C11ATOMIC_USHORT_LOCK_FREE >= 2
+#  define C11ATOMIC_UINT_FAST16_T C11ATOMIC_USHORT
+#elif 16 <= C11ATOMIC_UINT_WIDTH && C11ATOMIC_UINT_LOCK_FREE >= 2
+#  define C11ATOMIC_UINT_FAST16_T C11ATOMIC_UINT
+#elif 16 <= C11ATOMIC_ULONG_WIDTH && C11ATOMIC_ULONG_LOCK_FREE >= 2
+#  define C11ATOMIC_UINT_FAST16_T C11ATOMIC_ULONG
+#elif 16 <= C11ATOMIC_ULLONG_WIDTH && C11ATOMIC_ULLONG_LOCK_FREE >= 2
+#  define C11ATOMIC_UINT_FAST16_T C11ATOMIC_ULLONG
+#elif 16 <= C11ATOMIC_UCHAR_WIDTH && C11ATOMIC_UCHAR_LOCK_FREE >= 1
+#  define C11ATOMIC_UINT_FAST16_T C11ATOMIC_UCHAR
+#elif 16 <= C11ATOMIC_USHORT_WIDTH && C11ATOMIC_USHORT_LOCK_FREE >= 1
+#  define C11ATOMIC_UINT_FAST16_T C11ATOMIC_USHORT
+#elif 16 <= C11ATOMIC_UINT_WIDTH && C11ATOMIC_UINT_LOCK_FREE >= 1
+#  define C11ATOMIC_UINT_FAST16_T C11ATOMIC_UINT
+#elif 16 <= C11ATOMIC_ULONG_WIDTH && C11ATOMIC_ULONG_LOCK_FREE >= 1
+#  define C11ATOMIC_UINT_FAST16_T C11ATOMIC_ULONG
+#elif 16 <= C11ATOMIC_ULLONG_WIDTH && C11ATOMIC_ULLONG_LOCK_FREE >= 1
+#  define C11ATOMIC_UINT_FAST16_T C11ATOMIC_ULLONG
+#else
+#  define C11ATOMIC_UINT_FAST16_T C11ATOMIC_UINT_LEAST16_T
+#endif
+#ifdef C11ATOMIC_INT_FAST16_T_WIDTH
+#  define C11ATOMIC_UINT_FAST16_T_WIDTH   C11ATOMIC_INT_FAST16_T_WIDTH
+#endif
+#ifdef C11ATOMIC_INT_FAST16_T_SIZE
+#  define C11ATOMIC_UINT_FAST16_T_SIZE    C11ATOMIC_INT_FAST16_T_SIZE
+#  define C11ATOMIC_UINT_FAST16_T_BIT     C11ATOMIC_INT_FAST16_T_BIT
+#endif
+#define C11ATOMIC_UINT_FAST16_T_LOCK_FREE C11ATOMIC_INT_FAST16_T_LOCK_FREE
+
+/*---------------------------- C11ATOMIC_FAST32_T ---------------------------*/
+#if defined(_C11ATOMIC_STDINT_H) && defined(INT_FAST32_MAX) // C99
+#  define C11ATOMIC_INT_FAST32_T int_fast32_t
+#elif defined(__INT_FAST32_TYPE__) // GCC/Clang
+#  define C11ATOMIC_INT_FAST32_T __INT_FAST32_TYPE__
+#elif defined(_MSC_VER) // MSVC
+#  define C11ATOMIC_INT_FAST32_T signed __int32
+#elif !defined(C11ATOMIC_LLONG_WIDTH)
+#  define C11ATOMIC_INT_FAST32_T C11ATOMIC_INT_LEAST32_T
+#  define C11ATOMIC_INT_FAST32_T_LOCK_FREE C11ATOMIC_INT_LEAST32_T_LOCK_FREE
+#elif 32 <= C11ATOMIC_SCHAR_WIDTH && C11ATOMIC_SCHAR_LOCK_FREE >= 2
+#  define C11ATOMIC_INT_FAST32_T C11ATOMIC_SCHAR
+#  define C11ATOMIC_INT_FAST32_T_WIDTH     C11ATOMIC_SCHAR_WIDTH
+#elif 32 <= C11ATOMIC_SHORT_WIDTH && C11ATOMIC_SHORT_LOCK_FREE >= 2
+#  define C11ATOMIC_INT_FAST32_T C11ATOMIC_SHORT
+#  define C11ATOMIC_INT_FAST32_T_WIDTH     C11ATOMIC_SHORT_WIDTH
+#elif 32 <= C11ATOMIC_INT_WIDTH && C11ATOMIC_INT_LOCK_FREE >= 2
+#  define C11ATOMIC_INT_FAST32_T C11ATOMIC_INT
+#  define C11ATOMIC_INT_FAST32_T_WIDTH     C11ATOMIC_INT_WIDTH
+#elif 32 <= C11ATOMIC_LONG_WIDTH && C11ATOMIC_LONG_LOCK_FREE >= 2
+#  define C11ATOMIC_INT_FAST32_T C11ATOMIC_LONG
+#  define C11ATOMIC_INT_FAST32_T_WIDTH     C11ATOMIC_LONG_WIDTH
+#elif 32 <= C11ATOMIC_LLONG_WIDTH && C11ATOMIC_LLONG_LOCK_FREE >= 2
+#  define C11ATOMIC_INT_FAST32_T C11ATOMIC_LLONG
+#  define C11ATOMIC_INT_FAST32_T_WIDTH     C11ATOMIC_LLONG_WIDTH
+#elif 32 <= C11ATOMIC_SCHAR_WIDTH && C11ATOMIC_SCHAR_LOCK_FREE >= 1
+#  define C11ATOMIC_INT_FAST32_T C11ATOMIC_SCHAR
+#  define C11ATOMIC_INT_FAST32_T_WIDTH     C11ATOMIC_SCHAR_WIDTH
+#elif 32 <= C11ATOMIC_SHORT_WIDTH && C11ATOMIC_SHORT_LOCK_FREE >= 1
+#  define C11ATOMIC_INT_FAST32_T C11ATOMIC_SHORT
+#  define C11ATOMIC_INT_FAST32_T_WIDTH     C11ATOMIC_SHORT_WIDTH
+#elif 32 <= C11ATOMIC_INT_WIDTH && C11ATOMIC_INT_LOCK_FREE >= 1
+#  define C11ATOMIC_INT_FAST32_T C11ATOMIC_INT
+#  define C11ATOMIC_INT_FAST32_T_WIDTH     C11ATOMIC_INT_WIDTH
+#elif 32 <= C11ATOMIC_LONG_WIDTH && C11ATOMIC_LONG_LOCK_FREE >= 1
+#  define C11ATOMIC_INT_FAST32_T C11ATOMIC_LONG
+#  define C11ATOMIC_INT_FAST32_T_WIDTH     C11ATOMIC_LONG_WIDTH
+#elif 32 <= C11ATOMIC_LLONG_WIDTH && C11ATOMIC_LLONG_LOCK_FREE >= 1
+#  define C11ATOMIC_INT_FAST32_T C11ATOMIC_LLONG
+#  define C11ATOMIC_INT_FAST32_T_WIDTH     C11ATOMIC_LLONG_WIDTH
+#else
+#  define C11ATOMIC_INT_FAST32_T C11ATOMIC_INT_LEAST32_T
+#  define C11ATOMIC_INT_FAST32_T_WIDTH     C11ATOMIC_INT_LEAST32_T_WIDTH
+#endif
+#ifndef C11ATOMIC_INT_FAST32_T_LOCK_FREE
+#  if defined(INT_FAST32_WIDTH) // <stdint.h> (C23)
+#    define C11ATOMIC_INT_FAST32_T_WIDTH (INT_FAST32_WIDTH)
+#  elif defined(__INT_FAST32_WIDTH__) // GCC/Clang
+#    define C11ATOMIC_INT_FAST32_T_WIDTH (__INT_FAST32_WIDTH__)
+#  elif defined(INT_FAST32_MAX) // <stdint.h> (C99)
+#    define C11ATOMIC_INT_FAST32_T_WIDTH (INT_FAST32_MAX/0x7F80%0xFF*8+8)
+#  elif defined(__INT_FAST32_MAX__) // GCC/Clang
+#    define C11ATOMIC_INT_FAST32_T_WIDTH (__INT_FAST32_MAX__/0x7F80%0xFF*8+8)
+#  elif defined(_MSC_VER) // MSVC
+#    define C11ATOMIC_INT_FAST32_T_WIDTH (32)
+#  endif
+#  if !defined(C11ATOMIC_LLONG_WIDTH)
+#    define C11ATOMIC_INT_FAST32_T_LOCK_FREE 1 // unknown
+#  elif C11ATOMIC_INT_FAST32_T_WIDTH == C11ATOMIC_SCHAR_WIDTH
+#    ifdef C11ATOMIC_SCHAR_BIT
+#      define C11ATOMIC_INT_FAST32_T_SIZE    C11ATOMIC_SCHAR_SIZE
+#      define C11ATOMIC_INT_FAST32_T_BIT     C11ATOMIC_SCHAR_BIT
+#    endif
+#    define C11ATOMIC_INT_FAST32_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
+#  elif C11ATOMIC_INT_FAST32_T_WIDTH == C11ATOMIC_SHORT_WIDTH
+#    ifdef C11ATOMIC_SHORT_BIT
+#      define C11ATOMIC_INT_FAST32_T_SIZE    C11ATOMIC_SHORT_SIZE
+#      define C11ATOMIC_INT_FAST32_T_BIT     C11ATOMIC_SHORT_BIT
+#    endif
+#    define C11ATOMIC_INT_FAST32_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
+#  elif C11ATOMIC_INT_FAST32_T_WIDTH == C11ATOMIC_INT_WIDTH
+#    ifdef C11ATOMIC_INT_BIT
+#      define C11ATOMIC_INT_FAST32_T_SIZE    C11ATOMIC_INT_SIZE
+#      define C11ATOMIC_INT_FAST32_T_BIT     C11ATOMIC_INT_BIT
+#    endif
+#    define C11ATOMIC_INT_FAST32_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
+#  elif C11ATOMIC_INT_FAST32_T_WIDTH == C11ATOMIC_LONG_WIDTH
+#    ifdef C11ATOMIC_LONG_BIT
+#      define C11ATOMIC_INT_FAST32_T_SIZE    C11ATOMIC_LONG_SIZE
+#      define C11ATOMIC_INT_FAST32_T_BIT     C11ATOMIC_LONG_BIT
+#    endif
+#    define C11ATOMIC_INT_FAST32_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
+#  elif C11ATOMIC_INT_FAST32_T_WIDTH == C11ATOMIC_LLONG_WIDTH
+#    ifdef C11ATOMIC_LLONG_BIT
+#      define C11ATOMIC_INT_FAST32_T_SIZE    C11ATOMIC_LLONG_SIZE
+#      define C11ATOMIC_INT_FAST32_T_BIT     C11ATOMIC_LLONG_BIT
+#    endif
+#    define C11ATOMIC_INT_FAST32_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
+#  else
+#    define C11ATOMIC_INT_FAST32_T_LOCK_FREE 1 // unknown
+#  endif
+#endif
+#if defined(_C11ATOMIC_STDINT_H) && defined(UINT_FAST32_MAX) // C99
+#  define C11ATOMIC_UINT_FAST32_T uint_fast32_t
+#elif defined(__UINT_FAST32_TYPE__) // GCC/Clang
+#  define C11ATOMIC_UINT_FAST32_T __UINT_FAST32_TYPE__
+#elif defined(_MSC_VER) // MSVC
+#  define C11ATOMIC_UINT_FAST32_T unsigned __int32
+#elif !defined(C11ATOMIC_ULLONG_WIDTH)
+#  define C11ATOMIC_UINT_FAST32_T C11ATOMIC_UINT_LEAST32_T
+#elif 32 <= C11ATOMIC_UCHAR_WIDTH && C11ATOMIC_UCHAR_LOCK_FREE >= 2
+#  define C11ATOMIC_UINT_FAST32_T C11ATOMIC_UCHAR
+#elif 32 <= C11ATOMIC_USHORT_WIDTH && C11ATOMIC_USHORT_LOCK_FREE >= 2
+#  define C11ATOMIC_UINT_FAST32_T C11ATOMIC_USHORT
+#elif 32 <= C11ATOMIC_UINT_WIDTH && C11ATOMIC_UINT_LOCK_FREE >= 2
+#  define C11ATOMIC_UINT_FAST32_T C11ATOMIC_UINT
+#elif 32 <= C11ATOMIC_ULONG_WIDTH && C11ATOMIC_ULONG_LOCK_FREE >= 2
+#  define C11ATOMIC_UINT_FAST32_T C11ATOMIC_ULONG
+#elif 32 <= C11ATOMIC_ULLONG_WIDTH && C11ATOMIC_ULLONG_LOCK_FREE >= 2
+#  define C11ATOMIC_UINT_FAST32_T C11ATOMIC_ULLONG
+#elif 32 <= C11ATOMIC_UCHAR_WIDTH && C11ATOMIC_UCHAR_LOCK_FREE >= 1
+#  define C11ATOMIC_UINT_FAST32_T C11ATOMIC_UCHAR
+#elif 32 <= C11ATOMIC_USHORT_WIDTH && C11ATOMIC_USHORT_LOCK_FREE >= 1
+#  define C11ATOMIC_UINT_FAST32_T C11ATOMIC_USHORT
+#elif 32 <= C11ATOMIC_UINT_WIDTH && C11ATOMIC_UINT_LOCK_FREE >= 1
+#  define C11ATOMIC_UINT_FAST32_T C11ATOMIC_UINT
+#elif 32 <= C11ATOMIC_ULONG_WIDTH && C11ATOMIC_ULONG_LOCK_FREE >= 1
+#  define C11ATOMIC_UINT_FAST32_T C11ATOMIC_ULONG
+#elif 32 <= C11ATOMIC_ULLONG_WIDTH && C11ATOMIC_ULLONG_LOCK_FREE >= 1
+#  define C11ATOMIC_UINT_FAST32_T C11ATOMIC_ULLONG
+#else
+#  define C11ATOMIC_UINT_FAST32_T C11ATOMIC_UINT_LEAST32_T
+#endif
+#ifdef C11ATOMIC_INT_FAST32_T_WIDTH
+#  define C11ATOMIC_UINT_FAST32_T_WIDTH   C11ATOMIC_INT_FAST32_T_WIDTH
+#endif
+#ifdef C11ATOMIC_INT_FAST32_T_SIZE
+#  define C11ATOMIC_UINT_FAST32_T_SIZE    C11ATOMIC_INT_FAST32_T_SIZE
+#  define C11ATOMIC_UINT_FAST32_T_BIT     C11ATOMIC_INT_FAST32_T_BIT
+#endif
+#define C11ATOMIC_UINT_FAST32_T_LOCK_FREE C11ATOMIC_INT_FAST32_T_LOCK_FREE
+
+/*---------------------------- C11ATOMIC_FAST64_T ---------------------------*/
+#if defined(_C11ATOMIC_STDINT_H) && defined(INT_FAST64_MAX) // C99
+#  define C11ATOMIC_INT_FAST64_T int_fast64_t
+#elif defined(__INT_FAST64_TYPE__) // GCC/Clang
+#  define C11ATOMIC_INT_FAST64_T __INT_FAST64_TYPE__
+#elif defined(_MSC_VER) // MSVC
+#  define C11ATOMIC_INT_FAST64_T signed __int64
+#elif !defined(C11ATOMIC_LLONG_WIDTH)
+#  define C11ATOMIC_INT_FAST64_T C11ATOMIC_INT_LEAST64_T
+#  define C11ATOMIC_INT_FAST64_T_LOCK_FREE C11ATOMIC_INT_LEAST64_T_LOCK_FREE
+#elif 64 <= C11ATOMIC_SCHAR_WIDTH && C11ATOMIC_SCHAR_LOCK_FREE >= 2
+#  define C11ATOMIC_INT_FAST64_T C11ATOMIC_SCHAR
+#  define C11ATOMIC_INT_FAST64_T_WIDTH     C11ATOMIC_SCHAR_WIDTH
+#elif 64 <= C11ATOMIC_SHORT_WIDTH && C11ATOMIC_SHORT_LOCK_FREE >= 2
+#  define C11ATOMIC_INT_FAST64_T C11ATOMIC_SHORT
+#  define C11ATOMIC_INT_FAST64_T_WIDTH     C11ATOMIC_SHORT_WIDTH
+#elif 64 <= C11ATOMIC_INT_WIDTH && C11ATOMIC_INT_LOCK_FREE >= 2
+#  define C11ATOMIC_INT_FAST64_T C11ATOMIC_INT
+#  define C11ATOMIC_INT_FAST64_T_WIDTH     C11ATOMIC_INT_WIDTH
+#elif 64 <= C11ATOMIC_LONG_WIDTH && C11ATOMIC_LONG_LOCK_FREE >= 2
+#  define C11ATOMIC_INT_FAST64_T C11ATOMIC_LONG
+#  define C11ATOMIC_INT_FAST64_T_WIDTH     C11ATOMIC_LONG_WIDTH
+#elif 64 <= C11ATOMIC_LLONG_WIDTH && C11ATOMIC_LLONG_LOCK_FREE >= 2
+#  define C11ATOMIC_INT_FAST64_T C11ATOMIC_LLONG
+#  define C11ATOMIC_INT_FAST64_T_WIDTH     C11ATOMIC_LLONG_WIDTH
+#elif 64 <= C11ATOMIC_SCHAR_WIDTH && C11ATOMIC_SCHAR_LOCK_FREE >= 1
+#  define C11ATOMIC_INT_FAST64_T C11ATOMIC_SCHAR
+#  define C11ATOMIC_INT_FAST64_T_WIDTH     C11ATOMIC_SCHAR_WIDTH
+#elif 64 <= C11ATOMIC_SHORT_WIDTH && C11ATOMIC_SHORT_LOCK_FREE >= 1
+#  define C11ATOMIC_INT_FAST64_T C11ATOMIC_SHORT
+#  define C11ATOMIC_INT_FAST64_T_WIDTH     C11ATOMIC_SHORT_WIDTH
+#elif 64 <= C11ATOMIC_INT_WIDTH && C11ATOMIC_INT_LOCK_FREE >= 1
+#  define C11ATOMIC_INT_FAST64_T C11ATOMIC_INT
+#  define C11ATOMIC_INT_FAST64_T_WIDTH     C11ATOMIC_INT_WIDTH
+#elif 64 <= C11ATOMIC_LONG_WIDTH && C11ATOMIC_LONG_LOCK_FREE >= 1
+#  define C11ATOMIC_INT_FAST64_T C11ATOMIC_LONG
+#  define C11ATOMIC_INT_FAST64_T_WIDTH     C11ATOMIC_LONG_WIDTH
+#elif 64 <= C11ATOMIC_LLONG_WIDTH && C11ATOMIC_LLONG_LOCK_FREE >= 1
+#  define C11ATOMIC_INT_FAST64_T C11ATOMIC_LLONG
+#  define C11ATOMIC_INT_FAST64_T_WIDTH     C11ATOMIC_LLONG_WIDTH
+#else
+#  define C11ATOMIC_INT_FAST64_T C11ATOMIC_INT_LEAST64_T
+#  define C11ATOMIC_INT_FAST64_T_WIDTH     C11ATOMIC_INT_LEAST64_T_WIDTH
+#endif
+#ifndef C11ATOMIC_INT_FAST64_T_LOCK_FREE
+#  if defined(INT_FAST64_WIDTH) // <stdint.h> (C23)
+#    define C11ATOMIC_INT_FAST64_T_WIDTH (INT_FAST64_WIDTH)
+#  elif defined(__INT_FAST64_WIDTH__) // GCC/Clang
+#    define C11ATOMIC_INT_FAST64_T_WIDTH (__INT_FAST64_WIDTH__)
+#  elif defined(INT_FAST64_MAX) // <stdint.h> (C99)
+#    define C11ATOMIC_INT_FAST64_T_WIDTH (INT_FAST64_MAX/0x7F80%0xFF*8+8)
+#  elif defined(__INT_FAST64_MAX__) // GCC/Clang
+#    define C11ATOMIC_INT_FAST64_T_WIDTH (__INT_FAST64_MAX__/0x7F80%0xFF*8+8)
+#  elif defined(_MSC_VER) // MSVC
+#    define C11ATOMIC_INT_FAST64_T_WIDTH (64)
+#  endif
+#  if !defined(C11ATOMIC_LLONG_WIDTH)
+#    define C11ATOMIC_INT_FAST64_T_LOCK_FREE 1 // unknown
+#  elif C11ATOMIC_INT_FAST64_T_WIDTH == C11ATOMIC_SCHAR_WIDTH
+#    ifdef C11ATOMIC_SCHAR_BIT
+#      define C11ATOMIC_INT_FAST64_T_SIZE    C11ATOMIC_SCHAR_SIZE
+#      define C11ATOMIC_INT_FAST64_T_BIT     C11ATOMIC_SCHAR_BIT
+#    endif
+#    define C11ATOMIC_INT_FAST64_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
+#  elif C11ATOMIC_INT_FAST64_T_WIDTH == C11ATOMIC_SHORT_WIDTH
+#    ifdef C11ATOMIC_SHORT_BIT
+#      define C11ATOMIC_INT_FAST64_T_SIZE    C11ATOMIC_SHORT_SIZE
+#      define C11ATOMIC_INT_FAST64_T_BIT     C11ATOMIC_SHORT_BIT
+#    endif
+#    define C11ATOMIC_INT_FAST64_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
+#  elif C11ATOMIC_INT_FAST64_T_WIDTH == C11ATOMIC_INT_WIDTH
+#    ifdef C11ATOMIC_INT_BIT
+#      define C11ATOMIC_INT_FAST64_T_SIZE    C11ATOMIC_INT_SIZE
+#      define C11ATOMIC_INT_FAST64_T_BIT     C11ATOMIC_INT_BIT
+#    endif
+#    define C11ATOMIC_INT_FAST64_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
+#  elif C11ATOMIC_INT_FAST64_T_WIDTH == C11ATOMIC_LONG_WIDTH
+#    ifdef C11ATOMIC_LONG_BIT
+#      define C11ATOMIC_INT_FAST64_T_SIZE    C11ATOMIC_LONG_SIZE
+#      define C11ATOMIC_INT_FAST64_T_BIT     C11ATOMIC_LONG_BIT
+#    endif
+#    define C11ATOMIC_INT_FAST64_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
+#  elif C11ATOMIC_INT_FAST64_T_WIDTH == C11ATOMIC_LLONG_WIDTH
+#    ifdef C11ATOMIC_LLONG_BIT
+#      define C11ATOMIC_INT_FAST64_T_SIZE    C11ATOMIC_LLONG_SIZE
+#      define C11ATOMIC_INT_FAST64_T_BIT     C11ATOMIC_LLONG_BIT
+#    endif
+#    define C11ATOMIC_INT_FAST64_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
+#  else
+#    define C11ATOMIC_INT_FAST64_T_LOCK_FREE 1 // unknown
+#  endif
+#endif
+#if defined(_C11ATOMIC_STDINT_H) && defined(UINT_FAST64_MAX) // C99
+#  define C11ATOMIC_UINT_FAST64_T uint_fast64_t
+#elif defined(__UINT_FAST64_TYPE__) // GCC/Clang
+#  define C11ATOMIC_UINT_FAST64_T __UINT_FAST64_TYPE__
+#elif defined(_MSC_VER) // MSVC
+#  define C11ATOMIC_UINT_FAST64_T unsigned __int64
+#elif !defined(C11ATOMIC_ULLONG_WIDTH)
+#  define C11ATOMIC_UINT_FAST64_T C11ATOMIC_UINT_LEAST64_T
+#elif 64 <= C11ATOMIC_UCHAR_WIDTH && C11ATOMIC_UCHAR_LOCK_FREE >= 2
+#  define C11ATOMIC_UINT_FAST64_T C11ATOMIC_UCHAR
+#elif 64 <= C11ATOMIC_USHORT_WIDTH && C11ATOMIC_USHORT_LOCK_FREE >= 2
+#  define C11ATOMIC_UINT_FAST64_T C11ATOMIC_USHORT
+#elif 64 <= C11ATOMIC_UINT_WIDTH && C11ATOMIC_UINT_LOCK_FREE >= 2
+#  define C11ATOMIC_UINT_FAST64_T C11ATOMIC_UINT
+#elif 64 <= C11ATOMIC_ULONG_WIDTH && C11ATOMIC_ULONG_LOCK_FREE >= 2
+#  define C11ATOMIC_UINT_FAST64_T C11ATOMIC_ULONG
+#elif 64 <= C11ATOMIC_ULLONG_WIDTH && C11ATOMIC_ULLONG_LOCK_FREE >= 2
+#  define C11ATOMIC_UINT_FAST64_T C11ATOMIC_ULLONG
+#elif 64 <= C11ATOMIC_UCHAR_WIDTH && C11ATOMIC_UCHAR_LOCK_FREE >= 1
+#  define C11ATOMIC_UINT_FAST64_T C11ATOMIC_UCHAR
+#elif 64 <= C11ATOMIC_USHORT_WIDTH && C11ATOMIC_USHORT_LOCK_FREE >= 1
+#  define C11ATOMIC_UINT_FAST64_T C11ATOMIC_USHORT
+#elif 64 <= C11ATOMIC_UINT_WIDTH && C11ATOMIC_UINT_LOCK_FREE >= 1
+#  define C11ATOMIC_UINT_FAST64_T C11ATOMIC_UINT
+#elif 64 <= C11ATOMIC_ULONG_WIDTH && C11ATOMIC_ULONG_LOCK_FREE >= 1
+#  define C11ATOMIC_UINT_FAST64_T C11ATOMIC_ULONG
+#elif 64 <= C11ATOMIC_ULLONG_WIDTH && C11ATOMIC_ULLONG_LOCK_FREE >= 1
+#  define C11ATOMIC_UINT_FAST64_T C11ATOMIC_ULLONG
+#else
+#  define C11ATOMIC_UINT_FAST64_T C11ATOMIC_UINT_LEAST64_T
+#endif
+#ifdef C11ATOMIC_INT_FAST64_T_WIDTH
+#  define C11ATOMIC_UINT_FAST64_T_WIDTH   C11ATOMIC_INT_FAST64_T_WIDTH
+#endif
+#ifdef C11ATOMIC_INT_FAST64_T_SIZE
+#  define C11ATOMIC_UINT_FAST64_T_SIZE    C11ATOMIC_INT_FAST64_T_SIZE
+#  define C11ATOMIC_UINT_FAST64_T_BIT     C11ATOMIC_INT_FAST64_T_BIT
+#endif
+#define C11ATOMIC_UINT_FAST64_T_LOCK_FREE C11ATOMIC_INT_FAST64_T_LOCK_FREE
+
+/*---------------------------- C11ATOMIC_INTMAX_T ---------------------------*/
+#if defined(_C11ATOMIC_STDINT_H) && defined(INTMAX_MAX) // C99
+#  define C11ATOMIC_INTMAX_T intmax_t
+#elif defined(__INTMAX_TYPE__) // GCC/Clang
+#  define C11ATOMIC_INTMAX_T __INTMAX_TYPE__
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_INTMAX_T C11ATOMIC_LONG
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_INTMAX_T C11ATOMIC_LLONG
+#elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#  define C11ATOMIC_INTMAX_T signed __int64
+#elif !defined(C11ATOMIC_LLONG_WIDTH)
+#  define C11ATOMIC_INTMAX_T C11ATOMIC_LLONG
+#  define C11ATOMIC_INTMAX_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
+#elif C11ATOMIC_LLONG_WIDTH == C11ATOMIC_SCHAR_WIDTH
+#  define C11ATOMIC_INTMAX_T C11ATOMIC_SCHAR
+#  define C11ATOMIC_INTMAX_T_WIDTH     C11ATOMIC_SCHAR_WIDTH
+#elif C11ATOMIC_LLONG_WIDTH == C11ATOMIC_SHORT_WIDTH
+#  define C11ATOMIC_INTMAX_T C11ATOMIC_SHORT
+#  define C11ATOMIC_INTMAX_T_WIDTH     C11ATOMIC_SHORT_WIDTH
+#elif C11ATOMIC_LLONG_WIDTH == C11ATOMIC_INT_WIDTH
+#  define C11ATOMIC_INTMAX_T C11ATOMIC_INT
+#  define C11ATOMIC_INTMAX_T_WIDTH     C11ATOMIC_INT_WIDTH
+#elif C11ATOMIC_LLONG_WIDTH == C11ATOMIC_LONG_WIDTH
+#  define C11ATOMIC_INTMAX_T C11ATOMIC_LONG
+#  define C11ATOMIC_INTMAX_T_WIDTH     C11ATOMIC_LONG_WIDTH
+#else
+#  define C11ATOMIC_INTMAX_T C11ATOMIC_LLONG
+#  define C11ATOMIC_INTMAX_T_WIDTH     C11ATOMIC_LLONG_WIDTH
+#endif
+#ifndef C11ATOMIC_INTMAX_T_LOCK_FREE
+#  if defined(INTMAX_WIDTH) // <stdint.h> (C23)
+#    define C11ATOMIC_INTMAX_T_WIDTH (INTMAX_WIDTH)
+#  elif defined(__INTMAX_WIDTH__) // GCC/Clang
+#    define C11ATOMIC_INTMAX_T_WIDTH (__INTMAX_WIDTH__)
+#  elif defined(INTMAX_MAX) // <stdint.h> (C99)
+#    define C11ATOMIC_INTMAX_T_WIDTH (INTMAX_MAX/0x7F80%0xFF*8+8)
+#  elif defined(__INTMAX_MAX__) // GCC/Clang
+#    define C11ATOMIC_INTMAX_T_WIDTH (__INTMAX_MAX__/0x7F80%0xFF*8+8)
+#  elif defined(__LP64__) // GCC/Clang LP64
+#    define C11ATOMIC_INTMAX_T_WIDTH (64)
+#  elif defined(__ILP32__) // GCC/Clang ILP32
+#    define C11ATOMIC_INTMAX_T_WIDTH (64)
+#  elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#    define C11ATOMIC_INTMAX_T_WIDTH (64)
+#  endif
+#  if !defined(C11ATOMIC_LLONG_WIDTH)
+#    define C11ATOMIC_INTMAX_T_LOCK_FREE 1 // unknown
+#  elif C11ATOMIC_INTMAX_T_WIDTH == C11ATOMIC_SCHAR_WIDTH
+#    ifdef C11ATOMIC_SCHAR_BIT
+#      define C11ATOMIC_INTMAX_T_SIZE    C11ATOMIC_SCHAR_SIZE
+#      define C11ATOMIC_INTMAX_T_BIT     C11ATOMIC_SCHAR_BIT
+#    endif
+#    define C11ATOMIC_INTMAX_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
+#  elif C11ATOMIC_INTMAX_T_WIDTH == C11ATOMIC_SHORT_WIDTH
+#    ifdef C11ATOMIC_SHORT_BIT
+#      define C11ATOMIC_INTMAX_T_SIZE    C11ATOMIC_SHORT_SIZE
+#      define C11ATOMIC_INTMAX_T_BIT     C11ATOMIC_SHORT_BIT
+#    endif
+#    define C11ATOMIC_INTMAX_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
+#  elif C11ATOMIC_INTMAX_T_WIDTH == C11ATOMIC_INT_WIDTH
+#    ifdef C11ATOMIC_INT_BIT
+#      define C11ATOMIC_INTMAX_T_SIZE    C11ATOMIC_INT_SIZE
+#      define C11ATOMIC_INTMAX_T_BIT     C11ATOMIC_INT_BIT
+#    endif
+#    define C11ATOMIC_INTMAX_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
+#  elif C11ATOMIC_INTMAX_T_WIDTH == C11ATOMIC_LONG_WIDTH
+#    ifdef C11ATOMIC_LONG_BIT
+#      define C11ATOMIC_INTMAX_T_SIZE    C11ATOMIC_LONG_SIZE
+#      define C11ATOMIC_INTMAX_T_BIT     C11ATOMIC_LONG_BIT
+#    endif
+#    define C11ATOMIC_INTMAX_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
+#  elif C11ATOMIC_INTMAX_T_WIDTH == C11ATOMIC_LLONG_WIDTH
+#    ifdef C11ATOMIC_LLONG_BIT
+#      define C11ATOMIC_INTMAX_T_SIZE    C11ATOMIC_LLONG_SIZE
+#      define C11ATOMIC_INTMAX_T_BIT     C11ATOMIC_LLONG_BIT
+#    endif
+#    define C11ATOMIC_INTMAX_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
+#  else
+#    define C11ATOMIC_INTMAX_T_LOCK_FREE 1 // unknown
+#  endif
+#endif
+#if defined(_C11ATOMIC_STDINT_H) && defined(UINTMAX_MAX) // C99
+#  define C11ATOMIC_UINTMAX_T uintmax_t
+#elif defined(__UINTMAX_TYPE__) // GCC/Clang
+#  define C11ATOMIC_UINTMAX_T __UINTMAX_TYPE__
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_UINTMAX_T C11ATOMIC_ULONG
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_UINTMAX_T C11ATOMIC_ULLONG
+#elif defined(_MSC_VER) // MSVC (LLP64/ILP32)
+#  define C11ATOMIC_UINTMAX_T unsigned __int64
+#elif !defined(C11ATOMIC_ULLONG_WIDTH)
+#  define C11ATOMIC_UINTMAX_T C11ATOMIC_ULLONG
+#elif C11ATOMIC_ULLONG_WIDTH == C11ATOMIC_UCHAR_WIDTH
+#  define C11ATOMIC_UINTMAX_T C11ATOMIC_UCHAR
+#elif C11ATOMIC_ULLONG_WIDTH == C11ATOMIC_USHORT_WIDTH
+#  define C11ATOMIC_UINTMAX_T C11ATOMIC_USHORT
+#elif C11ATOMIC_ULLONG_WIDTH == C11ATOMIC_UINT_WIDTH
+#  define C11ATOMIC_UINTMAX_T C11ATOMIC_UINT
+#elif C11ATOMIC_ULLONG_WIDTH == C11ATOMIC_ULONG_WIDTH
+#  define C11ATOMIC_UINTMAX_T C11ATOMIC_ULONG
+#else
+#  define C11ATOMIC_UINTMAX_T C11ATOMIC_ULLONG
+#endif
+#ifdef C11ATOMIC_INTMAX_T_WIDTH
+#  define C11ATOMIC_UINTMAX_T_WIDTH   C11ATOMIC_INTMAX_T_WIDTH
+#endif
+#ifdef C11ATOMIC_INTMAX_T_BIT
+#  define C11ATOMIC_UINTMAX_T_SIZE    C11ATOMIC_INTMAX_T_SIZE
+#  define C11ATOMIC_UINTMAX_T_BIT     C11ATOMIC_INTMAX_T_BIT
+#endif
+#define C11ATOMIC_UINTMAX_T_LOCK_FREE C11ATOMIC_INTMAX_T_LOCK_FREE
+
+/*---------------------------- C11ATOMIC_INTPTR_T ---------------------------*/
+#if defined(_C11ATOMIC_STDINT_H) && defined(INTPTR_MAX) // C99 (optional)
+#  define C11ATOMIC_INTPTR_T intptr_t
+#elif defined(__INTPTR_TYPE__) // GCC/Clang (optional)
+#  define C11ATOMIC_INTPTR_T __INTPTR_TYPE__
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_INTPTR_T C11ATOMIC_LONG
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_INTPTR_T C11ATOMIC_INT
+#elif defined(_WIN64) // MSVC LLP64
+#  define C11ATOMIC_INTPTR_T signed __int64
+#elif defined(_WIN32) // MSVC ILP32
+#  define C11ATOMIC_INTPTR_T signed __int32
+#endif
+#ifdef C11ATOMIC_INTPTR_T
+#  if defined(INTPTR_WIDTH) // <stdint.h> (C23, optional)
+#    define C11ATOMIC_INTPTR_T_WIDTH (INTPTR_WIDTH)
+#  elif defined(__INTPTR_WIDTH__) // GCC/Clang (optional)
+#    define C11ATOMIC_INTPTR_T_WIDTH (__INTPTR_WIDTH__)
+#  elif defined(INTPTR_MAX) // <stdint.h> (C99, optional)
+#    define C11ATOMIC_INTPTR_T_WIDTH (INTPTR_MAX/0x7F80%0xFF*8+8)
+#  elif defined(__INTPTR_MAX__) // GCC/Clang (optional)
+#    define C11ATOMIC_INTPTR_T_WIDTH (__INTPTR_MAX__/0x7F80%0xFF*8+8)
+#  elif defined(__LP64__) // GCC/Clang LP64
+#    define C11ATOMIC_INTPTR_T_WIDTH (64)
+#  elif defined(__ILP32__) // GCC/Clang ILP32
+#    define C11ATOMIC_INTPTR_T_WIDTH (32)
+#  elif defined(_WIN64) // MSVC LLP64
+#    define C11ATOMIC_INTPTR_T_WIDTH (64)
+#  elif defined(_WIN32) // MSVC ILP32
+#    define C11ATOMIC_INTPTR_T_WIDTH (32)
+#  endif
+#  if !defined(C11ATOMIC_LLONG_WIDTH)
+#    define C11ATOMIC_INTPTR_T_LOCK_FREE 1 // unknown
+#  elif C11ATOMIC_INTPTR_T_WIDTH == C11ATOMIC_SCHAR_WIDTH
+#    ifdef C11ATOMIC_SCHAR_BIT
+#      define C11ATOMIC_INTPTR_T_SIZE    C11ATOMIC_SCHAR_SIZE
+#      define C11ATOMIC_INTPTR_T_BIT     C11ATOMIC_SCHAR_BIT
+#    endif
+#    define C11ATOMIC_INTPTR_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
+#  elif C11ATOMIC_INTPTR_T_WIDTH == C11ATOMIC_SHORT_WIDTH
+#    ifdef C11ATOMIC_SHORT_BIT
+#      define C11ATOMIC_INTPTR_T_SIZE    C11ATOMIC_SHORT_SIZE
+#      define C11ATOMIC_INTPTR_T_BIT     C11ATOMIC_SHORT_BIT
+#    endif
+#    define C11ATOMIC_INTPTR_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
+#  elif C11ATOMIC_INTPTR_T_WIDTH == C11ATOMIC_INT_WIDTH
+#    ifdef C11ATOMIC_INT_BIT
+#      define C11ATOMIC_INTPTR_T_SIZE    C11ATOMIC_INT_SIZE
+#      define C11ATOMIC_INTPTR_T_BIT     C11ATOMIC_INT_BIT
+#    endif
+#    define C11ATOMIC_INTPTR_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
+#  elif C11ATOMIC_INTPTR_T_WIDTH == C11ATOMIC_LONG_WIDTH
+#    ifdef C11ATOMIC_LONG_BIT
+#      define C11ATOMIC_INTPTR_T_SIZE    C11ATOMIC_LONG_SIZE
+#      define C11ATOMIC_INTPTR_T_BIT     C11ATOMIC_LONG_BIT
+#    endif
+#    define C11ATOMIC_INTPTR_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
+#  elif C11ATOMIC_INTPTR_T_WIDTH == C11ATOMIC_LLONG_WIDTH
+#    ifdef C11ATOMIC_LLONG_BIT
+#      define C11ATOMIC_INTPTR_T_SIZE    C11ATOMIC_LLONG_SIZE
+#      define C11ATOMIC_INTPTR_T_BIT     C11ATOMIC_LLONG_BIT
+#    endif
+#    define C11ATOMIC_INTPTR_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
+#  else
+#    define C11ATOMIC_INTPTR_T_LOCK_FREE 1 // unknown
+#  endif
+#endif
+#if defined(_C11ATOMIC_STDINT_H) && defined(UINTPTR_MAX) // C99 (optional)
+#  define C11ATOMIC_UINTPTR_T uintptr_t
+#elif defined(__UINTPTR_TYPE__) // GCC/Clang (optional)
+#  define C11ATOMIC_UINTPTR_T __UINTPTR_TYPE__
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_UINTPTR_T C11ATOMIC_ULONG
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_UINTPTR_T C11ATOMIC_UINT
+#elif defined(_WIN64) // MSVC LLP64
+#  define C11ATOMIC_UINTPTR_T unsigned __int64
+#elif defined(_WIN32) // MSVC ILP32
+#  define C11ATOMIC_UINTPTR_T unsigned __int32
+#endif
+#ifdef C11ATOMIC_UINTPTR_T
+#  ifdef C11ATOMIC_INTPTR_T_WIDTH
+#    define C11ATOMIC_UINTPTR_T_WIDTH   C11ATOMIC_INTPTR_T_WIDTH
+#  endif
+#  ifdef C11ATOMIC_INTPTR_T_BIT
+#    define C11ATOMIC_UINTPTR_T_SIZE    C11ATOMIC_INTPTR_T_SIZE
+#    define C11ATOMIC_UINTPTR_T_BIT     C11ATOMIC_INTPTR_T_BIT
+#  endif
+#  define C11ATOMIC_UINTPTR_T_LOCK_FREE C11ATOMIC_INTPTR_T_LOCK_FREE
+#endif
+
+/*----------------------------- C11ATOMIC_SIZE_T ----------------------------*/
+#if defined(_C11ATOMIC_STDDEF_H)
+#  define C11ATOMIC_SIZE_T size_t
+#elif defined(__SIZE_TYPE__) // GCC/Clang
+#  define C11ATOMIC_SIZE_T __SIZE_TYPE__
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_SIZE_T C11ATOMIC_ULONG
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_SIZE_T C11ATOMIC_UINT
+#elif defined(_WIN64) // MSVC LLP64
+#  define C11ATOMIC_SIZE_T unsigned __int64
+#elif defined(_WIN32) // MSVC ILP32
+#  define C11ATOMIC_SIZE_T unsigned __int32
+#endif
+#ifdef C11ATOMIC_SIZE_T
+#  if defined(SIZE_WIDTH) // <stdint.h> (C23)
+#    define C11ATOMIC_SIZE_T_WIDTH (SIZE_WIDTH)
+#  elif defined(__SIZE_WIDTH__) // GCC/Clang
+#    define C11ATOMIC_SIZE_T_WIDTH (__SIZE_WIDTH__)
+#  elif defined(SIZE_MAX) // <stdint.h> (C99)
+#    define C11ATOMIC_SIZE_T_WIDTH (SIZE_MAX/0xFF%0xFF*8)
+#  elif defined(__SIZE_MAX__) // GCC/Clang
+#    define C11ATOMIC_SIZE_T_WIDTH (__SIZE_MAX__/0xFF%0xFF*8)
+#  elif defined(__LP64__) // GCC/Clang LP64
+#    define C11ATOMIC_SIZE_T_WIDTH (64)
+#  elif defined(__ILP32__) // GCC/Clang ILP32
+#    define C11ATOMIC_SIZE_T_WIDTH (32)
+#  elif defined(_WIN64) // MSVC LLP64
+#    define C11ATOMIC_SIZE_T_WIDTH (64)
+#  elif defined(_WIN32) // MSVC ILP32
+#    define C11ATOMIC_SIZE_T_WIDTH (32)
+#  endif
+#  if !defined(C11ATOMIC_ULLONG_WIDTH)
+#    define C11ATOMIC_SIZE_T_LOCK_FREE 1 // unknown
+#  elif C11ATOMIC_SIZE_T_WIDTH == C11ATOMIC_UCHAR_WIDTH
+#    ifdef C11ATOMIC_UCHAR_BIT
+#      define C11ATOMIC_SIZE_T_SIZE    C11ATOMIC_UCHAR_SIZE
+#      define C11ATOMIC_SIZE_T_BIT     C11ATOMIC_UCHAR_BIT
+#    endif
+#    define C11ATOMIC_SIZE_T_LOCK_FREE C11ATOMIC_UCHAR_LOCK_FREE
+#  elif C11ATOMIC_SIZE_T_WIDTH == C11ATOMIC_USHORT_WIDTH
+#    ifdef C11ATOMIC_USHORT_BIT
+#      define C11ATOMIC_SIZE_T_SIZE    C11ATOMIC_USHORT_SIZE
+#      define C11ATOMIC_SIZE_T_BIT     C11ATOMIC_USHORT_BIT
+#    endif
+#    define C11ATOMIC_SIZE_T_LOCK_FREE C11ATOMIC_USHORT_LOCK_FREE
+#  elif C11ATOMIC_SIZE_T_WIDTH == C11ATOMIC_UINT_WIDTH
+#    ifdef C11ATOMIC_UINT_BIT
+#      define C11ATOMIC_SIZE_T_SIZE    C11ATOMIC_UINT_SIZE
+#      define C11ATOMIC_SIZE_T_BIT     C11ATOMIC_UINT_BIT
+#    endif
+#    define C11ATOMIC_SIZE_T_LOCK_FREE C11ATOMIC_UINT_LOCK_FREE
+#  elif C11ATOMIC_SIZE_T_WIDTH == C11ATOMIC_ULONG_WIDTH
+#    ifdef C11ATOMIC_ULONG_BIT
+#      define C11ATOMIC_SIZE_T_SIZE    C11ATOMIC_ULONG_SIZE
+#      define C11ATOMIC_SIZE_T_BIT     C11ATOMIC_ULONG_BIT
+#    endif
+#    define C11ATOMIC_SIZE_T_LOCK_FREE C11ATOMIC_ULONG_LOCK_FREE
+#  elif C11ATOMIC_SIZE_T_WIDTH == C11ATOMIC_ULLONG_WIDTH
+#    ifdef C11ATOMIC_ULLONG_BIT
+#      define C11ATOMIC_SIZE_T_SIZE    C11ATOMIC_ULLONG_SIZE
+#      define C11ATOMIC_SIZE_T_BIT     C11ATOMIC_ULLONG_BIT
+#    endif
+#    define C11ATOMIC_SIZE_T_LOCK_FREE C11ATOMIC_ULLONG_LOCK_FREE
+#  else
+#    define C11ATOMIC_SIZE_T_LOCK_FREE 1 // unknown
+#  endif
+#endif
+
+/*--------------------------- C11ATOMIC_PTRDIFF_T ---------------------------*/
+#if defined(_C11ATOMIC_STDDEF_H)
+#  define C11ATOMIC_PTRDIFF_T ptrdiff_t
+#elif defined(__PTRDIFF_TYPE__) // GCC/Clang
+#  define C11ATOMIC_PTRDIFF_T __PTRDIFF_TYPE__
+#elif defined(__LP64__) // GCC/Clang LP64
+#  define C11ATOMIC_PTRDIFF_T C11ATOMIC_LONG
+#elif defined(__ILP32__) // GCC/Clang ILP32
+#  define C11ATOMIC_PTRDIFF_T C11ATOMIC_INT
+#elif defined(_WIN64) // MSVC LLP64
+#  define C11ATOMIC_PTRDIFF_T signed __int64
+#elif defined(_WIN32) // MSVC ILP32
+#  define C11ATOMIC_PTRDIFF_T signed __int32
+#endif
+#ifdef C11ATOMIC_PTRDIFF_T
+#  if defined(PTRDIFF_WIDTH) // <stdint.h> (C23)
+#    define C11ATOMIC_PTRDIFF_T_WIDTH (PTRDIFF_WIDTH)
+#  elif defined(__PTRDIFF_WIDTH__) // GCC/Clang
+#    define C11ATOMIC_PTRDIFF_T_WIDTH (__PTRDIFF_WIDTH__)
+#  elif defined(PTRDIFF_MAX) // <stdint.h> (C99)
+#    define C11ATOMIC_PTRDIFF_T_WIDTH (PTRDIFF_MAX/0x7F80%0xFF*8+8)
+#  elif defined(__PTRDIFF_MAX__) // GCC/Clang
+#    define C11ATOMIC_PTRDIFF_T_WIDTH (__PTRDIFF_MAX__/0x7F80%0xFF*8+8)
+#  elif defined(__LP64__) // GCC/Clang LP64
+#    define C11ATOMIC_PTRDIFF_T_WIDTH (64)
+#  elif defined(__ILP32__) // GCC/Clang ILP32
+#    define C11ATOMIC_PTRDIFF_T_WIDTH (32)
+#  elif defined(_WIN64) // MSVC LLP64
+#    define C11ATOMIC_PTRDIFF_T_WIDTH (64)
+#  elif defined(_WIN32) // MSVC ILP32
+#    define C11ATOMIC_PTRDIFF_T_WIDTH (32)
+#  endif
+#  if !defined(C11ATOMIC_LLONG_WIDTH)
+#    define C11ATOMIC_PTRDIFF_T_LOCK_FREE 1 // unknown
+#  elif C11ATOMIC_PTRDIFF_T_WIDTH == C11ATOMIC_SCHAR_WIDTH
+#    ifdef C11ATOMIC_SCHAR_BIT
+#      define C11ATOMIC_PTRDIFF_T_SIZE    C11ATOMIC_SCHAR_SIZE
+#      define C11ATOMIC_PTRDIFF_T_BIT     C11ATOMIC_SCHAR_BIT
+#    endif
+#    define C11ATOMIC_PTRDIFF_T_LOCK_FREE C11ATOMIC_SCHAR_LOCK_FREE
+#  elif C11ATOMIC_PTRDIFF_T_WIDTH == C11ATOMIC_SHORT_WIDTH
+#    ifdef C11ATOMIC_SHORT_BIT
+#      define C11ATOMIC_PTRDIFF_T_SIZE    C11ATOMIC_SHORT_SIZE
+#      define C11ATOMIC_PTRDIFF_T_BIT     C11ATOMIC_SHORT_BIT
+#    endif
+#    define C11ATOMIC_PTRDIFF_T_LOCK_FREE C11ATOMIC_SHORT_LOCK_FREE
+#  elif C11ATOMIC_PTRDIFF_T_WIDTH == C11ATOMIC_INT_WIDTH
+#    ifdef C11ATOMIC_INT_BIT
+#      define C11ATOMIC_PTRDIFF_T_SIZE    C11ATOMIC_INT_SIZE
+#      define C11ATOMIC_PTRDIFF_T_BIT     C11ATOMIC_INT_BIT
+#    endif
+#    define C11ATOMIC_PTRDIFF_T_LOCK_FREE C11ATOMIC_INT_LOCK_FREE
+#  elif C11ATOMIC_PTRDIFF_T_WIDTH == C11ATOMIC_LONG_WIDTH
+#    ifdef C11ATOMIC_LONG_BIT
+#      define C11ATOMIC_PTRDIFF_T_SIZE    C11ATOMIC_LONG_SIZE
+#      define C11ATOMIC_PTRDIFF_T_BIT     C11ATOMIC_LONG_BIT
+#    endif
+#    define C11ATOMIC_PTRDIFF_T_LOCK_FREE C11ATOMIC_LONG_LOCK_FREE
+#  elif C11ATOMIC_PTRDIFF_T_WIDTH == C11ATOMIC_LLONG_WIDTH
+#    ifdef C11ATOMIC_LLONG_BIT
+#      define C11ATOMIC_PTRDIFF_T_SIZE    C11ATOMIC_LLONG_SIZE
+#      define C11ATOMIC_PTRDIFF_T_BIT     C11ATOMIC_LLONG_BIT
+#    endif
+#    define C11ATOMIC_PTRDIFF_T_LOCK_FREE C11ATOMIC_LLONG_LOCK_FREE
+#  else
+#    define C11ATOMIC_PTRDIFF_T_LOCK_FREE 1 // unknown
+#  endif
+#endif
+
+/*------------------------- C11ATOMIC_POINTERn_DEFk -------------------------*/
+/* 0-bit pointer (unknown) */
+#if !defined(C11ATOMIC_POINTER_BIT)
+#  define _C11ATOMIC_POINTER0_DEF1(name, S, ...)                              \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_POINTER, __VA_ARGS__)                                \
+)
+#  define _C11ATOMIC_POINTER0_DEF2(name, S, ...)                              \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_POINTER, C11ATOMIC_POINTER, __VA_ARGS__)             \
+)
+#elif C11ATOMIC_POINTER_BIT < 8
+#  define _C11ATOMIC_POINTER0_DEF1(name, S, ...)                              \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_POINTER, __VA_ARGS__)                                \
+)
+#  define _C11ATOMIC_POINTER0_DEF2(name, S, ...)                              \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_POINTER, C11ATOMIC_POINTER, __VA_ARGS__)             \
+)
+#else
+#  define _C11ATOMIC_POINTER0_DEF1(name, S, ...)
+#  define _C11ATOMIC_POINTER0_DEF2(name, S, ...)
+#endif
+/* 8-bit pointer */
+#if !defined(C11ATOMIC_POINTER_BIT)
+#  define _C11ATOMIC_POINTER8_DEF1(name, S, ...)
+#  define _C11ATOMIC_POINTER8_DEF2(name, S, ...)
+#elif 8 <= C11ATOMIC_POINTER_BIT && C11ATOMIC_POINTER_BIT < 16
+#  define _C11ATOMIC_POINTER8_DEF1(name, S, ...)                              \
+_C11ATOMIC_VA(                                                                \
+    name(8, S, C11ATOMIC_POINTER, __VA_ARGS__)                                \
+)
+#  define _C11ATOMIC_POINTER8_DEF2(name, S, ...)                              \
+_C11ATOMIC_VA(                                                                \
+    name(8, S, C11ATOMIC_POINTER, C11ATOMIC_POINTER, __VA_ARGS__)             \
+)
+#else
+#  define _C11ATOMIC_POINTER8_DEF1(name, S, ...)
+#  define _C11ATOMIC_POINTER8_DEF2(name, S, ...)
+#endif
+/* 16-bit pointer */
+#if !defined(C11ATOMIC_POINTER_BIT)
+#  define _C11ATOMIC_POINTER16_DEF1(name, S, ...)
+#  define _C11ATOMIC_POINTER16_DEF2(name, S, ...)
+#elif 16 <= C11ATOMIC_POINTER_BIT && C11ATOMIC_POINTER_BIT < 32
+#  define _C11ATOMIC_POINTER16_DEF1(name, S, ...)                             \
+_C11ATOMIC_VA(                                                                \
+    name(16, S, C11ATOMIC_POINTER, __VA_ARGS__)                               \
+)
+#  define _C11ATOMIC_POINTER16_DEF2(name, S, ...)                             \
+_C11ATOMIC_VA(                                                                \
+    name(16, S, C11ATOMIC_POINTER, C11ATOMIC_POINTER, __VA_ARGS__)            \
+)
+#else
+#  define _C11ATOMIC_POINTER16_DEF1(name, S, ...)
+#  define _C11ATOMIC_POINTER16_DEF2(name, S, ...)
+#endif
+/* 32-bit pointer */
+#if !defined(C11ATOMIC_POINTER_BIT)
+#  define _C11ATOMIC_POINTER32_DEF1(name, S, ...)
+#  define _C11ATOMIC_POINTER32_DEF2(name, S, ...)
+#elif 32 <= C11ATOMIC_POINTER_BIT && C11ATOMIC_POINTER_BIT < 64
+#  define _C11ATOMIC_POINTER32_DEF1(name, S, ...)                             \
+_C11ATOMIC_VA(                                                                \
+    name(32, S, C11ATOMIC_POINTER, __VA_ARGS__)                               \
+)
+#  define _C11ATOMIC_POINTER32_DEF2(name, S, ...)                             \
+_C11ATOMIC_VA(                                                                \
+    name(32, S, C11ATOMIC_POINTER, C11ATOMIC_POINTER, __VA_ARGS__)            \
+)
+#else
+#  define _C11ATOMIC_POINTER32_DEF1(name, S, ...)
+#  define _C11ATOMIC_POINTER32_DEF2(name, S, ...)
+#endif
+/* 64-bit pointer */
+#if !defined(C11ATOMIC_POINTER_BIT)
+#  define _C11ATOMIC_POINTER64_DEF1(name, S, ...)
+#  define _C11ATOMIC_POINTER64_DEF2(name, S, ...)
+#elif 64 <= C11ATOMIC_POINTER_BIT
+#  define _C11ATOMIC_POINTER64_DEF1(name, S, ...)                             \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_POINTER, __VA_ARGS__)                               \
+)
+#  define _C11ATOMIC_POINTER64_DEF2(name, S, ...)                             \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_POINTER, C11ATOMIC_POINTER, __VA_ARGS__)            \
+)
+#else
+#  define _C11ATOMIC_POINTER64_DEF1(name, S, ...)
+#  define _C11ATOMIC_POINTER64_DEF2(name, S, ...)
+#endif
+
+/*--------------------------- C11ATOMIC_BOOLn_DEFk --------------------------*/
+/* 0-bit pointer (unknown) */
+#if !defined(C11ATOMIC_BOOL_BIT)
+#  define _C11ATOMIC_BOOL0_DEF1(name, S, ...)                                 \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_BOOL, __VA_ARGS__)                                   \
+)
+#  define _C11ATOMIC_BOOL0_DEF2(name, S, ...)                                 \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_BOOL, C11ATOMIC_BOOL, __VA_ARGS__)                   \
+)
+#elif C11ATOMIC_BOOL_BIT < 8
+#  define _C11ATOMIC_BOOL0_DEF1(name, S, ...)                                 \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_BOOL, __VA_ARGS__)                                   \
+)
+#  define _C11ATOMIC_BOOL0_DEF2(name, S, ...)                                 \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_BOOL, C11ATOMIC_BOOL, __VA_ARGS__)                   \
+)
+#else
+#  define _C11ATOMIC_BOOL0_DEF1(name, S, ...)
+#  define _C11ATOMIC_BOOL0_DEF2(name, S, ...)
+#endif
+/* 8-bit pointer */
+#if !defined(C11ATOMIC_BOOL_BIT)
+#  define _C11ATOMIC_BOOL8_DEF1(name, S, ...)
+#  define _C11ATOMIC_BOOL8_DEF2(name, S, ...)
+#elif 8 <= C11ATOMIC_BOOL_BIT && C11ATOMIC_BOOL_BIT < 16
+#  define _C11ATOMIC_BOOL8_DEF1(name, S, ...)                                 \
+_C11ATOMIC_VA(                                                                \
+    name(8, S, C11ATOMIC_BOOL, __VA_ARGS__)                                   \
+)
+#  define _C11ATOMIC_BOOL8_DEF2(name, S, ...)                                 \
+_C11ATOMIC_VA(                                                                \
+    name(8, S, C11ATOMIC_BOOL, C11ATOMIC_BOOL, __VA_ARGS__)                   \
+)
+#else
+#  define _C11ATOMIC_BOOL8_DEF1(name, S, ...)
+#  define _C11ATOMIC_BOOL8_DEF2(name, S, ...)
+#endif
+/* 16-bit pointer */
+#if !defined(C11ATOMIC_BOOL_BIT)
+#  define _C11ATOMIC_BOOL16_DEF1(name, S, ...)
+#  define _C11ATOMIC_BOOL16_DEF2(name, S, ...)
+#elif 16 <= C11ATOMIC_BOOL_BIT && C11ATOMIC_BOOL_BIT < 32
+#  define _C11ATOMIC_BOOL16_DEF1(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(16, S, C11ATOMIC_BOOL, __VA_ARGS__)                                  \
+)
+#  define _C11ATOMIC_BOOL16_DEF2(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(16, S, C11ATOMIC_BOOL, C11ATOMIC_BOOL, __VA_ARGS__)                  \
+)
+#else
+#  define _C11ATOMIC_BOOL16_DEF1(name, S, ...)
+#  define _C11ATOMIC_BOOL16_DEF2(name, S, ...)
+#endif
+/* 32-bit pointer */
+#if !defined(C11ATOMIC_BOOL_BIT)
+#  define _C11ATOMIC_BOOL32_DEF1(name, S, ...)
+#  define _C11ATOMIC_BOOL32_DEF2(name, S, ...)
+#elif 32 <= C11ATOMIC_BOOL_BIT && C11ATOMIC_BOOL_BIT < 64
+#  define _C11ATOMIC_BOOL32_DEF1(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(32, S, C11ATOMIC_BOOL, __VA_ARGS__)                                  \
+)
+#  define _C11ATOMIC_BOOL32_DEF2(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(32, S, C11ATOMIC_BOOL, C11ATOMIC_BOOL, __VA_ARGS__)                  \
+)
+#else
+#  define _C11ATOMIC_BOOL32_DEF1(name, S, ...)
+#  define _C11ATOMIC_BOOL32_DEF2(name, S, ...)
+#endif
+/* 64-bit pointer */
+#if !defined(C11ATOMIC_BOOL_BIT)
+#  define _C11ATOMIC_BOOL64_DEF1(name, S, ...)
+#  define _C11ATOMIC_BOOL64_DEF2(name, S, ...)
+#elif 64 <= C11ATOMIC_BOOL_BIT
+#  define _C11ATOMIC_BOOL64_DEF1(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_BOOL, __VA_ARGS__)                                  \
+)
+#  define _C11ATOMIC_BOOL64_DEF2(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_BOOL, C11ATOMIC_BOOL, __VA_ARGS__)                  \
+)
+#else
+#  define _C11ATOMIC_BOOL64_DEF1(name, S, ...)
+#  define _C11ATOMIC_BOOL64_DEF2(name, S, ...)
+#endif
+
+/*--------------------------- C11ATOMIC_CHARn_DEFk --------------------------*/
+/* 0-bit pointer (unknown) */
+#if !defined(C11ATOMIC_CHAR_BIT)
+#  define _C11ATOMIC_CHAR0_DEF1(name,  S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_CHAR,  __VA_ARGS__)                                  \
+)
+#  define _C11ATOMIC_CHAR0_DEF2(name,  S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_CHAR,  C11ATOMIC_CHAR,  __VA_ARGS__)                 \
+)
+#  define _C11ATOMIC_SCHAR0_DEF1(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_SCHAR, __VA_ARGS__)                                  \
+)
+#  define _C11ATOMIC_SCHAR0_DEF2(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_SCHAR, C11ATOMIC_SCHAR, __VA_ARGS__)                 \
+)
+#  define _C11ATOMIC_UCHAR0_DEF1(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_UCHAR, __VA_ARGS__)                                  \
+)
+#  define _C11ATOMIC_UCHAR0_DEF2(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_UCHAR, C11ATOMIC_UCHAR, __VA_ARGS__)                 \
+)
+#elif C11ATOMIC_CHAR_BIT < 8
+#  define _C11ATOMIC_CHAR0_DEF1(name,  S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_CHAR,  __VA_ARGS__)                                  \
+)
+#  define _C11ATOMIC_CHAR0_DEF2(name,  S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_CHAR,  C11ATOMIC_CHAR,  __VA_ARGS__)                 \
+)
+#  define _C11ATOMIC_SCHAR0_DEF1(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_SCHAR, __VA_ARGS__)                                  \
+)
+#  define _C11ATOMIC_SCHAR0_DEF2(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_SCHAR, C11ATOMIC_SCHAR, __VA_ARGS__)                 \
+)
+#  define _C11ATOMIC_UCHAR0_DEF1(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_UCHAR, __VA_ARGS__)                                  \
+)
+#  define _C11ATOMIC_UCHAR0_DEF2(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_UCHAR, C11ATOMIC_UCHAR, __VA_ARGS__)                 \
+)
+#else
+#  define _C11ATOMIC_CHAR0_DEF1(name,  S, ...)
+#  define _C11ATOMIC_CHAR0_DEF2(name,  S, ...)
+#  define _C11ATOMIC_SCHAR0_DEF1(name, S, ...)
+#  define _C11ATOMIC_SCHAR0_DEF2(name, S, ...)
+#  define _C11ATOMIC_UCHAR0_DEF1(name, S, ...)
+#  define _C11ATOMIC_UCHAR0_DEF2(name, S, ...)
+#endif
+/* 8-bit pointer */
+#if !defined(C11ATOMIC_CHAR_BIT)
+#  define _C11ATOMIC_CHAR8_DEF1(name,  S, ...)
+#  define _C11ATOMIC_CHAR8_DEF2(name,  S, ...)
+#  define _C11ATOMIC_SCHAR8_DEF1(name, S, ...)
+#  define _C11ATOMIC_SCHAR8_DEF2(name, S, ...)
+#  define _C11ATOMIC_UCHAR8_DEF1(name, S, ...)
+#  define _C11ATOMIC_UCHAR8_DEF2(name, S, ...)
+#elif 8 <= C11ATOMIC_CHAR_BIT && C11ATOMIC_CHAR_BIT < 16
+#  define _C11ATOMIC_CHAR8_DEF1(name,  S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(8, S, C11ATOMIC_CHAR,  __VA_ARGS__)                                  \
+)
+#  define _C11ATOMIC_CHAR8_DEF2(name,  S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(8, S, C11ATOMIC_CHAR,  C11ATOMIC_CHAR,  __VA_ARGS__)                 \
+)
+#  define _C11ATOMIC_SCHAR8_DEF1(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(8, S, C11ATOMIC_SCHAR, __VA_ARGS__)                                  \
+)
+#  define _C11ATOMIC_SCHAR8_DEF2(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(8, S, C11ATOMIC_SCHAR, C11ATOMIC_SCHAR, __VA_ARGS__)                 \
+)
+#  define _C11ATOMIC_UCHAR8_DEF1(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(8, S, C11ATOMIC_UCHAR, __VA_ARGS__)                                  \
+)
+#  define _C11ATOMIC_UCHAR8_DEF2(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(8, S, C11ATOMIC_UCHAR, C11ATOMIC_UCHAR, __VA_ARGS__)                 \
+)
+#else
+#  define _C11ATOMIC_CHAR8_DEF1(name,  S, ...)
+#  define _C11ATOMIC_CHAR8_DEF2(name,  S, ...)
+#  define _C11ATOMIC_SCHAR8_DEF1(name, S, ...)
+#  define _C11ATOMIC_SCHAR8_DEF2(name, S, ...)
+#  define _C11ATOMIC_UCHAR8_DEF1(name, S, ...)
+#  define _C11ATOMIC_UCHAR8_DEF2(name, S, ...)
+#endif
+/* 16-bit pointer */
+#if !defined(C11ATOMIC_CHAR_BIT)
+#  define _C11ATOMIC_CHAR16_DEF1(name,  S, ...)
+#  define _C11ATOMIC_CHAR16_DEF2(name,  S, ...)
+#  define _C11ATOMIC_SCHAR16_DEF1(name, S, ...)
+#  define _C11ATOMIC_SCHAR16_DEF2(name, S, ...)
+#  define _C11ATOMIC_UCHAR16_DEF1(name, S, ...)
+#  define _C11ATOMIC_UCHAR16_DEF2(name, S, ...)
+#elif 16 <= C11ATOMIC_CHAR_BIT && C11ATOMIC_CHAR_BIT < 32
+#  define _C11ATOMIC_CHAR16_DEF1(name,  S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(16, S, C11ATOMIC_CHAR,  __VA_ARGS__)                                 \
+)
+#  define _C11ATOMIC_CHAR16_DEF2(name,  S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(16, S, C11ATOMIC_CHAR,  C11ATOMIC_CHAR,  __VA_ARGS__)                \
+)
+#  define _C11ATOMIC_SCHAR16_DEF1(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(16, S, C11ATOMIC_SCHAR, __VA_ARGS__)                                 \
+)
+#  define _C11ATOMIC_SCHAR16_DEF2(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(16, S, C11ATOMIC_SCHAR, C11ATOMIC_SCHAR, __VA_ARGS__)                \
+)
+#  define _C11ATOMIC_UCHAR16_DEF1(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(16, S, C11ATOMIC_UCHAR, __VA_ARGS__)                                 \
+)
+#  define _C11ATOMIC_UCHAR16_DEF2(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(16, S, C11ATOMIC_UCHAR, C11ATOMIC_UCHAR, __VA_ARGS__)                \
+)
+#else
+#  define _C11ATOMIC_CHAR16_DEF1(name,  S, ...)
+#  define _C11ATOMIC_CHAR16_DEF2(name,  S, ...)
+#  define _C11ATOMIC_SCHAR16_DEF1(name, S, ...)
+#  define _C11ATOMIC_SCHAR16_DEF2(name, S, ...)
+#  define _C11ATOMIC_UCHAR16_DEF1(name, S, ...)
+#  define _C11ATOMIC_UCHAR16_DEF2(name, S, ...)
+#endif
+/* 32-bit pointer */
+#if !defined(C11ATOMIC_CHAR_BIT)
+#  define _C11ATOMIC_CHAR32_DEF1(name,  S, ...)
+#  define _C11ATOMIC_CHAR32_DEF2(name,  S, ...)
+#  define _C11ATOMIC_SCHAR32_DEF1(name, S, ...)
+#  define _C11ATOMIC_SCHAR32_DEF2(name, S, ...)
+#  define _C11ATOMIC_UCHAR32_DEF1(name, S, ...)
+#  define _C11ATOMIC_UCHAR32_DEF2(name, S, ...)
+#elif 32 <= C11ATOMIC_CHAR_BIT && C11ATOMIC_CHAR_BIT < 64
+#  define _C11ATOMIC_CHAR32_DEF1(name,  S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(32, S, C11ATOMIC_CHAR,  __VA_ARGS__)                                 \
+)
+#  define _C11ATOMIC_CHAR32_DEF2(name,  S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(32, S, C11ATOMIC_CHAR,  C11ATOMIC_CHAR,  __VA_ARGS__)                \
+)
+#  define _C11ATOMIC_SCHAR32_DEF1(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(32, S, C11ATOMIC_SCHAR, __VA_ARGS__)                                 \
+)
+#  define _C11ATOMIC_SCHAR32_DEF2(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(32, S, C11ATOMIC_SCHAR, C11ATOMIC_SCHAR, __VA_ARGS__)                \
+)
+#  define _C11ATOMIC_UCHAR32_DEF1(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(32, S, C11ATOMIC_UCHAR, __VA_ARGS__)                                 \
+)
+#  define _C11ATOMIC_UCHAR32_DEF2(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(32, S, C11ATOMIC_UCHAR, C11ATOMIC_UCHAR, __VA_ARGS__)                \
+)
+#else
+#  define _C11ATOMIC_CHAR32_DEF1(name,  S, ...)
+#  define _C11ATOMIC_CHAR32_DEF2(name,  S, ...)
+#  define _C11ATOMIC_SCHAR32_DEF1(name, S, ...)
+#  define _C11ATOMIC_SCHAR32_DEF2(name, S, ...)
+#  define _C11ATOMIC_UCHAR32_DEF1(name, S, ...)
+#  define _C11ATOMIC_UCHAR32_DEF2(name, S, ...)
+#endif
+/* 64-bit pointer */
+#if !defined(C11ATOMIC_CHAR_BIT)
+#  define _C11ATOMIC_CHAR64_DEF1(name,  S, ...)
+#  define _C11ATOMIC_CHAR64_DEF2(name,  S, ...)
+#  define _C11ATOMIC_SCHAR64_DEF1(name, S, ...)
+#  define _C11ATOMIC_SCHAR64_DEF2(name, S, ...)
+#  define _C11ATOMIC_UCHAR64_DEF1(name, S, ...)
+#  define _C11ATOMIC_UCHAR64_DEF2(name, S, ...)
+#elif 64 <= C11ATOMIC_CHAR_BIT
+#  define _C11ATOMIC_CHAR64_DEF1(name,  S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_CHAR,  __VA_ARGS__)                                 \
+)
+#  define _C11ATOMIC_CHAR64_DEF2(name,  S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_CHAR,  C11ATOMIC_CHAR,  __VA_ARGS__)                \
+)
+#  define _C11ATOMIC_SCHAR64_DEF1(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_SCHAR, __VA_ARGS__)                                 \
+)
+#  define _C11ATOMIC_SCHAR64_DEF2(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_SCHAR, C11ATOMIC_SCHAR, __VA_ARGS__)                \
+)
+#  define _C11ATOMIC_UCHAR64_DEF1(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_UCHAR, __VA_ARGS__)                                 \
+)
+#  define _C11ATOMIC_UCHAR64_DEF2(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_UCHAR, C11ATOMIC_UCHAR, __VA_ARGS__)                \
+)
+#else
+#  define _C11ATOMIC_CHAR64_DEF1(name,  S, ...)
+#  define _C11ATOMIC_CHAR64_DEF2(name,  S, ...)
+#  define _C11ATOMIC_SCHAR64_DEF1(name, S, ...)
+#  define _C11ATOMIC_SCHAR64_DEF2(name, S, ...)
+#  define _C11ATOMIC_UCHAR64_DEF1(name, S, ...)
+#  define _C11ATOMIC_UCHAR64_DEF2(name, S, ...)
+#endif
+
+/*-------------------------- C11ATOMIC_SHORTn_DEFk --------------------------*/
+/* 0-bit pointer (unknown) */
+#if !defined(C11ATOMIC_SHORT_BIT)
+#  define _C11ATOMIC_SHORT0_DEF1(name,  S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_SHORT,  __VA_ARGS__)                                 \
+)
+#  define _C11ATOMIC_SHORT0_DEF2(name,  S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_SHORT,  C11ATOMIC_SHORT,  __VA_ARGS__)               \
+)
+#  define _C11ATOMIC_USHORT0_DEF1(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_USHORT, __VA_ARGS__)                                 \
+)
+#  define _C11ATOMIC_USHORT0_DEF2(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_USHORT, C11ATOMIC_USHORT, __VA_ARGS__)               \
+)
+#elif C11ATOMIC_SHORT_BIT < 16
+#  define _C11ATOMIC_SHORT0_DEF1(name,  S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_SHORT,  __VA_ARGS__)                                 \
+)
+#  define _C11ATOMIC_SHORT0_DEF2(name,  S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_SHORT,  C11ATOMIC_SHORT,  __VA_ARGS__)               \
+)
+#  define _C11ATOMIC_USHORT0_DEF1(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_USHORT, __VA_ARGS__)                                 \
+)
+#  define _C11ATOMIC_USHORT0_DEF2(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_USHORT, C11ATOMIC_USHORT, __VA_ARGS__)               \
+)
+#else
+#  define _C11ATOMIC_SHORT0_DEF1(name,  S, ...)
+#  define _C11ATOMIC_SHORT0_DEF2(name,  S, ...)
+#  define _C11ATOMIC_USHORT0_DEF1(name, S, ...)
+#  define _C11ATOMIC_USHORT0_DEF2(name, S, ...)
+#endif
+/* 16-bit pointer */
+#if !defined(C11ATOMIC_SHORT_BIT)
+#  define _C11ATOMIC_SHORT16_DEF1(name,  S, ...)
+#  define _C11ATOMIC_SHORT16_DEF2(name,  S, ...)
+#  define _C11ATOMIC_USHORT16_DEF1(name, S, ...)
+#  define _C11ATOMIC_USHORT16_DEF2(name, S, ...)
+#elif 16 <= C11ATOMIC_SHORT_BIT && C11ATOMIC_SHORT_BIT < 32
+#  define _C11ATOMIC_SHORT16_DEF1(name,  S, ...)                              \
+_C11ATOMIC_VA(                                                                \
+    name(16, S, C11ATOMIC_SHORT,  __VA_ARGS__)                                \
+)
+#  define _C11ATOMIC_SHORT16_DEF2(name,  S, ...)                              \
+_C11ATOMIC_VA(                                                                \
+    name(16, S, C11ATOMIC_SHORT,  C11ATOMIC_SHORT,  __VA_ARGS__)              \
+)
+#  define _C11ATOMIC_USHORT16_DEF1(name, S, ...)                              \
+_C11ATOMIC_VA(                                                                \
+    name(16, S, C11ATOMIC_USHORT, __VA_ARGS__)                                \
+)
+#  define _C11ATOMIC_USHORT16_DEF2(name, S, ...)                              \
+_C11ATOMIC_VA(                                                                \
+    name(16, S, C11ATOMIC_USHORT, C11ATOMIC_USHORT, __VA_ARGS__)              \
+)
+#else
+#  define _C11ATOMIC_SHORT16_DEF1(name,  S, ...)
+#  define _C11ATOMIC_SHORT16_DEF2(name,  S, ...)
+#  define _C11ATOMIC_USHORT16_DEF1(name, S, ...)
+#  define _C11ATOMIC_USHORT16_DEF2(name, S, ...)
+#endif
+/* 32-bit pointer */
+#if !defined(C11ATOMIC_SHORT_BIT)
+#  define _C11ATOMIC_SHORT32_DEF1(name,  S, ...)
+#  define _C11ATOMIC_SHORT32_DEF2(name,  S, ...)
+#  define _C11ATOMIC_USHORT32_DEF1(name, S, ...)
+#  define _C11ATOMIC_USHORT32_DEF2(name, S, ...)
+#elif 32 <= C11ATOMIC_SHORT_BIT && C11ATOMIC_SHORT_BIT < 64
+#  define _C11ATOMIC_SHORT32_DEF1(name,  S, ...)                              \
+_C11ATOMIC_VA(                                                                \
+    name(32, S, C11ATOMIC_SHORT,  __VA_ARGS__)                                \
+)
+#  define _C11ATOMIC_SHORT32_DEF2(name,  S, ...)                              \
+_C11ATOMIC_VA(                                                                \
+    name(32, S, C11ATOMIC_SHORT,  C11ATOMIC_SHORT,  __VA_ARGS__)              \
+)
+#  define _C11ATOMIC_USHORT32_DEF1(name, S, ...)                              \
+_C11ATOMIC_VA(                                                                \
+    name(32, S, C11ATOMIC_USHORT, __VA_ARGS__)                                \
+)
+#  define _C11ATOMIC_USHORT32_DEF2(name, S, ...)                              \
+_C11ATOMIC_VA(                                                                \
+    name(32, S, C11ATOMIC_USHORT, C11ATOMIC_USHORT, __VA_ARGS__)              \
+)
+#else
+#  define _C11ATOMIC_SHORT32_DEF1(name,  S, ...)
+#  define _C11ATOMIC_SHORT32_DEF2(name,  S, ...)
+#  define _C11ATOMIC_USHORT32_DEF1(name, S, ...)
+#  define _C11ATOMIC_USHORT32_DEF2(name, S, ...)
+#endif
+/* 64-bit pointer */
+#if !defined(C11ATOMIC_SHORT_BIT)
+#  define _C11ATOMIC_SHORT64_DEF1(name,  S, ...)
+#  define _C11ATOMIC_SHORT64_DEF2(name,  S, ...)
+#  define _C11ATOMIC_USHORT64_DEF1(name, S, ...)
+#  define _C11ATOMIC_USHORT64_DEF2(name, S, ...)
+#elif 64 <= C11ATOMIC_SHORT_BIT
+#  define _C11ATOMIC_SHORT64_DEF1(name,  S, ...)                              \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_SHORT,  __VA_ARGS__)                                \
+)
+#  define _C11ATOMIC_SHORT64_DEF2(name,  S, ...)                              \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_SHORT,  C11ATOMIC_SHORT,  __VA_ARGS__)              \
+)
+#  define _C11ATOMIC_USHORT64_DEF1(name, S, ...)                              \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_USHORT, __VA_ARGS__)                                \
+)
+#  define _C11ATOMIC_USHORT64_DEF2(name, S, ...)                              \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_USHORT, C11ATOMIC_USHORT, __VA_ARGS__)              \
+)
+#else
+#  define _C11ATOMIC_SHORT64_DEF1(name,  S, ...)
+#  define _C11ATOMIC_SHORT64_DEF2(name,  S, ...)
+#  define _C11ATOMIC_USHORT64_DEF1(name, S, ...)
+#  define _C11ATOMIC_USHORT64_DEF2(name, S, ...)
+#endif
+
+/*--------------------------- C11ATOMIC_INTn_DEFk ---------------------------*/
+/* 0-bit pointer (unknown) */
+#if !defined(C11ATOMIC_INT_BIT)
+#  define _C11ATOMIC_INT0_DEF1(name,  S, ...)                                 \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_INT,  __VA_ARGS__)                                   \
+)
+#  define _C11ATOMIC_INT0_DEF2(name,  S, ...)                                 \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_INT,  C11ATOMIC_INT,  __VA_ARGS__)                   \
+)
+#  define _C11ATOMIC_UINT0_DEF1(name, S, ...)                                 \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_UINT, __VA_ARGS__)                                   \
+)
+#  define _C11ATOMIC_UINT0_DEF2(name, S, ...)                                 \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_UINT, C11ATOMIC_UINT, __VA_ARGS__)                   \
+)
+#elif C11ATOMIC_INT_BIT < 16
+#  define _C11ATOMIC_INT0_DEF1(name,  S, ...)                                 \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_INT,  __VA_ARGS__)                                   \
+)
+#  define _C11ATOMIC_INT0_DEF2(name,  S, ...)                                 \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_INT,  C11ATOMIC_INT,  __VA_ARGS__)                   \
+)
+#  define _C11ATOMIC_UINT0_DEF1(name, S, ...)                                 \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_UINT, __VA_ARGS__)                                   \
+)
+#  define _C11ATOMIC_UINT0_DEF2(name, S, ...)                                 \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_UINT, C11ATOMIC_UINT, __VA_ARGS__)                   \
+)
+#else
+#  define _C11ATOMIC_INT0_DEF1(name,  S, ...)
+#  define _C11ATOMIC_INT0_DEF2(name,  S, ...)
+#  define _C11ATOMIC_UINT0_DEF1(name, S, ...)
+#  define _C11ATOMIC_UINT0_DEF2(name, S, ...)
+#endif
+/* 16-bit pointer */
+#if !defined(C11ATOMIC_INT_BIT)
+#  define _C11ATOMIC_INT16_DEF1(name,  S, ...)
+#  define _C11ATOMIC_INT16_DEF2(name,  S, ...)
+#  define _C11ATOMIC_UINT16_DEF1(name, S, ...)
+#  define _C11ATOMIC_UINT16_DEF2(name, S, ...)
+#elif 16 <= C11ATOMIC_INT_BIT && C11ATOMIC_INT_BIT < 32
+#  define _C11ATOMIC_INT16_DEF1(name,  S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(16, S, C11ATOMIC_INT,  __VA_ARGS__)                                  \
+)
+#  define _C11ATOMIC_INT16_DEF2(name,  S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(16, S, C11ATOMIC_INT,  C11ATOMIC_INT,  __VA_ARGS__)                  \
+)
+#  define _C11ATOMIC_UINT16_DEF1(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(16, S, C11ATOMIC_UINT, __VA_ARGS__)                                  \
+)
+#  define _C11ATOMIC_UINT16_DEF2(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(16, S, C11ATOMIC_UINT, C11ATOMIC_UINT, __VA_ARGS__)                  \
+)
+#else
+#  define _C11ATOMIC_INT16_DEF1(name,  S, ...)
+#  define _C11ATOMIC_INT16_DEF2(name,  S, ...)
+#  define _C11ATOMIC_UINT16_DEF1(name, S, ...)
+#  define _C11ATOMIC_UINT16_DEF2(name, S, ...)
+#endif
+/* 32-bit pointer */
+#if !defined(C11ATOMIC_INT_BIT)
+#  define _C11ATOMIC_INT32_DEF1(name,  S, ...)
+#  define _C11ATOMIC_INT32_DEF2(name,  S, ...)
+#  define _C11ATOMIC_UINT32_DEF1(name, S, ...)
+#  define _C11ATOMIC_UINT32_DEF2(name, S, ...)
+#elif 32 <= C11ATOMIC_INT_BIT && C11ATOMIC_INT_BIT < 64
+#  define _C11ATOMIC_INT32_DEF1(name,  S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(32, S, C11ATOMIC_INT,  __VA_ARGS__)                                  \
+)
+#  define _C11ATOMIC_INT32_DEF2(name,  S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(32, S, C11ATOMIC_INT,  C11ATOMIC_INT,  __VA_ARGS__)                  \
+)
+#  define _C11ATOMIC_UINT32_DEF1(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(32, S, C11ATOMIC_UINT, __VA_ARGS__)                                  \
+)
+#  define _C11ATOMIC_UINT32_DEF2(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(32, S, C11ATOMIC_UINT, C11ATOMIC_UINT, __VA_ARGS__)                  \
+)
+#else
+#  define _C11ATOMIC_INT32_DEF1(name,  S, ...)
+#  define _C11ATOMIC_INT32_DEF2(name,  S, ...)
+#  define _C11ATOMIC_UINT32_DEF1(name, S, ...)
+#  define _C11ATOMIC_UINT32_DEF2(name, S, ...)
+#endif
+/* 64-bit pointer */
+#if !defined(C11ATOMIC_INT_BIT)
+#  define _C11ATOMIC_INT64_DEF1(name,  S, ...)
+#  define _C11ATOMIC_INT64_DEF2(name,  S, ...)
+#  define _C11ATOMIC_UINT64_DEF1(name, S, ...)
+#  define _C11ATOMIC_UINT64_DEF2(name, S, ...)
+#elif 64 <= C11ATOMIC_INT_BIT
+#  define _C11ATOMIC_INT64_DEF1(name,  S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_INT,  __VA_ARGS__)                                  \
+)
+#  define _C11ATOMIC_INT64_DEF2(name,  S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_INT,  C11ATOMIC_INT,  __VA_ARGS__)                  \
+)
+#  define _C11ATOMIC_UINT64_DEF1(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_UINT, __VA_ARGS__)                                  \
+)
+#  define _C11ATOMIC_UINT64_DEF2(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_UINT, C11ATOMIC_UINT, __VA_ARGS__)                  \
+)
+#else
+#  define _C11ATOMIC_INT64_DEF1(name,  S, ...)
+#  define _C11ATOMIC_INT64_DEF2(name,  S, ...)
+#  define _C11ATOMIC_UINT64_DEF1(name, S, ...)
+#  define _C11ATOMIC_UINT64_DEF2(name, S, ...)
+#endif
+
+/*--------------------------- C11ATOMIC_LONGn_DEFk --------------------------*/
+/* 0-bit pointer (unknown) */
+#if !defined(C11ATOMIC_LONG_BIT)
+#  define _C11ATOMIC_LONG0_DEF1(name,  S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_LONG,  __VA_ARGS__)                                  \
+)
+#  define _C11ATOMIC_LONG0_DEF2(name,  S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_LONG,  C11ATOMIC_LONG,  __VA_ARGS__)                 \
+)
+#  define _C11ATOMIC_ULONG0_DEF1(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_ULONG, __VA_ARGS__)                                  \
+)
+#  define _C11ATOMIC_ULONG0_DEF2(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_ULONG, C11ATOMIC_ULONG, __VA_ARGS__)                 \
+)
+#elif C11ATOMIC_LONG_BIT < 32
+#  define _C11ATOMIC_LONG0_DEF1(name,  S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_LONG,  __VA_ARGS__)                                  \
+)
+#  define _C11ATOMIC_LONG0_DEF2(name,  S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_LONG,  C11ATOMIC_LONG,  __VA_ARGS__)                 \
+)
+#  define _C11ATOMIC_ULONG0_DEF1(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_ULONG, __VA_ARGS__)                                  \
+)
+#  define _C11ATOMIC_ULONG0_DEF2(name, S, ...)                                \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_ULONG, C11ATOMIC_ULONG, __VA_ARGS__)                 \
+)
+#else
+#  define _C11ATOMIC_LONG0_DEF1(name,  S, ...)
+#  define _C11ATOMIC_LONG0_DEF2(name,  S, ...)
+#  define _C11ATOMIC_ULONG0_DEF1(name, S, ...)
+#  define _C11ATOMIC_ULONG0_DEF2(name, S, ...)
+#endif
+/* 32-bit pointer */
+#if !defined(C11ATOMIC_LONG_BIT)
+#  define _C11ATOMIC_LONG32_DEF1(name,  S, ...)
+#  define _C11ATOMIC_LONG32_DEF2(name,  S, ...)
+#  define _C11ATOMIC_ULONG32_DEF1(name, S, ...)
+#  define _C11ATOMIC_ULONG32_DEF2(name, S, ...)
+#elif 32 <= C11ATOMIC_LONG_BIT && C11ATOMIC_LONG_BIT < 64
+#  define _C11ATOMIC_LONG32_DEF1(name,  S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(32, S, C11ATOMIC_LONG,  __VA_ARGS__)                                 \
+)
+#  define _C11ATOMIC_LONG32_DEF2(name,  S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(32, S, C11ATOMIC_LONG,  C11ATOMIC_LONG,  __VA_ARGS__)                \
+)
+#  define _C11ATOMIC_ULONG32_DEF1(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(32, S, C11ATOMIC_ULONG, __VA_ARGS__)                                 \
+)
+#  define _C11ATOMIC_ULONG32_DEF2(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(32, S, C11ATOMIC_ULONG, C11ATOMIC_ULONG, __VA_ARGS__)                \
+)
+#else
+#  define _C11ATOMIC_LONG32_DEF1(name,  S, ...)
+#  define _C11ATOMIC_LONG32_DEF2(name,  S, ...)
+#  define _C11ATOMIC_ULONG32_DEF1(name, S, ...)
+#  define _C11ATOMIC_ULONG32_DEF2(name, S, ...)
+#endif
+/* 64-bit pointer */
+#if !defined(C11ATOMIC_LONG_BIT)
+#  define _C11ATOMIC_LONG64_DEF1(name,  S, ...)
+#  define _C11ATOMIC_LONG64_DEF2(name,  S, ...)
+#  define _C11ATOMIC_ULONG64_DEF1(name, S, ...)
+#  define _C11ATOMIC_ULONG64_DEF2(name, S, ...)
+#elif 64 <= C11ATOMIC_LONG_BIT
+#  define _C11ATOMIC_LONG64_DEF1(name,  S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_LONG,  __VA_ARGS__)                                 \
+)
+#  define _C11ATOMIC_LONG64_DEF2(name,  S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_LONG,  C11ATOMIC_LONG,  __VA_ARGS__)                \
+)
+#  define _C11ATOMIC_ULONG64_DEF1(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_ULONG, __VA_ARGS__)                                 \
+)
+#  define _C11ATOMIC_ULONG64_DEF2(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_ULONG, C11ATOMIC_ULONG, __VA_ARGS__)                \
+)
+#else
+#  define _C11ATOMIC_LONG64_DEF1(name,  S, ...)
+#  define _C11ATOMIC_LONG64_DEF2(name,  S, ...)
+#  define _C11ATOMIC_ULONG64_DEF1(name, S, ...)
+#  define _C11ATOMIC_ULONG64_DEF2(name, S, ...)
+#endif
+
+/*-------------------------- C11ATOMIC_LLONGn_DEFk --------------------------*/
+/* 0-bit pointer (unknown) */
+#if !defined(C11ATOMIC_LLONG_BIT)
+#  define _C11ATOMIC_LLONG0_DEF1(name,  S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_LLONG,  __VA_ARGS__)                                 \
+)
+#  define _C11ATOMIC_LLONG0_DEF2(name,  S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_LLONG,  C11ATOMIC_LLONG,  __VA_ARGS__)               \
+)
+#  define _C11ATOMIC_ULLONG0_DEF1(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_ULLONG, __VA_ARGS__)                                 \
+)
+#  define _C11ATOMIC_ULLONG0_DEF2(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_ULLONG, C11ATOMIC_ULLONG, __VA_ARGS__)               \
+)
+#elif C11ATOMIC_LLONG_BIT < 64
+#  define _C11ATOMIC_LLONG0_DEF1(name,  S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_LLONG,  __VA_ARGS__)                                 \
+)
+#  define _C11ATOMIC_LLONG0_DEF2(name,  S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_LLONG,  C11ATOMIC_LLONG,  __VA_ARGS__)               \
+)
+#  define _C11ATOMIC_ULLONG0_DEF1(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_ULLONG, __VA_ARGS__)                                 \
+)
+#  define _C11ATOMIC_ULLONG0_DEF2(name, S, ...)                               \
+_C11ATOMIC_VA(                                                                \
+    name(0, S, C11ATOMIC_ULLONG, C11ATOMIC_ULLONG, __VA_ARGS__)               \
+)
+#else
+#  define _C11ATOMIC_LLONG0_DEF1(name,  S, ...)
+#  define _C11ATOMIC_LLONG0_DEF2(name,  S, ...)
+#  define _C11ATOMIC_ULLONG0_DEF1(name, S, ...)
+#  define _C11ATOMIC_ULLONG0_DEF2(name, S, ...)
+#endif
+/* 64-bit pointer */
+#if !defined(C11ATOMIC_LLONG_BIT)
+#  define _C11ATOMIC_LLONG64_DEF1(name,  S, ...)
+#  define _C11ATOMIC_LLONG64_DEF2(name,  S, ...)
+#  define _C11ATOMIC_ULLONG64_DEF1(name, S, ...)
+#  define _C11ATOMIC_ULLONG64_DEF2(name, S, ...)
+#elif 64 <= C11ATOMIC_LLONG_BIT
+#  define _C11ATOMIC_LLONG64_DEF1(name,  S, ...)                              \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_LLONG,  __VA_ARGS__)                                \
+)
+#  define _C11ATOMIC_LLONG64_DEF2(name,  S, ...)                              \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_LLONG,  C11ATOMIC_LLONG,  __VA_ARGS__)              \
+)
+#  define _C11ATOMIC_ULLONG64_DEF1(name, S, ...)                              \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_ULLONG, __VA_ARGS__)                                \
+)
+#  define _C11ATOMIC_ULLONG64_DEF2(name, S, ...)                              \
+_C11ATOMIC_VA(                                                                \
+    name(64, S, C11ATOMIC_ULLONG, C11ATOMIC_ULLONG, __VA_ARGS__)              \
+)
+#else
+#  define _C11ATOMIC_LLONG64_DEF1(name,  S, ...)
+#  define _C11ATOMIC_LLONG64_DEF2(name,  S, ...)
+#  define _C11ATOMIC_ULLONG64_DEF1(name, S, ...)
+#  define _C11ATOMIC_ULLONG64_DEF2(name, S, ...)
+#endif
+
+/*------------------------- C11ATOMIC_INTEGRALn_DEFk ------------------------*/
+/* 0-bit pointer (unknown) */
+#ifdef C11ATOMIC_CPP
+#  define _C11ATOMIC_INTEGRAL0_DEF1(name)                                     \
+    _C11ATOMIC_CHAR0_DEF1(name,   _cpp, volatile)                             \
+    _C11ATOMIC_CHAR0_DEF1(name,   _cpp, _C11ATOMIC_NA)                        \
+    _C11ATOMIC_SCHAR0_DEF1(name,  _cpp, volatile)                             \
+    _C11ATOMIC_SCHAR0_DEF1(name,  _cpp, _C11ATOMIC_NA)                        \
+    _C11ATOMIC_UCHAR0_DEF1(name,  _cpp, volatile)                             \
+    _C11ATOMIC_UCHAR0_DEF1(name,  _cpp, _C11ATOMIC_NA)                        \
+    _C11ATOMIC_SHORT0_DEF1(name,  _cpp, volatile)                             \
+    _C11ATOMIC_SHORT0_DEF1(name,  _cpp, _C11ATOMIC_NA)                        \
+    _C11ATOMIC_USHORT0_DEF1(name, _cpp, volatile)                             \
+    _C11ATOMIC_USHORT0_DEF1(name, _cpp, _C11ATOMIC_NA)                        \
+    _C11ATOMIC_INT0_DEF1(name,    _cpp, volatile)                             \
+    _C11ATOMIC_INT0_DEF1(name,    _cpp, _C11ATOMIC_NA)                        \
+    _C11ATOMIC_UINT0_DEF1(name,   _cpp, volatile)                             \
+    _C11ATOMIC_UINT0_DEF1(name,   _cpp, _C11ATOMIC_NA)                        \
+    _C11ATOMIC_LONG0_DEF1(name,   _cpp, volatile)                             \
+    _C11ATOMIC_LONG0_DEF1(name,   _cpp, _C11ATOMIC_NA)                        \
+    _C11ATOMIC_ULONG0_DEF1(name,  _cpp, volatile)                             \
+    _C11ATOMIC_ULONG0_DEF1(name,  _cpp, _C11ATOMIC_NA)                        \
+    _C11ATOMIC_LLONG0_DEF1(name,  _cpp, volatile)                             \
+    _C11ATOMIC_LLONG0_DEF1(name,  _cpp, _C11ATOMIC_NA)                        \
+    _C11ATOMIC_ULLONG0_DEF1(name, _cpp, volatile)                             \
+    _C11ATOMIC_ULLONG0_DEF1(name, _cpp, _C11ATOMIC_NA)
+#  define _C11ATOMIC_INTEGRAL0_DEF2(name)                                     \
+    _C11ATOMIC_CHAR0_DEF2(name,   _cpp, volatile)                             \
+    _C11ATOMIC_CHAR0_DEF2(name,   _cpp, _C11ATOMIC_NA)                        \
+    _C11ATOMIC_SCHAR0_DEF2(name,  _cpp, volatile)                             \
+    _C11ATOMIC_SCHAR0_DEF2(name,  _cpp, _C11ATOMIC_NA)                        \
+    _C11ATOMIC_UCHAR0_DEF2(name,  _cpp, volatile)                             \
+    _C11ATOMIC_UCHAR0_DEF2(name,  _cpp, _C11ATOMIC_NA)                        \
+    _C11ATOMIC_SHORT0_DEF2(name,  _cpp, volatile)                             \
+    _C11ATOMIC_SHORT0_DEF2(name,  _cpp, _C11ATOMIC_NA)                        \
+    _C11ATOMIC_USHORT0_DEF2(name, _cpp, volatile)                             \
+    _C11ATOMIC_USHORT0_DEF2(name, _cpp, _C11ATOMIC_NA)                        \
+    _C11ATOMIC_INT0_DEF2(name,    _cpp, volatile)                             \
+    _C11ATOMIC_INT0_DEF2(name,    _cpp, _C11ATOMIC_NA)                        \
+    _C11ATOMIC_UINT0_DEF2(name,   _cpp, volatile)                             \
+    _C11ATOMIC_UINT0_DEF2(name,   _cpp, _C11ATOMIC_NA)                        \
+    _C11ATOMIC_LONG0_DEF2(name,   _cpp, volatile)                             \
+    _C11ATOMIC_LONG0_DEF2(name,   _cpp, _C11ATOMIC_NA)                        \
+    _C11ATOMIC_ULONG0_DEF2(name,  _cpp, volatile)                             \
+    _C11ATOMIC_ULONG0_DEF2(name,  _cpp, _C11ATOMIC_NA)                        \
+    _C11ATOMIC_LLONG0_DEF2(name,  _cpp, volatile)                             \
+    _C11ATOMIC_LLONG0_DEF2(name,  _cpp, _C11ATOMIC_NA)                        \
+    _C11ATOMIC_ULLONG0_DEF2(name, _cpp, volatile)                             \
+    _C11ATOMIC_ULLONG0_DEF2(name, _cpp, _C11ATOMIC_NA)
+#else
+#  define _C11ATOMIC_INTEGRAL0_DEF1(name)                                     \
+    _C11ATOMIC_CHAR0_DEF1(name,   _v_char,   volatile)                        \
+    _C11ATOMIC_CHAR0_DEF1(name,   _n_char,   _C11ATOMIC_NA)                   \
+    _C11ATOMIC_SCHAR0_DEF1(name,  _v_schar,  volatile)                        \
+    _C11ATOMIC_SCHAR0_DEF1(name,  _n_schar,  _C11ATOMIC_NA)                   \
+    _C11ATOMIC_UCHAR0_DEF1(name,  _v_uchar,  volatile)                        \
+    _C11ATOMIC_UCHAR0_DEF1(name,  _n_uchar,  _C11ATOMIC_NA)                   \
+    _C11ATOMIC_SHORT0_DEF1(name,  _v_short,  volatile)                        \
+    _C11ATOMIC_SHORT0_DEF1(name,  _n_short,  _C11ATOMIC_NA)                   \
+    _C11ATOMIC_USHORT0_DEF1(name, _v_ushort, volatile)                        \
+    _C11ATOMIC_USHORT0_DEF1(name, _n_ushort, _C11ATOMIC_NA)                   \
+    _C11ATOMIC_INT0_DEF1(name,    _v_int,    volatile)                        \
+    _C11ATOMIC_INT0_DEF1(name,    _n_int,    _C11ATOMIC_NA)                   \
+    _C11ATOMIC_UINT0_DEF1(name,   _v_uint,   volatile)                        \
+    _C11ATOMIC_UINT0_DEF1(name,   _n_uint,   _C11ATOMIC_NA)                   \
+    _C11ATOMIC_LONG0_DEF1(name,   _v_long,   volatile)                        \
+    _C11ATOMIC_LONG0_DEF1(name,   _n_long,   _C11ATOMIC_NA)                   \
+    _C11ATOMIC_ULONG0_DEF1(name,  _v_ulong,  volatile)                        \
+    _C11ATOMIC_ULONG0_DEF1(name,  _n_ulong,  _C11ATOMIC_NA)                   \
+    _C11ATOMIC_LLONG0_DEF1(name,  _v_llong,  volatile)                        \
+    _C11ATOMIC_LLONG0_DEF1(name,  _n_llong,  _C11ATOMIC_NA)                   \
+    _C11ATOMIC_ULLONG0_DEF1(name, _v_ullong, volatile)                        \
+    _C11ATOMIC_ULLONG0_DEF1(name, _n_ullong, _C11ATOMIC_NA)
+#  define _C11ATOMIC_INTEGRAL0_DEF2(name)                                     \
+    _C11ATOMIC_CHAR0_DEF2(name,   _v_char,   volatile)                        \
+    _C11ATOMIC_CHAR0_DEF2(name,   _n_char,   _C11ATOMIC_NA)                   \
+    _C11ATOMIC_SCHAR0_DEF2(name,  _v_schar,  volatile)                        \
+    _C11ATOMIC_SCHAR0_DEF2(name,  _n_schar,  _C11ATOMIC_NA)                   \
+    _C11ATOMIC_UCHAR0_DEF2(name,  _v_uchar,  volatile)                        \
+    _C11ATOMIC_UCHAR0_DEF2(name,  _n_uchar,  _C11ATOMIC_NA)                   \
+    _C11ATOMIC_SHORT0_DEF2(name,  _v_short,  volatile)                        \
+    _C11ATOMIC_SHORT0_DEF2(name,  _n_short,  _C11ATOMIC_NA)                   \
+    _C11ATOMIC_USHORT0_DEF2(name, _v_ushort, volatile)                        \
+    _C11ATOMIC_USHORT0_DEF2(name, _n_ushort, _C11ATOMIC_NA)                   \
+    _C11ATOMIC_INT0_DEF2(name,    _v_int,    volatile)                        \
+    _C11ATOMIC_INT0_DEF2(name,    _n_int,    _C11ATOMIC_NA)                   \
+    _C11ATOMIC_UINT0_DEF2(name,   _v_uint,   volatile)                        \
+    _C11ATOMIC_UINT0_DEF2(name,   _n_uint,   _C11ATOMIC_NA)                   \
+    _C11ATOMIC_LONG0_DEF2(name,   _v_long,   volatile)                        \
+    _C11ATOMIC_LONG0_DEF2(name,   _n_long,   _C11ATOMIC_NA)                   \
+    _C11ATOMIC_ULONG0_DEF2(name,  _v_ulong,  volatile)                        \
+    _C11ATOMIC_ULONG0_DEF2(name,  _n_ulong,  _C11ATOMIC_NA)                   \
+    _C11ATOMIC_LLONG0_DEF2(name,  _v_llong,  volatile)                        \
+    _C11ATOMIC_LLONG0_DEF2(name,  _n_llong,  _C11ATOMIC_NA)                   \
+    _C11ATOMIC_ULLONG0_DEF2(name, _v_ullong, volatile)                        \
+    _C11ATOMIC_ULLONG0_DEF2(name, _n_ullong, _C11ATOMIC_NA)
+#endif
+/* 8-bit pointer */
+#ifdef C11ATOMIC_CPP
+#  define _C11ATOMIC_INTEGRAL8_DEF1(name)                                     \
+    _C11ATOMIC_CHAR8_DEF1(name,  _cpp, volatile)                              \
+    _C11ATOMIC_CHAR8_DEF1(name,  _cpp, _C11ATOMIC_NA)                         \
+    _C11ATOMIC_SCHAR8_DEF1(name, _cpp, volatile)                              \
+    _C11ATOMIC_SCHAR8_DEF1(name, _cpp, _C11ATOMIC_NA)                         \
+    _C11ATOMIC_UCHAR8_DEF1(name, _cpp, volatile)                              \
+    _C11ATOMIC_UCHAR8_DEF1(name, _cpp, _C11ATOMIC_NA)
+#  define _C11ATOMIC_INTEGRAL8_DEF2(name)                                     \
+    _C11ATOMIC_CHAR8_DEF2(name,  _cpp, volatile)                              \
+    _C11ATOMIC_CHAR8_DEF2(name,  _cpp, _C11ATOMIC_NA)                         \
+    _C11ATOMIC_SCHAR8_DEF2(name, _cpp, volatile)                              \
+    _C11ATOMIC_SCHAR8_DEF2(name, _cpp, _C11ATOMIC_NA)                         \
+    _C11ATOMIC_UCHAR8_DEF2(name, _cpp, volatile)                              \
+    _C11ATOMIC_UCHAR8_DEF2(name, _cpp, _C11ATOMIC_NA)
+#else
+#  define _C11ATOMIC_INTEGRAL8_DEF1(name)                                     \
+    _C11ATOMIC_CHAR8_DEF1(name,  _v_char,  volatile)                          \
+    _C11ATOMIC_CHAR8_DEF1(name,  _n_char,  _C11ATOMIC_NA)                     \
+    _C11ATOMIC_SCHAR8_DEF1(name, _v_schar, volatile)                          \
+    _C11ATOMIC_SCHAR8_DEF1(name, _n_schar, _C11ATOMIC_NA)                     \
+    _C11ATOMIC_UCHAR8_DEF1(name, _v_uchar, volatile)                          \
+    _C11ATOMIC_UCHAR8_DEF1(name, _n_uchar, _C11ATOMIC_NA)
+#  define _C11ATOMIC_INTEGRAL8_DEF2(name)                                     \
+    _C11ATOMIC_CHAR8_DEF2(name,  _v_char,  volatile)                          \
+    _C11ATOMIC_CHAR8_DEF2(name,  _n_char,  _C11ATOMIC_NA)                     \
+    _C11ATOMIC_SCHAR8_DEF2(name, _v_schar, volatile)                          \
+    _C11ATOMIC_SCHAR8_DEF2(name, _n_schar, _C11ATOMIC_NA)                     \
+    _C11ATOMIC_UCHAR8_DEF2(name, _v_uchar, volatile)                          \
+    _C11ATOMIC_UCHAR8_DEF2(name, _n_uchar, _C11ATOMIC_NA)
+#endif
+/* 16-bit pointer */
+#ifdef C11ATOMIC_CPP
+#  define _C11ATOMIC_INTEGRAL16_DEF1(name)                                    \
+    _C11ATOMIC_CHAR16_DEF1(name,   _cpp, volatile)                            \
+    _C11ATOMIC_CHAR16_DEF1(name,   _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_SCHAR16_DEF1(name,  _cpp, volatile)                            \
+    _C11ATOMIC_SCHAR16_DEF1(name,  _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_UCHAR16_DEF1(name,  _cpp, volatile)                            \
+    _C11ATOMIC_UCHAR16_DEF1(name,  _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_SHORT16_DEF1(name,  _cpp, volatile)                            \
+    _C11ATOMIC_SHORT16_DEF1(name,  _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_USHORT16_DEF1(name, _cpp, volatile)                            \
+    _C11ATOMIC_USHORT16_DEF1(name, _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_INT16_DEF1(name,    _cpp, volatile)                            \
+    _C11ATOMIC_INT16_DEF1(name,    _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_UINT16_DEF1(name,   _cpp, volatile)                            \
+    _C11ATOMIC_UINT16_DEF1(name,   _cpp, _C11ATOMIC_NA)
+#  define _C11ATOMIC_INTEGRAL16_DEF2(name)                                    \
+    _C11ATOMIC_CHAR16_DEF2(name,   _cpp, volatile)                            \
+    _C11ATOMIC_CHAR16_DEF2(name,   _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_SCHAR16_DEF2(name,  _cpp, volatile)                            \
+    _C11ATOMIC_SCHAR16_DEF2(name,  _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_UCHAR16_DEF2(name,  _cpp, volatile)                            \
+    _C11ATOMIC_UCHAR16_DEF2(name,  _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_SHORT16_DEF2(name,  _cpp, volatile)                            \
+    _C11ATOMIC_SHORT16_DEF2(name,  _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_USHORT16_DEF2(name, _cpp, volatile)                            \
+    _C11ATOMIC_USHORT16_DEF2(name, _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_INT16_DEF2(name,    _cpp, volatile)                            \
+    _C11ATOMIC_INT16_DEF2(name,    _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_UINT16_DEF2(name,   _cpp, volatile)                            \
+    _C11ATOMIC_UINT16_DEF2(name,   _cpp, _C11ATOMIC_NA)
+#else
+#  define _C11ATOMIC_INTEGRAL16_DEF1(name)                                    \
+    _C11ATOMIC_CHAR16_DEF1(name,   _v_char,   volatile)                       \
+    _C11ATOMIC_CHAR16_DEF1(name,   _n_char,   _C11ATOMIC_NA)                  \
+    _C11ATOMIC_SCHAR16_DEF1(name,  _v_schar,  volatile)                       \
+    _C11ATOMIC_SCHAR16_DEF1(name,  _n_schar,  _C11ATOMIC_NA)                  \
+    _C11ATOMIC_UCHAR16_DEF1(name,  _v_uchar,  volatile)                       \
+    _C11ATOMIC_UCHAR16_DEF1(name,  _n_uchar,  _C11ATOMIC_NA)                  \
+    _C11ATOMIC_SHORT16_DEF1(name,  _v_short,  volatile)                       \
+    _C11ATOMIC_SHORT16_DEF1(name,  _n_short,  _C11ATOMIC_NA)                  \
+    _C11ATOMIC_USHORT16_DEF1(name, _v_ushort, volatile)                       \
+    _C11ATOMIC_USHORT16_DEF1(name, _n_ushort, _C11ATOMIC_NA)                  \
+    _C11ATOMIC_INT16_DEF1(name,    _v_int,    volatile)                       \
+    _C11ATOMIC_INT16_DEF1(name,    _n_int,    _C11ATOMIC_NA)                  \
+    _C11ATOMIC_UINT16_DEF1(name,   _v_uint,   volatile)                       \
+    _C11ATOMIC_UINT16_DEF1(name,   _n_uint,   _C11ATOMIC_NA)
+#  define _C11ATOMIC_INTEGRAL16_DEF2(name)                                    \
+    _C11ATOMIC_CHAR16_DEF2(name,   _v_char,   volatile)                       \
+    _C11ATOMIC_CHAR16_DEF2(name,   _n_char,   _C11ATOMIC_NA)                  \
+    _C11ATOMIC_SCHAR16_DEF2(name,  _v_schar,  volatile)                       \
+    _C11ATOMIC_SCHAR16_DEF2(name,  _n_schar,  _C11ATOMIC_NA)                  \
+    _C11ATOMIC_UCHAR16_DEF2(name,  _v_uchar,  volatile)                       \
+    _C11ATOMIC_UCHAR16_DEF2(name,  _n_uchar,  _C11ATOMIC_NA)                  \
+    _C11ATOMIC_SHORT16_DEF2(name,  _v_short,  volatile)                       \
+    _C11ATOMIC_SHORT16_DEF2(name,  _n_short,  _C11ATOMIC_NA)                  \
+    _C11ATOMIC_USHORT16_DEF2(name, _v_ushort, volatile)                       \
+    _C11ATOMIC_USHORT16_DEF2(name, _n_ushort, _C11ATOMIC_NA)                  \
+    _C11ATOMIC_INT16_DEF2(name,    _v_int,    volatile)                       \
+    _C11ATOMIC_INT16_DEF2(name,    _n_int,    _C11ATOMIC_NA)                  \
+    _C11ATOMIC_UINT16_DEF2(name,   _v_uint,   volatile)                       \
+    _C11ATOMIC_UINT16_DEF2(name,   _n_uint,   _C11ATOMIC_NA)
+#endif
+/* 32-bit pointer */
+#ifdef C11ATOMIC_CPP
+#  define _C11ATOMIC_INTEGRAL32_DEF1(name)                                    \
+    _C11ATOMIC_CHAR32_DEF1(name,   _cpp, volatile)                            \
+    _C11ATOMIC_CHAR32_DEF1(name,   _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_SCHAR32_DEF1(name,  _cpp, volatile)                            \
+    _C11ATOMIC_SCHAR32_DEF1(name,  _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_UCHAR32_DEF1(name,  _cpp, volatile)                            \
+    _C11ATOMIC_UCHAR32_DEF1(name,  _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_SHORT32_DEF1(name,  _cpp, volatile)                            \
+    _C11ATOMIC_SHORT32_DEF1(name,  _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_USHORT32_DEF1(name, _cpp, volatile)                            \
+    _C11ATOMIC_USHORT32_DEF1(name, _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_INT32_DEF1(name,    _cpp, volatile)                            \
+    _C11ATOMIC_INT32_DEF1(name,    _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_UINT32_DEF1(name,   _cpp, volatile)                            \
+    _C11ATOMIC_UINT32_DEF1(name,   _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_LONG32_DEF1(name,   _cpp, volatile)                            \
+    _C11ATOMIC_LONG32_DEF1(name,   _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_ULONG32_DEF1(name,  _cpp, volatile)                            \
+    _C11ATOMIC_ULONG32_DEF1(name,  _cpp, _C11ATOMIC_NA)
+#  define _C11ATOMIC_INTEGRAL32_DEF2(name)                                    \
+    _C11ATOMIC_CHAR32_DEF2(name,   _cpp, volatile)                            \
+    _C11ATOMIC_CHAR32_DEF2(name,   _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_SCHAR32_DEF2(name,  _cpp, volatile)                            \
+    _C11ATOMIC_SCHAR32_DEF2(name,  _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_UCHAR32_DEF2(name,  _cpp, volatile)                            \
+    _C11ATOMIC_UCHAR32_DEF2(name,  _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_SHORT32_DEF2(name,  _cpp, volatile)                            \
+    _C11ATOMIC_SHORT32_DEF2(name,  _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_USHORT32_DEF2(name, _cpp, volatile)                            \
+    _C11ATOMIC_USHORT32_DEF2(name, _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_INT32_DEF2(name,    _cpp, volatile)                            \
+    _C11ATOMIC_INT32_DEF2(name,    _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_UINT32_DEF2(name,   _cpp, volatile)                            \
+    _C11ATOMIC_UINT32_DEF2(name,   _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_LONG32_DEF2(name,   _cpp, volatile)                            \
+    _C11ATOMIC_LONG32_DEF2(name,   _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_ULONG32_DEF2(name,  _cpp, volatile)                            \
+    _C11ATOMIC_ULONG32_DEF2(name,  _cpp, _C11ATOMIC_NA)
+#else
+#  define _C11ATOMIC_INTEGRAL32_DEF1(name)                                    \
+    _C11ATOMIC_CHAR32_DEF1(name,   _v_char,   volatile)                       \
+    _C11ATOMIC_CHAR32_DEF1(name,   _n_char,   _C11ATOMIC_NA)                  \
+    _C11ATOMIC_SCHAR32_DEF1(name,  _v_schar,  volatile)                       \
+    _C11ATOMIC_SCHAR32_DEF1(name,  _n_schar,  _C11ATOMIC_NA)                  \
+    _C11ATOMIC_UCHAR32_DEF1(name,  _v_uchar,  volatile)                       \
+    _C11ATOMIC_UCHAR32_DEF1(name,  _n_uchar,  _C11ATOMIC_NA)                  \
+    _C11ATOMIC_SHORT32_DEF1(name,  _v_short,  volatile)                       \
+    _C11ATOMIC_SHORT32_DEF1(name,  _n_short,  _C11ATOMIC_NA)                  \
+    _C11ATOMIC_USHORT32_DEF1(name, _v_ushort, volatile)                       \
+    _C11ATOMIC_USHORT32_DEF1(name, _n_ushort, _C11ATOMIC_NA)                  \
+    _C11ATOMIC_INT32_DEF1(name,    _v_int,    volatile)                       \
+    _C11ATOMIC_INT32_DEF1(name,    _n_int,    _C11ATOMIC_NA)                  \
+    _C11ATOMIC_UINT32_DEF1(name,   _v_uint,   volatile)                       \
+    _C11ATOMIC_UINT32_DEF1(name,   _n_uint,   _C11ATOMIC_NA)                  \
+    _C11ATOMIC_LONG32_DEF1(name,   _v_long,   volatile)                       \
+    _C11ATOMIC_LONG32_DEF1(name,   _n_long,   _C11ATOMIC_NA)                  \
+    _C11ATOMIC_ULONG32_DEF1(name,  _v_ulong,  volatile)                       \
+    _C11ATOMIC_ULONG32_DEF1(name,  _n_ulong,  _C11ATOMIC_NA)
+#  define _C11ATOMIC_INTEGRAL32_DEF2(name)                                    \
+    _C11ATOMIC_CHAR32_DEF2(name,   _v_char,   volatile)                       \
+    _C11ATOMIC_CHAR32_DEF2(name,   _n_char,   _C11ATOMIC_NA)                  \
+    _C11ATOMIC_SCHAR32_DEF2(name,  _v_schar,  volatile)                       \
+    _C11ATOMIC_SCHAR32_DEF2(name,  _n_schar,  _C11ATOMIC_NA)                  \
+    _C11ATOMIC_UCHAR32_DEF2(name,  _v_uchar,  volatile)                       \
+    _C11ATOMIC_UCHAR32_DEF2(name,  _n_uchar,  _C11ATOMIC_NA)                  \
+    _C11ATOMIC_SHORT32_DEF2(name,  _v_short,  volatile)                       \
+    _C11ATOMIC_SHORT32_DEF2(name,  _n_short,  _C11ATOMIC_NA)                  \
+    _C11ATOMIC_USHORT32_DEF2(name, _v_ushort, volatile)                       \
+    _C11ATOMIC_USHORT32_DEF2(name, _n_ushort, _C11ATOMIC_NA)                  \
+    _C11ATOMIC_INT32_DEF2(name,    _v_int,    volatile)                       \
+    _C11ATOMIC_INT32_DEF2(name,    _n_int,    _C11ATOMIC_NA)                  \
+    _C11ATOMIC_UINT32_DEF2(name,   _v_uint,   volatile)                       \
+    _C11ATOMIC_UINT32_DEF2(name,   _n_uint,   _C11ATOMIC_NA)                  \
+    _C11ATOMIC_LONG32_DEF2(name,   _v_long,   volatile)                       \
+    _C11ATOMIC_LONG32_DEF2(name,   _n_long,   _C11ATOMIC_NA)                  \
+    _C11ATOMIC_ULONG32_DEF2(name,  _v_ulong,  volatile)                       \
+    _C11ATOMIC_ULONG32_DEF2(name,  _n_ulong,  _C11ATOMIC_NA)
+#endif
+/* 64-bit pointer */
+#ifdef C11ATOMIC_CPP
+#  define _C11ATOMIC_INTEGRAL64_DEF1(name)                                    \
+    _C11ATOMIC_CHAR64_DEF1(name,   _cpp, volatile)                            \
+    _C11ATOMIC_CHAR64_DEF1(name,   _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_SCHAR64_DEF1(name,  _cpp, volatile)                            \
+    _C11ATOMIC_SCHAR64_DEF1(name,  _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_UCHAR64_DEF1(name,  _cpp, volatile)                            \
+    _C11ATOMIC_UCHAR64_DEF1(name,  _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_SHORT64_DEF1(name,  _cpp, volatile)                            \
+    _C11ATOMIC_SHORT64_DEF1(name,  _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_USHORT64_DEF1(name, _cpp, volatile)                            \
+    _C11ATOMIC_USHORT64_DEF1(name, _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_INT64_DEF1(name,    _cpp, volatile)                            \
+    _C11ATOMIC_INT64_DEF1(name,    _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_UINT64_DEF1(name,   _cpp, volatile)                            \
+    _C11ATOMIC_UINT64_DEF1(name,   _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_LONG64_DEF1(name,   _cpp, volatile)                            \
+    _C11ATOMIC_LONG64_DEF1(name,   _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_ULONG64_DEF1(name,  _cpp, volatile)                            \
+    _C11ATOMIC_ULONG64_DEF1(name,  _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_LLONG64_DEF1(name,  _cpp, volatile)                            \
+    _C11ATOMIC_LLONG64_DEF1(name,  _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_ULLONG64_DEF1(name, _cpp, volatile)                            \
+    _C11ATOMIC_ULLONG64_DEF1(name, _cpp, _C11ATOMIC_NA)
+#  define _C11ATOMIC_INTEGRAL64_DEF2(name)                                    \
+    _C11ATOMIC_CHAR64_DEF2(name,   _cpp, volatile)                            \
+    _C11ATOMIC_CHAR64_DEF2(name,   _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_SCHAR64_DEF2(name,  _cpp, volatile)                            \
+    _C11ATOMIC_SCHAR64_DEF2(name,  _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_UCHAR64_DEF2(name,  _cpp, volatile)                            \
+    _C11ATOMIC_UCHAR64_DEF2(name,  _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_SHORT64_DEF2(name,  _cpp, volatile)                            \
+    _C11ATOMIC_SHORT64_DEF2(name,  _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_USHORT64_DEF2(name, _cpp, volatile)                            \
+    _C11ATOMIC_USHORT64_DEF2(name, _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_INT64_DEF2(name,    _cpp, volatile)                            \
+    _C11ATOMIC_INT64_DEF2(name,    _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_UINT64_DEF2(name,   _cpp, volatile)                            \
+    _C11ATOMIC_UINT64_DEF2(name,   _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_LONG64_DEF2(name,   _cpp, volatile)                            \
+    _C11ATOMIC_LONG64_DEF2(name,   _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_ULONG64_DEF2(name,  _cpp, volatile)                            \
+    _C11ATOMIC_ULONG64_DEF2(name,  _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_LLONG64_DEF2(name,  _cpp, volatile)                            \
+    _C11ATOMIC_LLONG64_DEF2(name,  _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_ULLONG64_DEF2(name, _cpp, volatile)                            \
+    _C11ATOMIC_ULLONG64_DEF2(name, _cpp, _C11ATOMIC_NA)
+#else
+#  define _C11ATOMIC_INTEGRAL64_DEF1(name)                                    \
+    _C11ATOMIC_CHAR64_DEF1(name,   _v_char,   volatile)                       \
+    _C11ATOMIC_CHAR64_DEF1(name,   _n_char,   _C11ATOMIC_NA)                  \
+    _C11ATOMIC_SCHAR64_DEF1(name,  _v_schar,  volatile)                       \
+    _C11ATOMIC_SCHAR64_DEF1(name,  _n_schar,  _C11ATOMIC_NA)                  \
+    _C11ATOMIC_UCHAR64_DEF1(name,  _v_uchar,  volatile)                       \
+    _C11ATOMIC_UCHAR64_DEF1(name,  _n_uchar,  _C11ATOMIC_NA)                  \
+    _C11ATOMIC_SHORT64_DEF1(name,  _v_short,  volatile)                       \
+    _C11ATOMIC_SHORT64_DEF1(name,  _n_short,  _C11ATOMIC_NA)                  \
+    _C11ATOMIC_USHORT64_DEF1(name, _v_ushort, volatile)                       \
+    _C11ATOMIC_USHORT64_DEF1(name, _n_ushort, _C11ATOMIC_NA)                  \
+    _C11ATOMIC_INT64_DEF1(name,    _v_int,    volatile)                       \
+    _C11ATOMIC_INT64_DEF1(name,    _n_int,    _C11ATOMIC_NA)                  \
+    _C11ATOMIC_UINT64_DEF1(name,   _v_uint,   volatile)                       \
+    _C11ATOMIC_UINT64_DEF1(name,   _n_uint,   _C11ATOMIC_NA)                  \
+    _C11ATOMIC_LONG64_DEF1(name,   _v_long,   volatile)                       \
+    _C11ATOMIC_LONG64_DEF1(name,   _n_long,   _C11ATOMIC_NA)                  \
+    _C11ATOMIC_ULONG64_DEF1(name,  _v_ulong,  volatile)                       \
+    _C11ATOMIC_ULONG64_DEF1(name,  _n_ulong,  _C11ATOMIC_NA)                  \
+    _C11ATOMIC_LLONG64_DEF1(name,  _v_llong,  volatile)                       \
+    _C11ATOMIC_LLONG64_DEF1(name,  _n_llong,  _C11ATOMIC_NA)                  \
+    _C11ATOMIC_ULLONG64_DEF1(name, _v_ullong, volatile)                       \
+    _C11ATOMIC_ULLONG64_DEF1(name, _n_ullong, _C11ATOMIC_NA)
+#  define _C11ATOMIC_INTEGRAL64_DEF2(name)                                    \
+    _C11ATOMIC_CHAR64_DEF2(name,   _v_char,   volatile)                       \
+    _C11ATOMIC_CHAR64_DEF2(name,   _n_char,   _C11ATOMIC_NA)                  \
+    _C11ATOMIC_SCHAR64_DEF2(name,  _v_schar,  volatile)                       \
+    _C11ATOMIC_SCHAR64_DEF2(name,  _n_schar,  _C11ATOMIC_NA)                  \
+    _C11ATOMIC_UCHAR64_DEF2(name,  _v_uchar,  volatile)                       \
+    _C11ATOMIC_UCHAR64_DEF2(name,  _n_uchar,  _C11ATOMIC_NA)                  \
+    _C11ATOMIC_SHORT64_DEF2(name,  _v_short,  volatile)                       \
+    _C11ATOMIC_SHORT64_DEF2(name,  _n_short,  _C11ATOMIC_NA)                  \
+    _C11ATOMIC_USHORT64_DEF2(name, _v_ushort, volatile)                       \
+    _C11ATOMIC_USHORT64_DEF2(name, _n_ushort, _C11ATOMIC_NA)                  \
+    _C11ATOMIC_INT64_DEF2(name,    _v_int,    volatile)                       \
+    _C11ATOMIC_INT64_DEF2(name,    _n_int,    _C11ATOMIC_NA)                  \
+    _C11ATOMIC_UINT64_DEF2(name,   _v_uint,   volatile)                       \
+    _C11ATOMIC_UINT64_DEF2(name,   _n_uint,   _C11ATOMIC_NA)                  \
+    _C11ATOMIC_LONG64_DEF2(name,   _v_long,   volatile)                       \
+    _C11ATOMIC_LONG64_DEF2(name,   _n_long,   _C11ATOMIC_NA)                  \
+    _C11ATOMIC_ULONG64_DEF2(name,  _v_ulong,  volatile)                       \
+    _C11ATOMIC_ULONG64_DEF2(name,  _n_ulong,  _C11ATOMIC_NA)                  \
+    _C11ATOMIC_LLONG64_DEF2(name,  _v_llong,  volatile)                       \
+    _C11ATOMIC_LLONG64_DEF2(name,  _n_llong,  _C11ATOMIC_NA)                  \
+    _C11ATOMIC_ULLONG64_DEF2(name, _v_ullong, volatile)                       \
+    _C11ATOMIC_ULLONG64_DEF2(name, _n_ullong, _C11ATOMIC_NA)
+#endif
+
+/*----------------------- C11ATOMIC_FUNDAMENTALn_DEFk -----------------------*/
+/* 0-bit pointer (unknown) */
+#ifdef C11ATOMIC_CPP
+#  define _C11ATOMIC_FUNDAMENTAL0_DEF1(name)                                  \
+    _C11ATOMIC_POINTER0_DEF1(name, _cpp, volatile)                            \
+    _C11ATOMIC_POINTER0_DEF1(name, _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_BOOL0_DEF1(name,    _cpp, volatile)                            \
+    _C11ATOMIC_BOOL0_DEF1(name,    _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_INTEGRAL0_DEF1(name)
+#  define _C11ATOMIC_FUNDAMENTAL0_DEF2(name)                                  \
+    _C11ATOMIC_POINTER0_DEF2(name, _cpp, volatile)                            \
+    _C11ATOMIC_POINTER0_DEF2(name, _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_BOOL0_DEF2(name,    _cpp, volatile)                            \
+    _C11ATOMIC_BOOL0_DEF2(name,    _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_INTEGRAL0_DEF2(name)
+#else
+#  define _C11ATOMIC_FUNDAMENTAL0_DEF1(name)                                  \
+    _C11ATOMIC_POINTER0_DEF1(name, _v_pointer, volatile)                      \
+    _C11ATOMIC_POINTER0_DEF1(name, _n_pointer, _C11ATOMIC_NA)                 \
+    _C11ATOMIC_BOOL0_DEF1(name,    _v_bool,    volatile)                      \
+    _C11ATOMIC_BOOL0_DEF1(name,    _n_bool,    _C11ATOMIC_NA)                 \
+    _C11ATOMIC_INTEGRAL0_DEF1(name)
+#  define _C11ATOMIC_FUNDAMENTAL0_DEF2(name)                                  \
+    _C11ATOMIC_POINTER0_DEF2(name, _v_pointer, volatile)                      \
+    _C11ATOMIC_POINTER0_DEF2(name, _n_pointer, _C11ATOMIC_NA)                 \
+    _C11ATOMIC_BOOL0_DEF2(name,    _v_bool,    volatile)                      \
+    _C11ATOMIC_BOOL0_DEF2(name,    _n_bool,    _C11ATOMIC_NA)                 \
+    _C11ATOMIC_INTEGRAL0_DEF2(name)
+#endif
+/* 8-bit pointer */
+#ifdef C11ATOMIC_CPP
+#  define _C11ATOMIC_FUNDAMENTAL8_DEF1(name)                                  \
+    _C11ATOMIC_POINTER8_DEF1(name, _cpp, volatile)                            \
+    _C11ATOMIC_POINTER8_DEF1(name, _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_BOOL8_DEF1(name,    _cpp, volatile)                            \
+    _C11ATOMIC_BOOL8_DEF1(name,    _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_INTEGRAL8_DEF1(name)
+#  define _C11ATOMIC_FUNDAMENTAL8_DEF2(name)                                  \
+    _C11ATOMIC_POINTER8_DEF2(name, _cpp, volatile)                            \
+    _C11ATOMIC_POINTER8_DEF2(name, _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_BOOL8_DEF2(name,    _cpp, volatile)                            \
+    _C11ATOMIC_BOOL8_DEF2(name,    _cpp, _C11ATOMIC_NA)                       \
+    _C11ATOMIC_INTEGRAL8_DEF2(name)
+#else
+#  define _C11ATOMIC_FUNDAMENTAL8_DEF1(name)                                  \
+    _C11ATOMIC_POINTER8_DEF1(name, _v_pointer, volatile)                      \
+    _C11ATOMIC_POINTER8_DEF1(name, _n_pointer, _C11ATOMIC_NA)                 \
+    _C11ATOMIC_BOOL8_DEF1(name,    _v_bool,    volatile)                      \
+    _C11ATOMIC_BOOL8_DEF1(name,    _n_bool,    _C11ATOMIC_NA)                 \
+    _C11ATOMIC_INTEGRAL8_DEF1(name)
+#  define _C11ATOMIC_FUNDAMENTAL8_DEF2(name)                                  \
+    _C11ATOMIC_POINTER8_DEF2(name, _v_pointer, volatile)                      \
+    _C11ATOMIC_POINTER8_DEF2(name, _n_pointer, _C11ATOMIC_NA)                 \
+    _C11ATOMIC_BOOL8_DEF2(name,    _v_bool,    volatile)                      \
+    _C11ATOMIC_BOOL8_DEF2(name,    _n_bool,    _C11ATOMIC_NA)                 \
+    _C11ATOMIC_INTEGRAL8_DEF2(name)
+#endif
+/* 16-bit pointer */
+#ifdef C11ATOMIC_CPP
+#  define _C11ATOMIC_FUNDAMENTAL16_DEF1(name)                                 \
+    _C11ATOMIC_POINTER16_DEF1(name, _cpp, volatile)                           \
+    _C11ATOMIC_POINTER16_DEF1(name, _cpp, _C11ATOMIC_NA)                      \
+    _C11ATOMIC_BOOL16_DEF1(name,    _cpp, volatile)                           \
+    _C11ATOMIC_BOOL16_DEF1(name,    _cpp, _C11ATOMIC_NA)                      \
+    _C11ATOMIC_INTEGRAL16_DEF1(name)
+#  define _C11ATOMIC_FUNDAMENTAL16_DEF2(name)                                 \
+    _C11ATOMIC_POINTER16_DEF2(name, _cpp, volatile)                           \
+    _C11ATOMIC_POINTER16_DEF2(name, _cpp, _C11ATOMIC_NA)                      \
+    _C11ATOMIC_BOOL16_DEF2(name,    _cpp, volatile)                           \
+    _C11ATOMIC_BOOL16_DEF2(name,    _cpp, _C11ATOMIC_NA)                      \
+    _C11ATOMIC_INTEGRAL16_DEF2(name)
+#else
+#  define _C11ATOMIC_FUNDAMENTAL16_DEF1(name)                                 \
+    _C11ATOMIC_POINTER16_DEF1(name, _v_pointer, volatile)                     \
+    _C11ATOMIC_POINTER16_DEF1(name, _n_pointer, _C11ATOMIC_NA)                \
+    _C11ATOMIC_BOOL16_DEF1(name,    _v_bool,    volatile)                     \
+    _C11ATOMIC_BOOL16_DEF1(name,    _n_bool,    _C11ATOMIC_NA)                \
+    _C11ATOMIC_INTEGRAL16_DEF1(name)
+#  define _C11ATOMIC_FUNDAMENTAL16_DEF2(name)                                 \
+    _C11ATOMIC_POINTER16_DEF2(name, _v_pointer, volatile)                     \
+    _C11ATOMIC_POINTER16_DEF2(name, _n_pointer, _C11ATOMIC_NA)                \
+    _C11ATOMIC_BOOL16_DEF2(name,    _v_bool,    volatile)                     \
+    _C11ATOMIC_BOOL16_DEF2(name,    _n_bool,    _C11ATOMIC_NA)                \
+    _C11ATOMIC_INTEGRAL16_DEF2(name)
+#endif
+/* 32-bit pointer */
+#ifdef C11ATOMIC_CPP
+#  define _C11ATOMIC_FUNDAMENTAL32_DEF1(name)                                 \
+    _C11ATOMIC_POINTER32_DEF1(name, _cpp, volatile)                           \
+    _C11ATOMIC_POINTER32_DEF1(name, _cpp, _C11ATOMIC_NA)                      \
+    _C11ATOMIC_BOOL32_DEF1(name,    _cpp, volatile)                           \
+    _C11ATOMIC_BOOL32_DEF1(name,    _cpp, _C11ATOMIC_NA)                      \
+    _C11ATOMIC_INTEGRAL32_DEF1(name)
+#  define _C11ATOMIC_FUNDAMENTAL32_DEF2(name)                                 \
+    _C11ATOMIC_POINTER32_DEF2(name, _cpp, volatile)                           \
+    _C11ATOMIC_POINTER32_DEF2(name, _cpp, _C11ATOMIC_NA)                      \
+    _C11ATOMIC_BOOL32_DEF2(name,    _cpp, volatile)                           \
+    _C11ATOMIC_BOOL32_DEF2(name,    _cpp, _C11ATOMIC_NA)                      \
+    _C11ATOMIC_INTEGRAL32_DEF2(name)
+#else
+#  define _C11ATOMIC_FUNDAMENTAL32_DEF1(name)                                 \
+    _C11ATOMIC_POINTER32_DEF1(name, _v_pointer, volatile)                     \
+    _C11ATOMIC_POINTER32_DEF1(name, _n_pointer, _C11ATOMIC_NA)                \
+    _C11ATOMIC_BOOL32_DEF1(name,    _v_bool,    volatile)                     \
+    _C11ATOMIC_BOOL32_DEF1(name,    _n_bool,    _C11ATOMIC_NA)                \
+    _C11ATOMIC_INTEGRAL32_DEF1(name)
+#  define _C11ATOMIC_FUNDAMENTAL32_DEF2(name)                                 \
+    _C11ATOMIC_POINTER32_DEF2(name, _v_pointer, volatile)                     \
+    _C11ATOMIC_POINTER32_DEF2(name, _n_pointer, _C11ATOMIC_NA)                \
+    _C11ATOMIC_BOOL32_DEF2(name,    _v_bool,    volatile)                     \
+    _C11ATOMIC_BOOL32_DEF2(name,    _n_bool,    _C11ATOMIC_NA)                \
+    _C11ATOMIC_INTEGRAL32_DEF2(name)
+#endif
+/* 64-bit pointer */
+#ifdef C11ATOMIC_CPP
+#  define _C11ATOMIC_FUNDAMENTAL64_DEF1(name)                                 \
+    _C11ATOMIC_POINTER64_DEF1(name, _cpp, volatile)                           \
+    _C11ATOMIC_POINTER64_DEF1(name, _cpp, _C11ATOMIC_NA)                      \
+    _C11ATOMIC_BOOL64_DEF1(name,    _cpp, volatile)                           \
+    _C11ATOMIC_BOOL64_DEF1(name,    _cpp, _C11ATOMIC_NA)                      \
+    _C11ATOMIC_INTEGRAL64_DEF1(name)
+#  define _C11ATOMIC_FUNDAMENTAL64_DEF2(name)                                 \
+    _C11ATOMIC_POINTER64_DEF2(name, _cpp, volatile)                           \
+    _C11ATOMIC_POINTER64_DEF2(name, _cpp, _C11ATOMIC_NA)                      \
+    _C11ATOMIC_BOOL64_DEF2(name,    _cpp, volatile)                           \
+    _C11ATOMIC_BOOL64_DEF2(name,    _cpp, _C11ATOMIC_NA)                      \
+    _C11ATOMIC_INTEGRAL64_DEF2(name)
+#else
+#  define _C11ATOMIC_FUNDAMENTAL64_DEF1(name)                                 \
+    _C11ATOMIC_POINTER64_DEF1(name, _v_pointer, volatile)                     \
+    _C11ATOMIC_POINTER64_DEF1(name, _n_pointer, _C11ATOMIC_NA)                \
+    _C11ATOMIC_BOOL64_DEF1(name,    _v_bool,    volatile)                     \
+    _C11ATOMIC_BOOL64_DEF1(name,    _n_bool,    _C11ATOMIC_NA)                \
+    _C11ATOMIC_INTEGRAL64_DEF1(name)
+#  define _C11ATOMIC_FUNDAMENTAL64_DEF2(name)                                 \
+    _C11ATOMIC_POINTER64_DEF2(name, _v_pointer, volatile)                     \
+    _C11ATOMIC_POINTER64_DEF2(name, _n_pointer, _C11ATOMIC_NA)                \
+    _C11ATOMIC_BOOL64_DEF2(name,    _v_bool,    volatile)                     \
+    _C11ATOMIC_BOOL64_DEF2(name,    _n_bool,    _C11ATOMIC_NA)                \
+    _C11ATOMIC_INTEGRAL64_DEF2(name)
+#endif
+
+/*------------------------- C11ATOMIC_INTEGRAL_DEFk -------------------------*/
+#define _C11ATOMIC_INTEGRAL_DEF1(name)                                        \
+    _C11ATOMIC_INTEGRAL0_DEF1(name)                                           \
+    _C11ATOMIC_INTEGRAL8_DEF1(name)                                           \
+    _C11ATOMIC_INTEGRAL16_DEF1(name)                                          \
+    _C11ATOMIC_INTEGRAL32_DEF1(name)                                          \
+    _C11ATOMIC_INTEGRAL64_DEF1(name)
+#define _C11ATOMIC_INTEGRAL_DEF2(name)                                        \
+    _C11ATOMIC_INTEGRAL0_DEF2(name)                                           \
+    _C11ATOMIC_INTEGRAL8_DEF2(name)                                           \
+    _C11ATOMIC_INTEGRAL16_DEF2(name)                                          \
+    _C11ATOMIC_INTEGRAL32_DEF2(name)                                          \
+    _C11ATOMIC_INTEGRAL64_DEF2(name)
+
+/*------------------------ C11ATOMIC_FUNDAMENTAL_DEFk -----------------------*/
+#define _C11ATOMIC_FUNDAMENTAL_DEF1(name)                                     \
+    _C11ATOMIC_FUNDAMENTAL0_DEF1(name)                                        \
+    _C11ATOMIC_FUNDAMENTAL8_DEF1(name)                                        \
+    _C11ATOMIC_FUNDAMENTAL16_DEF1(name)                                       \
+    _C11ATOMIC_FUNDAMENTAL32_DEF1(name)                                       \
+    _C11ATOMIC_FUNDAMENTAL64_DEF1(name)
+#define _C11ATOMIC_FUNDAMENTAL_DEF2(name)                                     \
+    _C11ATOMIC_FUNDAMENTAL0_DEF2(name)                                        \
+    _C11ATOMIC_FUNDAMENTAL8_DEF2(name)                                        \
+    _C11ATOMIC_FUNDAMENTAL16_DEF2(name)                                       \
+    _C11ATOMIC_FUNDAMENTAL32_DEF2(name)                                       \
+    _C11ATOMIC_FUNDAMENTAL64_DEF2(name)
+
+/*------------------------- C11ATOMIC_INTEGRAL_CALL -------------------------*/
+#ifdef C11ATOMIC_CPP
+#  define _C11ATOMIC_INTEGRAL_CALL(name, ...)                                 \
+_C11ATOMIC_VA((                                                               \
+    name##_cpp(__VA_ARGS__)                                                   \
+))
+#else
+#  define _C11ATOMIC_INTEGRAL_CALL(name, ...)                                 \
+_C11ATOMIC_VA((                                                               \
+    _Generic(_C11ATOMIC_FIRST(__VA_ARGS__),                                   \
+        volatile c11atomic_vt(C11ATOMIC_CHAR) *:   name##_v_char,             \
+        volatile c11atomic_vt(C11ATOMIC_SCHAR) *:  name##_v_schar,            \
+        volatile c11atomic_vt(C11ATOMIC_UCHAR) *:  name##_v_uchar,            \
+        volatile c11atomic_vt(C11ATOMIC_SHORT) *:  name##_v_short,            \
+        volatile c11atomic_vt(C11ATOMIC_USHORT) *: name##_v_ushort,           \
+        volatile c11atomic_vt(C11ATOMIC_INT) *:    name##_v_int,              \
+        volatile c11atomic_vt(C11ATOMIC_UINT) *:   name##_v_uint,             \
+        volatile c11atomic_vt(C11ATOMIC_LONG) *:   name##_v_long,             \
+        volatile c11atomic_vt(C11ATOMIC_ULONG) *:  name##_v_ulong,            \
+        volatile c11atomic_vt(C11ATOMIC_LLONG) *:  name##_v_llong,            \
+        volatile c11atomic_vt(C11ATOMIC_ULLONG) *: name##_v_ullong,           \
+        c11atomic_vt(C11ATOMIC_CHAR) *:   name##_n_char,                      \
+        c11atomic_vt(C11ATOMIC_SCHAR) *:  name##_n_schar,                     \
+        c11atomic_vt(C11ATOMIC_UCHAR) *:  name##_n_uchar,                     \
+        c11atomic_vt(C11ATOMIC_SHORT) *:  name##_n_short,                     \
+        c11atomic_vt(C11ATOMIC_USHORT) *: name##_n_ushort,                    \
+        c11atomic_vt(C11ATOMIC_INT) *:    name##_n_int,                       \
+        c11atomic_vt(C11ATOMIC_UINT) *:   name##_n_uint,                      \
+        c11atomic_vt(C11ATOMIC_LONG) *:   name##_n_long,                      \
+        c11atomic_vt(C11ATOMIC_ULONG) *:  name##_n_ulong,                     \
+        c11atomic_vt(C11ATOMIC_LLONG) *:  name##_n_llong,                     \
+        c11atomic_vt(C11ATOMIC_ULLONG) *: name##_n_ullong                     \
+    )(__VA_ARGS__)                                                            \
+))
+#endif
+#ifdef C11ATOMIC_CPP
+#  define _C11ATOMIC_INTEGRAL_CALL_CONST(name, ...)                           \
+_C11ATOMIC_VA((                                                               \
+    name##_cpp(__VA_ARGS__)                                                   \
+))
+#else
+#  define _C11ATOMIC_INTEGRAL_CALL_CONST(name, ...)                           \
+_C11ATOMIC_VA((                                                               \
+    _Generic(_C11ATOMIC_FIRST(__VA_ARGS__),                                   \
+        const volatile c11atomic_vt(C11ATOMIC_CHAR) *:   name##_v_char,       \
+        const volatile c11atomic_vt(C11ATOMIC_SCHAR) *:  name##_v_schar,      \
+        const volatile c11atomic_vt(C11ATOMIC_UCHAR) *:  name##_v_uchar,      \
+        const volatile c11atomic_vt(C11ATOMIC_SHORT) *:  name##_v_short,      \
+        const volatile c11atomic_vt(C11ATOMIC_USHORT) *: name##_v_ushort,     \
+        const volatile c11atomic_vt(C11ATOMIC_INT) *:    name##_v_int,        \
+        const volatile c11atomic_vt(C11ATOMIC_UINT) *:   name##_v_uint,       \
+        const volatile c11atomic_vt(C11ATOMIC_LONG) *:   name##_v_long,       \
+        const volatile c11atomic_vt(C11ATOMIC_ULONG) *:  name##_v_ulong,      \
+        const volatile c11atomic_vt(C11ATOMIC_LLONG) *:  name##_v_llong,      \
+        const volatile c11atomic_vt(C11ATOMIC_ULLONG) *: name##_v_ullong,     \
+        const c11atomic_vt(C11ATOMIC_CHAR) *:   name##_n_char,                \
+        const c11atomic_vt(C11ATOMIC_SCHAR) *:  name##_n_schar,               \
+        const c11atomic_vt(C11ATOMIC_UCHAR) *:  name##_n_uchar,               \
+        const c11atomic_vt(C11ATOMIC_SHORT) *:  name##_n_short,               \
+        const c11atomic_vt(C11ATOMIC_USHORT) *: name##_n_ushort,              \
+        const c11atomic_vt(C11ATOMIC_INT) *:    name##_n_int,                 \
+        const c11atomic_vt(C11ATOMIC_UINT) *:   name##_n_uint,                \
+        const c11atomic_vt(C11ATOMIC_LONG) *:   name##_n_long,                \
+        const c11atomic_vt(C11ATOMIC_ULONG) *:  name##_n_ulong,               \
+        const c11atomic_vt(C11ATOMIC_LLONG) *:  name##_n_llong,               \
+        const c11atomic_vt(C11ATOMIC_ULLONG) *: name##_n_ullong,              \
+        volatile c11atomic_vt(C11ATOMIC_CHAR) *:   name##_v_char,             \
+        volatile c11atomic_vt(C11ATOMIC_SCHAR) *:  name##_v_schar,            \
+        volatile c11atomic_vt(C11ATOMIC_UCHAR) *:  name##_v_uchar,            \
+        volatile c11atomic_vt(C11ATOMIC_SHORT) *:  name##_v_short,            \
+        volatile c11atomic_vt(C11ATOMIC_USHORT) *: name##_v_ushort,           \
+        volatile c11atomic_vt(C11ATOMIC_INT) *:    name##_v_int,              \
+        volatile c11atomic_vt(C11ATOMIC_UINT) *:   name##_v_uint,             \
+        volatile c11atomic_vt(C11ATOMIC_LONG) *:   name##_v_long,             \
+        volatile c11atomic_vt(C11ATOMIC_ULONG) *:  name##_v_ulong,            \
+        volatile c11atomic_vt(C11ATOMIC_LLONG) *:  name##_v_llong,            \
+        volatile c11atomic_vt(C11ATOMIC_ULLONG) *: name##_v_ullong,           \
+        c11atomic_vt(C11ATOMIC_CHAR) *:   name##_n_char,                      \
+        c11atomic_vt(C11ATOMIC_SCHAR) *:  name##_n_schar,                     \
+        c11atomic_vt(C11ATOMIC_UCHAR) *:  name##_n_uchar,                     \
+        c11atomic_vt(C11ATOMIC_SHORT) *:  name##_n_short,                     \
+        c11atomic_vt(C11ATOMIC_USHORT) *: name##_n_ushort,                    \
+        c11atomic_vt(C11ATOMIC_INT) *:    name##_n_int,                       \
+        c11atomic_vt(C11ATOMIC_UINT) *:   name##_n_uint,                      \
+        c11atomic_vt(C11ATOMIC_LONG) *:   name##_n_long,                      \
+        c11atomic_vt(C11ATOMIC_ULONG) *:  name##_n_ulong,                     \
+        c11atomic_vt(C11ATOMIC_LLONG) *:  name##_n_llong,                     \
+        c11atomic_vt(C11ATOMIC_ULLONG) *: name##_n_ullong                     \
+    )(__VA_ARGS__)                                                            \
+))
+#endif
+
+/*------------------------ C11ATOMIC_FUNDAMENTAL_CALL -----------------------*/
 #ifdef C11ATOMIC_CPP
 #  define _C11ATOMIC_FUNDAMENTAL_CALL(name, ...)                              \
 _C11ATOMIC_VA((                                                               \
@@ -763,267 +3418,8 @@ _C11ATOMIC_VA((                                                               \
     )(__VA_ARGS__)                                                            \
 ))
 #endif
-#ifdef C11ATOMIC_CPP
-#  define _C11ATOMIC_FUNDAMENTAL_DEF1(name)                                   \
-    name##_impl(volatile, _cpp, C11ATOMIC_POINTER)                            \
-    name##_impl(volatile, _cpp, C11ATOMIC_BOOL)                               \
-    name##_impl(volatile, _cpp, C11ATOMIC_CHAR)                               \
-    name##_impl(volatile, _cpp, C11ATOMIC_SCHAR)                              \
-    name##_impl(volatile, _cpp, C11ATOMIC_UCHAR)                              \
-    name##_impl(volatile, _cpp, C11ATOMIC_SHORT)                              \
-    name##_impl(volatile, _cpp, C11ATOMIC_USHORT)                             \
-    name##_impl(volatile, _cpp, C11ATOMIC_INT)                                \
-    name##_impl(volatile, _cpp, C11ATOMIC_UINT)                               \
-    name##_impl(volatile, _cpp, C11ATOMIC_LONG)                               \
-    name##_impl(volatile, _cpp, C11ATOMIC_ULONG)                              \
-    name##_impl(volatile, _cpp, C11ATOMIC_LLONG)                              \
-    name##_impl(volatile, _cpp, C11ATOMIC_ULLONG)                             \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_POINTER)                       \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_BOOL)                          \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_CHAR)                          \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_SCHAR)                         \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_UCHAR)                         \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_SHORT)                         \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_USHORT)                        \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_INT)                           \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_UINT)                          \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_LONG)                          \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_ULONG)                         \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_LLONG)                         \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_ULLONG)
-#else
-#  define _C11ATOMIC_FUNDAMENTAL_DEF1(name)                                   \
-    name##_impl(volatile, _v_pointer, C11ATOMIC_POINTER)                      \
-    name##_impl(volatile, _v_bool,    C11ATOMIC_BOOL)                         \
-    name##_impl(volatile, _v_char,    C11ATOMIC_CHAR)                         \
-    name##_impl(volatile, _v_schar,   C11ATOMIC_SCHAR)                        \
-    name##_impl(volatile, _v_uchar,   C11ATOMIC_UCHAR)                        \
-    name##_impl(volatile, _v_short,   C11ATOMIC_SHORT)                        \
-    name##_impl(volatile, _v_ushort,  C11ATOMIC_USHORT)                       \
-    name##_impl(volatile, _v_int,     C11ATOMIC_INT)                          \
-    name##_impl(volatile, _v_uint,    C11ATOMIC_UINT)                         \
-    name##_impl(volatile, _v_long,    C11ATOMIC_LONG)                         \
-    name##_impl(volatile, _v_ulong,   C11ATOMIC_ULONG)                        \
-    name##_impl(volatile, _v_llong,   C11ATOMIC_LLONG)                        \
-    name##_impl(volatile, _v_ullong,  C11ATOMIC_ULLONG)                       \
-    name##_impl(_C11ATOMIC_NA, _n_pointer, C11ATOMIC_POINTER)                 \
-    name##_impl(_C11ATOMIC_NA, _n_bool,    C11ATOMIC_BOOL)                    \
-    name##_impl(_C11ATOMIC_NA, _n_char,    C11ATOMIC_CHAR)                    \
-    name##_impl(_C11ATOMIC_NA, _n_schar,   C11ATOMIC_SCHAR)                   \
-    name##_impl(_C11ATOMIC_NA, _n_uchar,   C11ATOMIC_UCHAR)                   \
-    name##_impl(_C11ATOMIC_NA, _n_short,   C11ATOMIC_SHORT)                   \
-    name##_impl(_C11ATOMIC_NA, _n_ushort,  C11ATOMIC_USHORT)                  \
-    name##_impl(_C11ATOMIC_NA, _n_int,     C11ATOMIC_INT)                     \
-    name##_impl(_C11ATOMIC_NA, _n_uint,    C11ATOMIC_UINT)                    \
-    name##_impl(_C11ATOMIC_NA, _n_long,    C11ATOMIC_LONG)                    \
-    name##_impl(_C11ATOMIC_NA, _n_ulong,   C11ATOMIC_ULONG)                   \
-    name##_impl(_C11ATOMIC_NA, _n_llong,   C11ATOMIC_LLONG)                   \
-    name##_impl(_C11ATOMIC_NA, _n_ullong,  C11ATOMIC_ULLONG)
-#endif
-#ifdef C11ATOMIC_CPP
-#  define _C11ATOMIC_INTEGRAL_CALL(name, ...)                                 \
-_C11ATOMIC_VA((                                                               \
-    name##_cpp(__VA_ARGS__)                                                   \
-))
-#else
-#  define _C11ATOMIC_INTEGRAL_CALL(name, ...)                                 \
-_C11ATOMIC_VA((                                                               \
-    _Generic(_C11ATOMIC_FIRST(__VA_ARGS__),                                   \
-        volatile c11atomic_vt(C11ATOMIC_CHAR) *:   name##_v_char,             \
-        volatile c11atomic_vt(C11ATOMIC_SCHAR) *:  name##_v_schar,            \
-        volatile c11atomic_vt(C11ATOMIC_UCHAR) *:  name##_v_uchar,            \
-        volatile c11atomic_vt(C11ATOMIC_SHORT) *:  name##_v_short,            \
-        volatile c11atomic_vt(C11ATOMIC_USHORT) *: name##_v_ushort,           \
-        volatile c11atomic_vt(C11ATOMIC_INT) *:    name##_v_int,              \
-        volatile c11atomic_vt(C11ATOMIC_UINT) *:   name##_v_uint,             \
-        volatile c11atomic_vt(C11ATOMIC_LONG) *:   name##_v_long,             \
-        volatile c11atomic_vt(C11ATOMIC_ULONG) *:  name##_v_ulong,            \
-        volatile c11atomic_vt(C11ATOMIC_LLONG) *:  name##_v_llong,            \
-        volatile c11atomic_vt(C11ATOMIC_ULLONG) *: name##_v_ullong,           \
-        c11atomic_vt(C11ATOMIC_CHAR) *:   name##_n_char,                      \
-        c11atomic_vt(C11ATOMIC_SCHAR) *:  name##_n_schar,                     \
-        c11atomic_vt(C11ATOMIC_UCHAR) *:  name##_n_uchar,                     \
-        c11atomic_vt(C11ATOMIC_SHORT) *:  name##_n_short,                     \
-        c11atomic_vt(C11ATOMIC_USHORT) *: name##_n_ushort,                    \
-        c11atomic_vt(C11ATOMIC_INT) *:    name##_n_int,                       \
-        c11atomic_vt(C11ATOMIC_UINT) *:   name##_n_uint,                      \
-        c11atomic_vt(C11ATOMIC_LONG) *:   name##_n_long,                      \
-        c11atomic_vt(C11ATOMIC_ULONG) *:  name##_n_ulong,                     \
-        c11atomic_vt(C11ATOMIC_LLONG) *:  name##_n_llong,                     \
-        c11atomic_vt(C11ATOMIC_ULLONG) *: name##_n_ullong                     \
-    )(__VA_ARGS__)                                                            \
-))
-#endif
-#ifdef C11ATOMIC_CPP
-#  define _C11ATOMIC_INTEGRAL_CALL_CONST(name, ...)                           \
-_C11ATOMIC_VA((                                                               \
-    name##_cpp(__VA_ARGS__)                                                   \
-))
-#else
-#  define _C11ATOMIC_INTEGRAL_CALL_CONST(name, ...)                           \
-_C11ATOMIC_VA((                                                               \
-    _Generic(_C11ATOMIC_FIRST(__VA_ARGS__),                                   \
-        const volatile c11atomic_vt(C11ATOMIC_CHAR) *:   name##_v_char,       \
-        const volatile c11atomic_vt(C11ATOMIC_SCHAR) *:  name##_v_schar,      \
-        const volatile c11atomic_vt(C11ATOMIC_UCHAR) *:  name##_v_uchar,      \
-        const volatile c11atomic_vt(C11ATOMIC_SHORT) *:  name##_v_short,      \
-        const volatile c11atomic_vt(C11ATOMIC_USHORT) *: name##_v_ushort,     \
-        const volatile c11atomic_vt(C11ATOMIC_INT) *:    name##_v_int,        \
-        const volatile c11atomic_vt(C11ATOMIC_UINT) *:   name##_v_uint,       \
-        const volatile c11atomic_vt(C11ATOMIC_LONG) *:   name##_v_long,       \
-        const volatile c11atomic_vt(C11ATOMIC_ULONG) *:  name##_v_ulong,      \
-        const volatile c11atomic_vt(C11ATOMIC_LLONG) *:  name##_v_llong,      \
-        const volatile c11atomic_vt(C11ATOMIC_ULLONG) *: name##_v_ullong,     \
-        const c11atomic_vt(C11ATOMIC_CHAR) *:   name##_n_char,                \
-        const c11atomic_vt(C11ATOMIC_SCHAR) *:  name##_n_schar,               \
-        const c11atomic_vt(C11ATOMIC_UCHAR) *:  name##_n_uchar,               \
-        const c11atomic_vt(C11ATOMIC_SHORT) *:  name##_n_short,               \
-        const c11atomic_vt(C11ATOMIC_USHORT) *: name##_n_ushort,              \
-        const c11atomic_vt(C11ATOMIC_INT) *:    name##_n_int,                 \
-        const c11atomic_vt(C11ATOMIC_UINT) *:   name##_n_uint,                \
-        const c11atomic_vt(C11ATOMIC_LONG) *:   name##_n_long,                \
-        const c11atomic_vt(C11ATOMIC_ULONG) *:  name##_n_ulong,               \
-        const c11atomic_vt(C11ATOMIC_LLONG) *:  name##_n_llong,               \
-        const c11atomic_vt(C11ATOMIC_ULLONG) *: name##_n_ullong,              \
-        volatile c11atomic_vt(C11ATOMIC_CHAR) *:   name##_v_char,             \
-        volatile c11atomic_vt(C11ATOMIC_SCHAR) *:  name##_v_schar,            \
-        volatile c11atomic_vt(C11ATOMIC_UCHAR) *:  name##_v_uchar,            \
-        volatile c11atomic_vt(C11ATOMIC_SHORT) *:  name##_v_short,            \
-        volatile c11atomic_vt(C11ATOMIC_USHORT) *: name##_v_ushort,           \
-        volatile c11atomic_vt(C11ATOMIC_INT) *:    name##_v_int,              \
-        volatile c11atomic_vt(C11ATOMIC_UINT) *:   name##_v_uint,             \
-        volatile c11atomic_vt(C11ATOMIC_LONG) *:   name##_v_long,             \
-        volatile c11atomic_vt(C11ATOMIC_ULONG) *:  name##_v_ulong,            \
-        volatile c11atomic_vt(C11ATOMIC_LLONG) *:  name##_v_llong,            \
-        volatile c11atomic_vt(C11ATOMIC_ULLONG) *: name##_v_ullong,           \
-        c11atomic_vt(C11ATOMIC_CHAR) *:   name##_n_char,                      \
-        c11atomic_vt(C11ATOMIC_SCHAR) *:  name##_n_schar,                     \
-        c11atomic_vt(C11ATOMIC_UCHAR) *:  name##_n_uchar,                     \
-        c11atomic_vt(C11ATOMIC_SHORT) *:  name##_n_short,                     \
-        c11atomic_vt(C11ATOMIC_USHORT) *: name##_n_ushort,                    \
-        c11atomic_vt(C11ATOMIC_INT) *:    name##_n_int,                       \
-        c11atomic_vt(C11ATOMIC_UINT) *:   name##_n_uint,                      \
-        c11atomic_vt(C11ATOMIC_LONG) *:   name##_n_long,                      \
-        c11atomic_vt(C11ATOMIC_ULONG) *:  name##_n_ulong,                     \
-        c11atomic_vt(C11ATOMIC_LLONG) *:  name##_n_llong,                     \
-        c11atomic_vt(C11ATOMIC_ULLONG) *: name##_n_ullong                     \
-    )(__VA_ARGS__)                                                            \
-))
-#endif
-#ifdef C11ATOMIC_CPP
-#  define _C11ATOMIC_INTEGRAL_DEF1(name)                                      \
-    name##_impl(volatile, _cpp, C11ATOMIC_CHAR)                               \
-    name##_impl(volatile, _cpp, C11ATOMIC_SCHAR)                              \
-    name##_impl(volatile, _cpp, C11ATOMIC_UCHAR)                              \
-    name##_impl(volatile, _cpp, C11ATOMIC_SHORT)                              \
-    name##_impl(volatile, _cpp, C11ATOMIC_USHORT)                             \
-    name##_impl(volatile, _cpp, C11ATOMIC_INT)                                \
-    name##_impl(volatile, _cpp, C11ATOMIC_UINT)                               \
-    name##_impl(volatile, _cpp, C11ATOMIC_LONG)                               \
-    name##_impl(volatile, _cpp, C11ATOMIC_ULONG)                              \
-    name##_impl(volatile, _cpp, C11ATOMIC_LLONG)                              \
-    name##_impl(volatile, _cpp, C11ATOMIC_ULLONG)                             \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_CHAR)                          \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_SCHAR)                         \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_UCHAR)                         \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_SHORT)                         \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_USHORT)                        \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_INT)                           \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_UINT)                          \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_LONG)                          \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_ULONG)                         \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_LLONG)                         \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_ULLONG)
-#else
-#  define _C11ATOMIC_INTEGRAL_DEF1(name)                                      \
-    name##_impl(volatile, _v_char,   C11ATOMIC_CHAR)                          \
-    name##_impl(volatile, _v_schar,  C11ATOMIC_SCHAR)                         \
-    name##_impl(volatile, _v_uchar,  C11ATOMIC_UCHAR)                         \
-    name##_impl(volatile, _v_short,  C11ATOMIC_SHORT)                         \
-    name##_impl(volatile, _v_ushort, C11ATOMIC_USHORT)                        \
-    name##_impl(volatile, _v_int,    C11ATOMIC_INT)                           \
-    name##_impl(volatile, _v_uint,   C11ATOMIC_UINT)                          \
-    name##_impl(volatile, _v_long,   C11ATOMIC_LONG)                          \
-    name##_impl(volatile, _v_ulong,  C11ATOMIC_ULONG)                         \
-    name##_impl(volatile, _v_llong,  C11ATOMIC_LLONG)                         \
-    name##_impl(volatile, _v_ullong, C11ATOMIC_ULLONG)                        \
-    name##_impl(_C11ATOMIC_NA, _n_char,   C11ATOMIC_CHAR)                     \
-    name##_impl(_C11ATOMIC_NA, _n_schar,  C11ATOMIC_SCHAR)                    \
-    name##_impl(_C11ATOMIC_NA, _n_uchar,  C11ATOMIC_UCHAR)                    \
-    name##_impl(_C11ATOMIC_NA, _n_short,  C11ATOMIC_SHORT)                    \
-    name##_impl(_C11ATOMIC_NA, _n_ushort, C11ATOMIC_USHORT)                   \
-    name##_impl(_C11ATOMIC_NA, _n_int,    C11ATOMIC_INT)                      \
-    name##_impl(_C11ATOMIC_NA, _n_uint,   C11ATOMIC_UINT)                     \
-    name##_impl(_C11ATOMIC_NA, _n_long,   C11ATOMIC_LONG)                     \
-    name##_impl(_C11ATOMIC_NA, _n_ulong,  C11ATOMIC_ULONG)                    \
-    name##_impl(_C11ATOMIC_NA, _n_llong,  C11ATOMIC_LLONG)                    \
-    name##_impl(_C11ATOMIC_NA, _n_ullong, C11ATOMIC_ULLONG)
-#endif
-#ifdef C11ATOMIC_CPP
-#  define _C11ATOMIC_INTEGRAL_DEF2(name)                                      \
-    name##_impl(volatile, _cpp, C11ATOMIC_CHAR,   C11ATOMIC_CHAR)             \
-    name##_impl(volatile, _cpp, C11ATOMIC_SCHAR,  C11ATOMIC_SCHAR)            \
-    name##_impl(volatile, _cpp, C11ATOMIC_UCHAR,  C11ATOMIC_UCHAR)            \
-    name##_impl(volatile, _cpp, C11ATOMIC_SHORT,  C11ATOMIC_SHORT)            \
-    name##_impl(volatile, _cpp, C11ATOMIC_USHORT, C11ATOMIC_USHORT)           \
-    name##_impl(volatile, _cpp, C11ATOMIC_INT,    C11ATOMIC_INT)              \
-    name##_impl(volatile, _cpp, C11ATOMIC_UINT,   C11ATOMIC_UINT)             \
-    name##_impl(volatile, _cpp, C11ATOMIC_LONG,   C11ATOMIC_LONG)             \
-    name##_impl(volatile, _cpp, C11ATOMIC_ULONG,  C11ATOMIC_ULONG)            \
-    name##_impl(volatile, _cpp, C11ATOMIC_LLONG,  C11ATOMIC_LLONG)            \
-    name##_impl(volatile, _cpp, C11ATOMIC_ULLONG, C11ATOMIC_ULLONG)           \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_CHAR,   C11ATOMIC_CHAR)        \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_SCHAR,  C11ATOMIC_SCHAR)       \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_UCHAR,  C11ATOMIC_UCHAR)       \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_SHORT,  C11ATOMIC_SHORT)       \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_USHORT, C11ATOMIC_USHORT)      \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_INT,    C11ATOMIC_INT)         \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_UINT,   C11ATOMIC_UINT)        \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_LONG,   C11ATOMIC_LONG)        \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_ULONG,  C11ATOMIC_ULONG)       \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_LLONG,  C11ATOMIC_LLONG)       \
-    name##_impl(_C11ATOMIC_NA, _cpp, C11ATOMIC_ULLONG, C11ATOMIC_ULLONG)
-#else
-#  define _C11ATOMIC_INTEGRAL_DEF2(name)                                      \
-    name##_impl(volatile, _v_char,   C11ATOMIC_CHAR,   C11ATOMIC_CHAR)        \
-    name##_impl(volatile, _v_schar,  C11ATOMIC_SCHAR,  C11ATOMIC_SCHAR)       \
-    name##_impl(volatile, _v_uchar,  C11ATOMIC_UCHAR,  C11ATOMIC_UCHAR)       \
-    name##_impl(volatile, _v_short,  C11ATOMIC_SHORT,  C11ATOMIC_SHORT)       \
-    name##_impl(volatile, _v_ushort, C11ATOMIC_USHORT, C11ATOMIC_USHORT)      \
-    name##_impl(volatile, _v_int,    C11ATOMIC_INT,    C11ATOMIC_INT)         \
-    name##_impl(volatile, _v_uint,   C11ATOMIC_UINT,   C11ATOMIC_UINT)        \
-    name##_impl(volatile, _v_long,   C11ATOMIC_LONG,   C11ATOMIC_LONG)        \
-    name##_impl(volatile, _v_ulong,  C11ATOMIC_ULONG,  C11ATOMIC_ULONG)       \
-    name##_impl(volatile, _v_llong,  C11ATOMIC_LLONG,  C11ATOMIC_LLONG)       \
-    name##_impl(volatile, _v_ullong, C11ATOMIC_ULLONG, C11ATOMIC_ULLONG)      \
-    name##_impl(_C11ATOMIC_NA, _n_char,   C11ATOMIC_CHAR,   C11ATOMIC_CHAR)   \
-    name##_impl(_C11ATOMIC_NA, _n_schar,  C11ATOMIC_SCHAR,  C11ATOMIC_SCHAR)  \
-    name##_impl(_C11ATOMIC_NA, _n_uchar,  C11ATOMIC_UCHAR,  C11ATOMIC_UCHAR)  \
-    name##_impl(_C11ATOMIC_NA, _n_short,  C11ATOMIC_SHORT,  C11ATOMIC_SHORT)  \
-    name##_impl(_C11ATOMIC_NA, _n_ushort, C11ATOMIC_USHORT, C11ATOMIC_USHORT) \
-    name##_impl(_C11ATOMIC_NA, _n_int,    C11ATOMIC_INT,    C11ATOMIC_INT)    \
-    name##_impl(_C11ATOMIC_NA, _n_uint,   C11ATOMIC_UINT,   C11ATOMIC_UINT)   \
-    name##_impl(_C11ATOMIC_NA, _n_long,   C11ATOMIC_LONG,   C11ATOMIC_LONG)   \
-    name##_impl(_C11ATOMIC_NA, _n_ulong,  C11ATOMIC_ULONG,  C11ATOMIC_ULONG)  \
-    name##_impl(_C11ATOMIC_NA, _n_llong,  C11ATOMIC_LLONG,  C11ATOMIC_LLONG)  \
-    name##_impl(_C11ATOMIC_NA, _n_ullong, C11ATOMIC_ULLONG, C11ATOMIC_ULLONG)
-#endif
-#ifdef C11ATOMIC_CPP
-#  define _C11ATOMIC_STD_CALL(name, ...)                                      \
-_C11ATOMIC_VA((                                                               \
-    std::name(__VA_ARGS__)                                                    \
-))
-#else
-#  define _C11ATOMIC_STD_CALL(name, ...)                                      \
-_C11ATOMIC_VA((                                                               \
-    name(__VA_ARGS__)                                                         \
-))
-#endif
-#ifdef C11ATOMIC_CPP
-#  define _C11ATOMIC_NOEXCEPT noexcept
-#else
-#  define _C11ATOMIC_NOEXCEPT
-#endif
+
+/*-------------------------------- c11atomic --------------------------------*/
 #ifdef C11ATOMIC_CPP
 template<class T>
 struct _c11atomic {
@@ -1045,6 +3441,7 @@ _C11ATOMIC_VA(                                                                \
 )
 #endif
 #define C11ATOMIC_VAR_INIT(...) { __VA_ARGS__ }
+#define C11ATOMIC_PTR_INIT C11ATOMIC_VAR_INIT(C11ATOMIC_NULLPTR)
 typedef c11atomic(C11ATOMIC_POINTER) c11atomic_pointer;
 typedef c11atomic(C11ATOMIC_BOOL) c11atomic_bool;
 typedef c11atomic(C11ATOMIC_CHAR) c11atomic_char;
@@ -1082,60 +3479,24 @@ typedef c11atomic(C11ATOMIC_INT64_T) c11atomic_int64_t;
 #ifdef C11ATOMIC_UINT64_T
 typedef c11atomic(C11ATOMIC_UINT64_T) c11atomic_uint64_t;
 #endif
-#ifdef C11ATOMIC_INT_LEAST8_T
 typedef c11atomic(C11ATOMIC_INT_LEAST8_T) c11atomic_int_least8_t;
-#endif
-#ifdef C11ATOMIC_UINT_LEAST8_T
 typedef c11atomic(C11ATOMIC_UINT_LEAST8_T) c11atomic_uint_least8_t;
-#endif
-#ifdef C11ATOMIC_INT_LEAST16_T
 typedef c11atomic(C11ATOMIC_INT_LEAST16_T) c11atomic_int_least16_t;
-#endif
-#ifdef C11ATOMIC_UINT_LEAST16_T
 typedef c11atomic(C11ATOMIC_UINT_LEAST16_T) c11atomic_uint_least16_t;
-#endif
-#ifdef C11ATOMIC_INT_LEAST32_T
 typedef c11atomic(C11ATOMIC_INT_LEAST32_T) c11atomic_int_least32_t;
-#endif
-#ifdef C11ATOMIC_UINT_LEAST32_T
 typedef c11atomic(C11ATOMIC_UINT_LEAST32_T) c11atomic_uint_least32_t;
-#endif
-#ifdef C11ATOMIC_INT_LEAST64_T
 typedef c11atomic(C11ATOMIC_INT_LEAST64_T) c11atomic_int_least64_t;
-#endif
-#ifdef C11ATOMIC_UINT_LEAST64_T
 typedef c11atomic(C11ATOMIC_UINT_LEAST64_T) c11atomic_uint_least64_t;
-#endif
-#ifdef C11ATOMIC_INT_FAST8_T
 typedef c11atomic(C11ATOMIC_INT_FAST8_T) c11atomic_int_fast8_t;
-#endif
-#ifdef C11ATOMIC_UINT_FAST8_T
 typedef c11atomic(C11ATOMIC_UINT_FAST8_T) c11atomic_uint_fast8_t;
-#endif
-#ifdef C11ATOMIC_INT_FAST16_T
 typedef c11atomic(C11ATOMIC_INT_FAST16_T) c11atomic_int_fast16_t;
-#endif
-#ifdef C11ATOMIC_UINT_FAST16_T
 typedef c11atomic(C11ATOMIC_UINT_FAST16_T) c11atomic_uint_fast16_t;
-#endif
-#ifdef C11ATOMIC_INT_FAST32_T
 typedef c11atomic(C11ATOMIC_INT_FAST32_T) c11atomic_int_fast32_t;
-#endif
-#ifdef C11ATOMIC_UINT_FAST32_T
 typedef c11atomic(C11ATOMIC_UINT_FAST32_T) c11atomic_uint_fast32_t;
-#endif
-#ifdef C11ATOMIC_INT_FAST64_T
 typedef c11atomic(C11ATOMIC_INT_FAST64_T) c11atomic_int_fast64_t;
-#endif
-#ifdef C11ATOMIC_UINT_FAST64_T
 typedef c11atomic(C11ATOMIC_UINT_FAST64_T) c11atomic_uint_fast64_t;
-#endif
-#ifdef C11ATOMIC_INTMAX_T
 typedef c11atomic(C11ATOMIC_INTMAX_T) c11atomic_intmax_t;
-#endif
-#ifdef C11ATOMIC_UINTMAX_T
 typedef c11atomic(C11ATOMIC_UINTMAX_T) c11atomic_uintmax_t;
-#endif
 #ifdef C11ATOMIC_INTPTR_T
 typedef c11atomic(C11ATOMIC_INTPTR_T) c11atomic_intptr_t;
 #endif

@@ -57,14 +57,14 @@ typedef struct { c11atomic_flag_vt _c11atomic_flag_v; } c11atomic_flag;
 #define C11ATOMIC_FLAG_INIT { ATOMIC_FLAG_INIT }
 
 /*------------------------- c11atomic_is_lock_free --------------------------*/
-#define _c11atomic_is_lock_free_impl(volatile, S, T)                          \
+#define _c11atomic_is_lock_free_impl(N, S, T, volatile)                       \
 static inline C11ATOMIC_BOOL                                                  \
 _c11atomic_is_lock_free##S(const volatile c11atomic_vt(T) *obj)               \
 _C11ATOMIC_NOEXCEPT                                                           \
 {                                                                             \
     return _C11ATOMIC_STD_CALL(atomic_is_lock_free, obj);                     \
 }
-_C11ATOMIC_FUNDAMENTAL_DEF1(_c11atomic_is_lock_free)
+_C11ATOMIC_FUNDAMENTAL_DEF1(_c11atomic_is_lock_free_impl)
 #define _c11atomic_is_lock_free(...)                                          \
 _C11ATOMIC_VA(                                                                \
     _C11ATOMIC_FUNDAMENTAL_CALL_CONST(                                        \
