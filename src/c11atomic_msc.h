@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: ISC
  */
 
-#ifndef C11ATOMIC_H
+#ifndef C11ATOMIC_INC
 #  error "this header file must not be included directly"
-#endif
+#else /*=====================================================================*/
 
 /* memory scope */
 typedef enum {
@@ -345,3 +345,5 @@ _C11ATOMIC_NOEXCEPT
         C11ATOMIC_DEFAULT_MEMORY_SCOPE,                                       \
         C11ATOMIC_DEFAULT_MEMORY_ORDER                                        \
     )
+
+#endif /*====================================================================*/

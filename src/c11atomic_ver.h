@@ -20,7 +20,7 @@
 #  else
 #    define C11ATOMIC_CPP __cplusplus
 #  endif
-#elif defined(__STDC__) || defined(__STDC_VERSION__) /* see `/Zc:__STDC__` */
+#elif defined(__STDC_VERSION__) || defined(__STDC__) /* see `/Zc:__STDC__` */
 #  if defined(__STDC_VERSION__) /* C94/C95 */
 #    define C11ATOMIC_C __STDC_VERSION__
 #  else /* C89/C90 */

@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: ISC
  */
 
-#ifndef C11ATOMIC_H
+#ifndef C11ATOMIC_INC
 #  error "this header file must not be included directly"
-#endif
+#else /*=====================================================================*/
 
 #ifndef C11ATOMIC_DEFAULT_MEMORY_SCOPE
 #  define C11ATOMIC_DEFAULT_MEMORY_SCOPE                                      \
@@ -3509,3 +3509,5 @@ typedef c11atomic(C11ATOMIC_SIZE_T) c11atomic_size_t;
 #ifdef C11ATOMIC_PTRDIFF_T
 typedef c11atomic(C11ATOMIC_PTRDIFF_T) c11atomic_ptrdiff_t;
 #endif
+
+#endif /*====================================================================*/

@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: ISC
  */
 
-#ifndef C11ATOMIC_H
+#ifndef C11ATOMIC_INC
 #  error "this header file must not be included directly"
-#endif
+#else /*=====================================================================*/
 
 #ifdef __has_include // Clang 2.7, GCC 5.1, C++17, C23, ...
 #  define _C11ATOMIC_HAS_INCLUDE_OPTIMISTIC(...) __has_include(__VA_ARGS__)
@@ -50,16 +50,22 @@
 #endif
 
 #if defined(C11ATOMIC_STD)
+#  define C11ATOMIC_
 #  define C11ATOMIC
 #elif defined(C11ATOMIC_STDCPP)
+#  define C11ATOMIC_
 #  define C11ATOMIC
 #elif defined(C11ATOMIC_STDC)
+#  define C11ATOMIC_
 #  define C11ATOMIC
 #elif defined(C11ATOMIC_CLANG)
+#  define C11ATOMIC_
 #  define C11ATOMIC
 #elif defined(C11ATOMIC_GCC)
+#  define C11ATOMIC_
 #  define C11ATOMIC
 #elif defined(C11ATOMIC_MSC)
+#  define C11ATOMIC_
 #  define C11ATOMIC
 #else // no predefined macro => auto-detect
 #  ifdef _C11ATOMIC_ATOMIC_H
@@ -91,16 +97,9 @@
 #      define C11ATOMIC_CLANG
 #    endif
 #  endif
-#  ifdef C11ATOMIC
-#    ifdef C11ATOMIC_
-#      undef C11ATOMIC_
-#    else // to avoid include errors
-#      error "no implementation available for this platform/compiler"
-#    endif
-#  endif
 #endif
 
-#ifdef C11ATOMIC
+#ifdef C11ATOMIC_
 #  ifdef __cplusplus
 extern "C++" {
 #  endif
@@ -178,6 +177,15 @@ extern "C" {
 #  elif defined(C11ATOMIC_MSC)
 #    include "c11atomic_msc.h"
 #  else
+#    undef C11ATOMIC_
+#  endif
+#endif
+#ifdef C11ATOMIC
+#  ifdef C11ATOMIC_
+#    undef C11ATOMIC_
+#  else
 #    error "no implementation available for this platform/compiler"
 #  endif
 #endif
+
+#endif /*====================================================================*/
