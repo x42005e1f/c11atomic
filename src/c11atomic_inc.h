@@ -17,16 +17,16 @@
 #    define _C11ATOMIC_ATOMIC_H
 #  endif
 #endif
-#ifdef _MSC_VER
+#ifdef _MSC_VER // MSVC
 #  if _C11ATOMIC_HAS_INCLUDE_OPTIMISTIC(<intrin.h>) // MSVC intrinsics
 #    define _C11ATOMIC_INTRIN_H
 #  endif
 #endif
-#if _C11ATOMIC_HAS_INCLUDE_OPTIMISTIC(<limits.h>)
+#if _C11ATOMIC_HAS_INCLUDE_OPTIMISTIC(<limits.h>) // C/C++
 #  define _C11ATOMIC_LIMITS_H
 #endif
 #ifdef C11ATOMIC_C
-#  if !defined(__STDC_NO_ATOMICS__)
+#  if !defined(__STDC_NO_ATOMICS__) // C11
 #    if _C11ATOMIC_HAS_INCLUDE_OPTIMISTIC(<stdatomic.h>) // C11 (optional)
 #      define _C11ATOMIC_STDATOMIC_H
 #    endif
@@ -35,17 +35,17 @@
 #ifdef C11ATOMIC_CPP // C++: `bool`, `true`, and `false` are keywords
 #  define _C11ATOMIC_BOOL_TRUE_FALSE_ARE_DEFINED
 #else
-#  if C11ATOMIC_C >= 202311L // C23: predefined `bool`, `true`, and `false`
+#  if C11ATOMIC_C >= 202311L // C23: `bool`, `true`, and `false` are keywords
 #    define _C11ATOMIC_BOOL_TRUE_FALSE_ARE_DEFINED
-#  elif _C11ATOMIC_HAS_INCLUDE_OPTIMISTIC(<stdbool.h>) // C99
+#  elif _C11ATOMIC_HAS_INCLUDE_OPTIMISTIC(<stdbool.h>) // C99/C++11
 #    define _C11ATOMIC_BOOL_TRUE_FALSE_ARE_DEFINED
 #    define _C11ATOMIC_STDBOOL_H
 #  endif
 #endif
-#if _C11ATOMIC_HAS_INCLUDE_OPTIMISTIC(<stddef.h>)
+#if _C11ATOMIC_HAS_INCLUDE_OPTIMISTIC(<stddef.h>) // C/C++
 #  define _C11ATOMIC_STDDEF_H
 #endif
-#if _C11ATOMIC_HAS_INCLUDE_OPTIMISTIC(<stdint.h>) // C99
+#if _C11ATOMIC_HAS_INCLUDE_OPTIMISTIC(<stdint.h>) // C99/C++11
 #  define _C11ATOMIC_STDINT_H
 #endif
 
@@ -84,7 +84,7 @@
 #    define C11ATOMIC_STD
 #  endif
 #  if defined(__GNUC__) && defined(__GNUC_MINOR__)
-#    if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 8)
+#    if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 8) // GCC 4.8
 #      define C11ATOMIC
 #      define C11ATOMIC_
 #      define C11ATOMIC_GCC
