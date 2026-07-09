@@ -81,7 +81,11 @@ _C11ATOMIC_VA((                                                               \
 #  define C11ATOMIC_POINTER_BIT  (C11ATOMIC_POINTER_SIZE * C11ATOMIC_CHAR_BIT)
 #  define C11ATOMIC_POINTER_WIDTH C11ATOMIC_POINTER_BIT
 #endif
-#if defined(C11ATOMIC_STD)
+#if defined(C11ATOMIC_CLANG) && defined(__CLANG_ATOMIC_POINTER_LOCK_FREE)
+#  define C11ATOMIC_POINTER_LOCK_FREE __CLANG_ATOMIC_POINTER_LOCK_FREE
+#elif defined(C11ATOMIC_GCC) && defined(__GCC_ATOMIC_POINTER_LOCK_FREE)
+#  define C11ATOMIC_POINTER_LOCK_FREE __GCC_ATOMIC_POINTER_LOCK_FREE
+#elif defined(C11ATOMIC_STD) && defined(ATOMIC_POINTER_LOCK_FREE)
 #  define C11ATOMIC_POINTER_LOCK_FREE ATOMIC_POINTER_LOCK_FREE
 #elif defined(C11ATOMIC_MSC)
 #  define C11ATOMIC_POINTER_LOCK_FREE 2 // always
@@ -99,7 +103,11 @@ _C11ATOMIC_VA((                                                               \
 #  define C11ATOMIC_TRUE  (1)    // C99
 #  define C11ATOMIC_FALSE (0)    // C99
 #endif
-#if defined(C11ATOMIC_STD)
+#if defined(C11ATOMIC_CLANG) && defined(__CLANG_ATOMIC_BOOL_LOCK_FREE)
+#  define C11ATOMIC_BOOL_LOCK_FREE __CLANG_ATOMIC_BOOL_LOCK_FREE
+#elif defined(C11ATOMIC_GCC) && defined(__GCC_ATOMIC_BOOL_LOCK_FREE)
+#  define C11ATOMIC_BOOL_LOCK_FREE __GCC_ATOMIC_BOOL_LOCK_FREE
+#elif defined(C11ATOMIC_STD) && defined(ATOMIC_BOOL_LOCK_FREE)
 #  define C11ATOMIC_BOOL_LOCK_FREE ATOMIC_BOOL_LOCK_FREE
 #elif defined(C11ATOMIC_MSC)
 #  define C11ATOMIC_BOOL_LOCK_FREE 2 // always
@@ -129,7 +137,11 @@ _C11ATOMIC_VA((                                                               \
 #  define C11ATOMIC_BOOL_SIZE   C11ATOMIC_CHAR_SIZE // typical (unreliable!)
 #  define C11ATOMIC_BOOL_BIT   (C11ATOMIC_BOOL_SIZE * C11ATOMIC_CHAR_BIT)
 #endif
-#if defined(C11ATOMIC_STD)
+#if defined(C11ATOMIC_CLANG) && defined(__CLANG_ATOMIC_CHAR_LOCK_FREE)
+#  define C11ATOMIC_CHAR_LOCK_FREE __CLANG_ATOMIC_CHAR_LOCK_FREE
+#elif defined(C11ATOMIC_GCC) && defined(__GCC_ATOMIC_CHAR_LOCK_FREE)
+#  define C11ATOMIC_CHAR_LOCK_FREE __GCC_ATOMIC_CHAR_LOCK_FREE
+#elif defined(C11ATOMIC_STD) && defined(ATOMIC_CHAR_LOCK_FREE)
 #  define C11ATOMIC_CHAR_LOCK_FREE ATOMIC_CHAR_LOCK_FREE
 #elif defined(C11ATOMIC_MSC)
 #  define C11ATOMIC_CHAR_LOCK_FREE 2 // always
@@ -182,7 +194,11 @@ _C11ATOMIC_VA((                                                               \
 #    define C11ATOMIC_SHORT_BIT   C11ATOMIC_SHORT_WIDTH // no padding bits
 #  endif
 #endif
-#if defined(C11ATOMIC_STD)
+#if defined(C11ATOMIC_CLANG) && defined(__CLANG_ATOMIC_SHORT_LOCK_FREE)
+#  define C11ATOMIC_SHORT_LOCK_FREE __CLANG_ATOMIC_SHORT_LOCK_FREE
+#elif defined(C11ATOMIC_GCC) && defined(__GCC_ATOMIC_SHORT_LOCK_FREE)
+#  define C11ATOMIC_SHORT_LOCK_FREE __GCC_ATOMIC_SHORT_LOCK_FREE
+#elif defined(C11ATOMIC_STD) && defined(ATOMIC_SHORT_LOCK_FREE)
 #  define C11ATOMIC_SHORT_LOCK_FREE ATOMIC_SHORT_LOCK_FREE
 #elif defined(C11ATOMIC_MSC)
 #  define C11ATOMIC_SHORT_LOCK_FREE 2 // always
@@ -230,7 +246,11 @@ _C11ATOMIC_VA((                                                               \
 #    define C11ATOMIC_INT_BIT   C11ATOMIC_INT_WIDTH // no padding bits
 #  endif
 #endif
-#if defined(C11ATOMIC_STD)
+#if defined(C11ATOMIC_CLANG) && defined(__CLANG_ATOMIC_INT_LOCK_FREE)
+#  define C11ATOMIC_INT_LOCK_FREE __CLANG_ATOMIC_INT_LOCK_FREE
+#elif defined(C11ATOMIC_GCC) && defined(__GCC_ATOMIC_INT_LOCK_FREE)
+#  define C11ATOMIC_INT_LOCK_FREE __GCC_ATOMIC_INT_LOCK_FREE
+#elif defined(C11ATOMIC_STD) && defined(ATOMIC_INT_LOCK_FREE)
 #  define C11ATOMIC_INT_LOCK_FREE ATOMIC_INT_LOCK_FREE
 #elif defined(C11ATOMIC_MSC)
 #  define C11ATOMIC_INT_LOCK_FREE 2 // always
@@ -278,7 +298,11 @@ _C11ATOMIC_VA((                                                               \
 #    define C11ATOMIC_LONG_BIT   C11ATOMIC_LONG_WIDTH // no padding bits
 #  endif
 #endif
-#if defined(C11ATOMIC_STD)
+#if defined(C11ATOMIC_CLANG) && defined(__CLANG_ATOMIC_LONG_LOCK_FREE)
+#  define C11ATOMIC_LONG_LOCK_FREE __CLANG_ATOMIC_LONG_LOCK_FREE
+#elif defined(C11ATOMIC_GCC) && defined(__GCC_ATOMIC_LONG_LOCK_FREE)
+#  define C11ATOMIC_LONG_LOCK_FREE __GCC_ATOMIC_LONG_LOCK_FREE
+#elif defined(C11ATOMIC_STD) && defined(ATOMIC_LONG_LOCK_FREE)
 #  define C11ATOMIC_LONG_LOCK_FREE ATOMIC_LONG_LOCK_FREE
 #elif defined(C11ATOMIC_MSC)
 #  define C11ATOMIC_LONG_LOCK_FREE 2 // always
@@ -326,7 +350,11 @@ _C11ATOMIC_VA((                                                               \
 #    define C11ATOMIC_LLONG_BIT   C11ATOMIC_LLONG_WIDTH // no padding bits
 #  endif
 #endif
-#if defined(C11ATOMIC_STD)
+#if defined(C11ATOMIC_CLANG) && defined(__CLANG_ATOMIC_LLONG_LOCK_FREE)
+#  define C11ATOMIC_LLONG_LOCK_FREE __CLANG_ATOMIC_LLONG_LOCK_FREE
+#elif defined(C11ATOMIC_GCC) && defined(__GCC_ATOMIC_LLONG_LOCK_FREE)
+#  define C11ATOMIC_LLONG_LOCK_FREE __GCC_ATOMIC_LLONG_LOCK_FREE
+#elif defined(C11ATOMIC_STD) && defined(ATOMIC_LLONG_LOCK_FREE)
 #  define C11ATOMIC_LLONG_LOCK_FREE ATOMIC_LLONG_LOCK_FREE
 #elif defined(C11ATOMIC_MSC)
 #  define C11ATOMIC_LLONG_LOCK_FREE 2 // always
